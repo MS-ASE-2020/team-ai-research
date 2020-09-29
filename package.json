@@ -1,0 +1,15 @@
+{
+  "name": "msase-ai-research",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron src/",
+    "build": "electron-packager src/ --out=dist/ --overwrite --asar"
+  },
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "electron": "^10.1.3",
+    "electron-packager": "^15.1.0"
+  }
+}
