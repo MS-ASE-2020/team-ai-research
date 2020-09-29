@@ -2,9 +2,14 @@
   "name": "msase-ai-research",
   "version": "1.0.0",
   "main": "index.js",
+  "build": {
+    "win": {
+      "target": "portable"
+    }
+  },
   "scripts": {
-    "start": "electron src/",
-    "build": "electron-packager src/ --out=dist/ --overwrite --asar"
+    "start": "electron .",
+    "build": "electron-packager . --out=dist/ --overwrite"
   },
   "author": "",
   "license": "BSD",
