@@ -1,6 +1,8 @@
 {
   "name": "msase-ai-research",
   "version": "1.0.0",
+  "description": "Another Node.js project",
+  "repository": "https://github.com/MS-ASE-2020/team-ai-research",
   "main": "index.js",
   "build": {
     "win": {
@@ -12,9 +14,10 @@
     "build": "electron-packager . --out=dist/ --overwrite"
   },
   "author": "",
-  "license": "BSD",
+  "license": "MIT",
   "devDependencies": {
     "electron": "^10.1.3",
-    "electron-packager": "^15.1.0"
+    "electron-packager": "^15.1.0",
+    "pdf-annotate.js": "^1.0.0"
   }
 }
