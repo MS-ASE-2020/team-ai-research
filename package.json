@@ -11,13 +11,24 @@
   },
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . --out=dist/ --overwrite"
+    "build": "electron-packager . --out=dist/ --overwrite",
+    "webpack": "webpack --inline --config ./webpack.web.js --content-base web/"
   },
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "pdfjs-dist": "2.4.456"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
     "electron": "^10.1.3",
     "electron-packager": "^15.1.0",
-    "pdf-annotate.js": "^1.0.0"
+    "pdf-annotate.js": "taoky/pdf-annotate.js#master",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
