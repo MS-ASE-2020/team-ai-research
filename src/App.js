@@ -3,13 +3,20 @@ import React, { Component } from "react";
 import "./App.css";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      versions: window.api.getVersions()
+    }
+  }
+
   render() {
     return (
-      <div id="App" class="App">
+      <div id="App" className="App">
         <h1>Hello World!</h1>
-        We are using node <script>document.write(process.versions.node)</script>,<br />
-        Chrome <script>document.write(process.versions.chrome)</script>,<br />
-        and Electron <script> document.write(process.versions.electron)</script>.
+        We are using node {this.state.versions.node},<br />
+        Chrome {this.state.versions.chrome},<br />
+        and Electron {this.state.versions.electron}.
       </div>
     );
   }
