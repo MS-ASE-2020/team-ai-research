@@ -7,8 +7,6 @@ const {
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld(
     "api", {
-       getVersions: () => {
-           return process.versions
-       }
+       getVersions: () => process.versions
     }
 );

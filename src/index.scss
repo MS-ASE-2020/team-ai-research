@@ -1,0 +1,39 @@
+@import "animation";
+
+html {
+    font-size: 16px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body,
+#root,
+#App {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-family: sans-serif;
+}
+
+.App {
+    display: flex;
+
+    @import "main/NavBar";
+
+    .navbar {
+        animation: background-pulse 3s linear infinite;
+    }
+
+    .main {
+        flex: 1 0 auto;
+        overflow: hidden scroll;
+    }
+}
