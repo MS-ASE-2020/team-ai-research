@@ -32,5 +32,11 @@
       background-color: $theme-color-highlight;
       color: $theme-color-highlight-foreground;
     }
+
+    &.active {
+      background-color: $theme-color-active;
+      color: $theme-color-active-foreground;
+      cursor: default;
+    }
   }
 }
