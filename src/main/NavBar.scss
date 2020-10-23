@@ -1,4 +1,36 @@
 .navbar {
-  width: 3em;
-  background-color: magenta;
+  display: flex;
+  flex-direction: column;
+  width: 4em;
+  background-color: $theme-color;
+
+  .nav-item {
+    padding: 0.5em;
+    color: $theme-color-foreground;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &__icon {
+      width: 100%;
+      font-size: 2em;
+
+      .fas,
+      .far,
+      .fab {
+        display: inline-block;
+        margin: 0 auto;
+      }
+    }
+
+    &__title {
+      font-size: 0.8em;
+      overflow-x: hidden;
+    }
+
+    &:hover {
+      background-color: $theme-color-highlight;
+      color: $theme-color-highlight-foreground;
+    }
+  }
 }
