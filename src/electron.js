@@ -14,14 +14,15 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1024, 
-    height: 768, 
-    webPreferences: { 
-      worldSafeExecuteJavaScript: true, 
+    width: 1024,
+    height: 768,
+    webPreferences: {
+      worldSafeExecuteJavaScript: true,
       contextIsolation: true,
       preload: path.join(__dirname, "/preload.js")
     },
   });
+  mainWindow.setMenuBarVisibility(false);
 
   // and load the index.html of the app.
   const startUrl = process.env.ELECTRON_START_URL || url.format({
