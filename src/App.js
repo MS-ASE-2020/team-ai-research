@@ -39,8 +39,15 @@ export default class App extends Component {
     super(props);
     this.state = {
       activeTab: 1,
-      versions: window.api.getVersions()
-    }
+      versions: window.version_info,
+      openFile: null,
+    };
+  }
+
+  onOpenFile(file) {
+    this.setState({
+      openFile: file,
+    })
   }
 
   switchToTab(tab) {

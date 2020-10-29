@@ -5,8 +5,4 @@ const {
 
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
-contextBridge.exposeInMainWorld(
-    "api", {
-       getVersions: () => process.versions
-    }
-);
+contextBridge.exposeInMainWorld("version_info", process.versions);

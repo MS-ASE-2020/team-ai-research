@@ -1,5 +1,6 @@
 @import "variables";
 @import "animation";
+@import "utils";
 
 html {
   font-size: 16px;
@@ -28,6 +29,7 @@ body,
   display: flex;
 
   @import "main/NavBar";
+  @import "main/File";
 
   .main {
     flex: 1 0 auto;
