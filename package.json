@@ -22,7 +22,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "dev": "nf start -p 3000",
+    "dev": "node src/pdf-worker-copyer.js && nf start -p 3000",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "postinstall": "install-app-deps"
@@ -35,7 +35,9 @@
     "electron-devtools-installer": "^3.1.1",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
-    "react-scripts": "^3.4.3"
+    "react-scripts": "^3.4.3",
+    "pdf-annotate.js": "taoky/pdf-annotate.js#master",
+    "pdfjs-dist": "^2.5.207"
   },
   "dependencies": {
     "bootstrap": "^5.0.0-alpha2",
