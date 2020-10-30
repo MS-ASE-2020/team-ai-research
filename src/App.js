@@ -50,7 +50,7 @@ export default class App extends Component {
     })
   }
 
-  switchToTab(tab) {
+  onSwitchTab(tab) {
     this.setState({
       activeTab: tab
     });
@@ -58,11 +58,17 @@ export default class App extends Component {
 
   render() {
     const ActiveComponent = CONTENT_TABS[this.state.activeTab].component;
+    const data = {
+      openFile: this.state.openFile,
+    };
+    const actions = {
+      openFile: f => this.onOpenFile(f),
+    };
     return (
       <div id="App" className="App">
-        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.switchToTab(tab)}/>
+        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.onSwitchTab(tab)}/>
         <div id="main" className="main">
-          <ActiveComponent versions={this.state.versions} />
+          <ActiveComponent versions={this.state.versions} data={data} actions={actions} />
         </div>
       </div>
     );

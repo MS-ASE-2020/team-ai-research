@@ -1,8 +1,16 @@
-$theme-color:  #ed7d31;
+$theme-color: #ed7d31;
 $theme-color-foreground: white;
-$theme-color-light:  mix($theme-color, white, 24%);
+$theme-color-light: mix($theme-color, white, 24%);
 $theme-color-dark: mix($theme-color, #231e04, 85%);
 $theme-color-active: mix($theme-color, #231e04, 70%);
 $theme-color-active-foreground: white;
 $theme-color-highlight: white;
 $theme-color-highlight-foreground: #a0711c;
+
+$breakpoints: (
+  s: 640px,
+  m: 852px,
+  l: 1024px,
+  xl: 1280px,
+  2xl: 1440px,
+);

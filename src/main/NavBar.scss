@@ -5,10 +5,10 @@
   background-color: $theme-color;
 
   .nav-item {
+    @include clickable;
     padding: 0.5em;
     color: $theme-color-foreground;
     text-align: center;
-    cursor: pointer;
     transition: all 0.3s ease-in-out;
 
     &__icon {
@@ -36,7 +36,6 @@
     &.active {
       background-color: $theme-color-active;
       color: $theme-color-active-foreground;
-      cursor: default;
     }
   }
 }

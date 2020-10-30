@@ -5,7 +5,7 @@ export default class FileManager extends Component {
   render() {
     return (
       <div id="FileManager" className="FileManager">
-        <OpenFile />
+        <OpenFile onOpenFile={f => this.props.actions.openFile}/>
       </div>
     );
   }

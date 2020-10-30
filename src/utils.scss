@@ -1,3 +1,13 @@
-.flex-grow-1 {
-  flex-grow: 1 !important;
+@mixin clickable {
+  cursor: pointer;
+
+  &.active {
+    cursor: inherit;
+  }
+}
+
+@mixin breakpoint($level) {
+  @media screen and (min-width: map-get($breakpoints, $level)) {
+    @content;
+  }
 }

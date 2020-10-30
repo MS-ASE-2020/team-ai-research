@@ -56,8 +56,25 @@
   }
 
   .file-properties {
+    $margin: 2em;
+
     flex-grow: 1;
     min-width: 16em;
     background-color: $theme-color-light;
+    padding: 0 $margin;
+
+    > :first-child {
+      margin-top: $margin;
+    }
+
+    > :last-child {
+      margin-bottom: $margin;
+    }
+
+    h2 {
+      &.lead {
+        margin: 2em 0 1em;
+      }
+    }
   }
 }

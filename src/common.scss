@@ -1,0 +1,37 @@
+//@import "bootstrap";
+
+.btn {
+  font: inherit;
+  font-size: 0.8em;
+
+  padding: 0.25em 0.4em;
+  margin: -0.25em 0;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.clickable {
+  @include clickable;
+}
+
+.form-row {
+  + .form-row {
+    margin-top: 0.5em;
+  }
+
+  @include breakpoint(l) {
+    .form-title {
+      width: 25%;
+      float: left;
+      clear: left;
+    }
+  }
+}
+
+.form-title {
+  line-height: 1.5;
+}
+
+.form-action {
+  line-height: 1.5;
+}
