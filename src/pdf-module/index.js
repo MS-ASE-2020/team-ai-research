@@ -25,7 +25,8 @@ class Annotator extends React.Component {
         // global.pdfjsViewer = pdfjsViewer;
         const { UI } = PDFJSAnnotate;
         PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
-        const documentId = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+        // const documentId = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+        const documentId = 'file:///Users/tao/Documents/Linux-101-Ch05-modified.pdf';
         let RENDER_OPTIONS = {
             documentId,
             pdfDocument: null,
