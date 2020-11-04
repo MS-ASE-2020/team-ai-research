@@ -25,8 +25,7 @@ class Annotator extends React.Component {
         // global.pdfjsViewer = pdfjsViewer;
         const { UI } = PDFJSAnnotate;
         PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
-        // const documentId = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
-        const documentId = 'file:///Users/tao/Documents/Linux-101-Ch05-modified.pdf';
+        const documentId = props.documentId;
         let RENDER_OPTIONS = {
             documentId,
             pdfDocument: null,
@@ -35,7 +34,7 @@ class Annotator extends React.Component {
         };
         this.UI = UI;
         this.RENDER_OPTIONS = RENDER_OPTIONS;
-        this.render_done = true;
+        this.rendered = true;
         pdfjsLib.GlobalWorkerOptions.workerSrc = workerURL;
         this.PDFRender();
     }
@@ -67,24 +66,22 @@ class Annotator extends React.Component {
         }
 
         if (visiblePage && okToRender) {
-            setTimeout(() => {
-                this.UI.renderPage(visiblePageNum, this.RENDER_OPTIONS);
-            });
+            setTimeout(() => this.UI.renderPage(visiblePageNum, this.RENDER_OPTIONS));
         }
     }
 
     PDFRender = () => {
-        if (this.render_done === false) {
+        if (this.rendered === false) {
             return;
         }
         try {
-            this.render_done = false;
+            this.rendered = false;
             const loadingTask = pdfjsLib.getDocument({
                 url: this.RENDER_OPTIONS.documentId,
                 cMapUrl: 'shared/cmaps/',
                 cMapPacked: true
             });
-    
+
             loadingTask.promise.then((pdf) => {
                 this.RENDER_OPTIONS.pdfDocument = pdf;
                 let viewer = document.getElementById('viewer');
@@ -93,18 +90,18 @@ class Annotator extends React.Component {
                     let page = this.UI.createPage(i + 1);
                     viewer.appendChild(page);
                 }
-    
+
                 this.NUM_PAGES = pdf.numPages;
                 window.pdfjsViewer = pdfjsViewer;
                 this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
                     let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
                     this.PAGE_HEIGHT = viewport.height;
-                    this.render_done = true;
+                    this.rendered = true;
                     this.setState({});
                 });
             })
         } catch {
-            this.render_done = true;
+            this.rendered = true;
         }
     }
 
@@ -118,13 +115,13 @@ class Annotator extends React.Component {
                     PDFJSAnnotate={PDFJSAnnotate}
                     visiblePageNum={this.visiblePageNum}
                     render={this.PDFRender}></AnnotatorToolBar>
-                <div id="content-wrapper" 
-                    onScroll={this.contentWrapperScroll.bind(this)} 
+                <div id="content-wrapper"
+                    onScroll={this.contentWrapperScroll.bind(this)}
                     ref={el => this.wrapper = el}>
                     <div id="viewer" className="pdfViewer"></div>
                 </div>
-                <AnnotatorComment 
-                    UI={this.UI} 
+                <AnnotatorComment
+                    UI={this.UI}
                     RENDER_OPTIONS={this.RENDER_OPTIONS}
                     PDFJSAnnotate={PDFJSAnnotate}></AnnotatorComment>
             </div>
