@@ -31,8 +31,10 @@ body,
 
   @import "main/NavBar";
   @import "main/File";
+  @import "main/Reader";
 
   .main {
+    position: relative;
     flex: 1 0 auto;
     overflow: hidden scroll;
   }

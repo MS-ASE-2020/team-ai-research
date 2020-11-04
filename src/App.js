@@ -47,7 +47,8 @@ export default class App extends Component {
   onOpenFile(file) {
     this.setState({
       openFile: file,
-    })
+    });
+    this.switchToTab(1);
   }
 
   onSwitchTab(tab) {
@@ -69,7 +70,6 @@ export default class App extends Component {
         <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.onSwitchTab(tab)}/>
         <div id="main" className="main">
           <ActiveComponent versions={this.state.versions} data={data} actions={actions} />
-        </div>
       </div>
     );
   }

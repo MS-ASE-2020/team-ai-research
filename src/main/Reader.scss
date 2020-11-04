@@ -1,0 +1,11 @@
+.Reader {
+  @include absolute;
+
+  @at-root #pdfwrapper {
+    @include absolute;
+
+    .toolbar {
+      position: sticky;
+    }
+  }
+}
