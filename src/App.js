@@ -67,9 +67,10 @@ export default class App extends Component {
     };
     return (
       <div id="App" className="App">
-        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.onSwitchTab(tab)}/>
+        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.onSwitchTab(tab)} />
         <div id="main" className="main">
           <ActiveComponent versions={this.state.versions} data={data} actions={actions} />
+        </div>
       </div>
     );
   }
