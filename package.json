@@ -38,7 +38,6 @@
     "react-scripts": "^3.4.4"
   },
   "dependencies": {
-    "aws-sdk": "^2.784.0",
     "bootstrap": "^5.0.0-alpha2",
     "popper.js": "^1.16.1",
     "react": "^16.14.0",
