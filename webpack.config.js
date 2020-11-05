@@ -1,4 +1,7 @@
 module.exports = {
+  output: {
+    libraryTarget: 'commonjs2',
+  },
   externals: {
     "aws-sdk": "aws-sdk",
     pg: "pg",
@@ -10,6 +13,7 @@ module.exports = {
     mysql2: "mysql2",
     oracle: "oracle",
     oracledb: "oracledb",
+    sqlite3: "sqlite3",
     tedious: "tedious",
   },
 };
