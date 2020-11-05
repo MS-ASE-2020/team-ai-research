@@ -5,20 +5,24 @@ class OpenFileZone extends Component {
     return (
       <div className="file-properties">
         <h3>Please choose a method to open a PDF file:</h3>
-        <br/>
+        <br />
         <h4>Local Path</h4>
-        <p> 
-          <button id="localPathButton" onClick={() => alert(document.getElementById("localPath").value)}>Open</button>
-          <input type="file" id="localPath"/>
+        <p>
+          <button id="localPathButton" onClick={() => alert(document.getElementById("localPath").files[0].path)}>
+            Open
+          </button>
+          <input type="file" id="localPath" />
         </p>
-        <br/>
+        <br />
         <h4>URL Path</h4>
-        <p> 
-          <button id="urlPathButton" onClick={() => alert(document.getElementById("urlPath").value)}>Open</button>
-          <input type="text" id="urlPath"/>
-        </p>    
+        <p>
+          <button id="urlPathButton" onClick={() => alert(document.getElementById("urlPath").value)}>
+            Open
+          </button>
+          <input type="text" id="urlPath" />
+        </p>
       </div>
-    )
+    );
   }
 }
 
