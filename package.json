@@ -35,9 +35,10 @@
     "electron-devtools-installer": "^3.1.1",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
-    "react-scripts": "^3.4.4",
     "pdf-annotate.js": "taoky/pdf-annotate.js#master",
-    "pdfjs-dist": "^2.5.207"
+    "pdfjs-dist": "^2.5.207",
+    "react-scripts": "^3.4.4",
+    "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
     "bootstrap": "^5.0.0-alpha2",
