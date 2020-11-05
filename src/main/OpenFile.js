@@ -1,5 +1,27 @@
 import React, { Component } from "react";
 
+class OpenFileZone extends Component {
+  render() {
+    return (
+      <div className="file-properties">
+        <h3>Please choose a method to open a PDF file:</h3>
+        <br/>
+        <h4>Local Path</h4>
+        <p> 
+          <button id="localPathButton" onClick={() => alert(document.getElementById("localPath").value)}>Open</button>
+          <input type="file" id="localPath"/>
+        </p>
+        <br/>
+        <h4>URL Path</h4>
+        <p> 
+          <button id="urlPathButton" onClick={() => alert(document.getElementById("urlPath").value)}>Open</button>
+          <input type="text" id="urlPath"/>
+        </p>    
+      </div>
+    )
+  }
+}
+
 export default class OpenFile extends Component {
   openFile(f) {
     this.props.onOpenFile(f);
@@ -25,21 +47,7 @@ export default class OpenFile extends Component {
             <h2>Settings</h2>
           </div>
         </div>
-        <div className="file-properties">
-          <h2 className="lead">Open new file</h2>
-          <div className="form-row">
-            <div className="form-title">Open file</div>
-            <div className="form-action">
-              <button className="btn">Open</button>
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-title">Open from URL</div>
-            <div className="form-action">
-              <button className="btn">Open</button>
-            </div>
-          </div>
-        </div>
+        <OpenFileZone />
       </div>
     );
   }
