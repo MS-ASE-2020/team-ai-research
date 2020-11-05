@@ -25,7 +25,8 @@ class Annotator extends React.Component {
         // global.pdfjsViewer = pdfjsViewer;
         const { UI } = PDFJSAnnotate;
         PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
-        const documentId = props.documentId;
+        const documentId = props.file;
+        console.log(documentId);
         let RENDER_OPTIONS = {
             documentId,
             pdfDocument: null,
