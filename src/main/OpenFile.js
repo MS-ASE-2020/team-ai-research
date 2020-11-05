@@ -8,7 +8,7 @@ export default class OpenFile extends Component {
   render() {
     var placeholderItems = [];
     for (let i = 0; i < 30; i++) {
-      placeholderItems.push(<div className="file-item">Item {i + 1}</div>);
+      placeholderItems.push(<div className="file-item" key={"item-" + i}>Item {i + 1}</div>);
     }
     return (
       <div id="OpenFile" className="OpenFile">
