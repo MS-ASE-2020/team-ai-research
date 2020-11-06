@@ -6,6 +6,9 @@ dist/
 node_modules/
 .npm
 
+# Database
+papera.db
+
 # Logs
 logs
 *.log

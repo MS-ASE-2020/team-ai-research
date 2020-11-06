@@ -3,7 +3,7 @@ const DB_FILE = "papera.db";
 
 function connectDatabase() {
   try {
-    var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE, (error) => {
+    var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
       if (error) {
         console.error(error)
         throw error
