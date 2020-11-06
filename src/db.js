@@ -69,8 +69,7 @@ function closeDatabase(db) {
   });
 }
 
-export { connectDatabase, closeDatabase };
-export default {
+module.exports = {
   connect: connectDatabase,
-  close: closeDatabase,
+  close: closeDatabase
 };
