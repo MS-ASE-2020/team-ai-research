@@ -1,4 +1,11 @@
 const electron = require('electron');
+const { protocol } = require('electron');
+
+// Register file:// with privilege. It's SHOULD BE replaced to a safer version when it really ships.
+// protocol.registerSchemesAsPrivileged([
+//   { scheme: 'file', privileges: { corsEnabled: true } }
+// ])
+
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -17,9 +24,10 @@ function createWindow() {
     width: 1024,
     height: 768,
     webPreferences: {
-      worldSafeExecuteJavaScript: true,
+      // worldSafeExecuteJavaScript: true,
       contextIsolation: true,
-      preload: path.join(__dirname, "/preload.js")
+      preload: path.join(__dirname, "/preload.js"),
+      webSecurity: false
     },
   });
   mainWindow.setMenuBarVisibility(false);
@@ -72,6 +80,10 @@ app.on('activate', () => {
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    const pathname = request.url.replace('file:///', '');
+    callback(pathname);
+  });
   installExtension(REACT_DEVELOPER_TOOLS)
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err));

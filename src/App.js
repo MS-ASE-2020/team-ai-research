@@ -44,13 +44,14 @@ export default class App extends Component {
     };
   }
 
-  onOpenFile(file) {
+  handleOpenFile(file) {
     this.setState({
       openFile: file,
-    })
+    });
+    this.handleSwitchTab(1);
   }
 
-  onSwitchTab(tab) {
+  handleSwitchTab(tab) {
     this.setState({
       activeTab: tab
     });
@@ -62,11 +63,11 @@ export default class App extends Component {
       openFile: this.state.openFile,
     };
     const actions = {
-      openFile: f => this.onOpenFile(f),
+      openFile: this.handleOpenFile.bind(this),
     };
     return (
       <div id="App" className="App">
-        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.onSwitchTab(tab)}/>
+        <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.handleSwitchTab(tab)} />
         <div id="main" className="main">
           <ActiveComponent versions={this.state.versions} data={data} actions={actions} />
         </div>

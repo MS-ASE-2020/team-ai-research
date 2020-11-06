@@ -1,13 +1,19 @@
 import React, { Component } from "react";
+import PDFReader from "./reader/PDFReader";
 
 export default class Reader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openFile: undefined,
+    };
+  }
+
   render() {
+    const file = this.props.data.openFile;
     return (
       <div id="Reader" className="Reader">
-        <h1>Reader page</h1>
-        We are using node {this.props.versions.node},<br />
-        Chrome {this.props.versions.chrome},<br />
-        and Electron {this.props.versions.electron}.
+        <PDFReader key={file} file={file}></PDFReader>
       </div>
     );
   }

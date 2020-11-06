@@ -55,7 +55,7 @@
     }
   }
 
-  .file-properties {
+  .file-details {
     $margin: 2em;
 
     flex-grow: 1;
@@ -74,6 +74,33 @@
     h2 {
       &.lead {
         margin: 2em 0 1em;
+      }
+    }
+  }
+
+  .open-new-file {
+    .heading {
+      font-weight: normal;
+    }
+
+    .section {
+      margin: 2em 0;
+    }
+
+    input[type=radio] {
+      display: initial;
+      padding: 0.2em 0.5em;
+    }
+
+    .section-title {
+      display: inline;
+    }
+
+    .section-content {
+      margin-top: 1em;
+
+      > input {
+        width: 100%;
       }
     }
   }
