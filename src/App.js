@@ -39,7 +39,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       activeTab: 1,
-      versions: window.version_info,
+      versions: window.api.version_info,
       openFile: null,
     };
   }

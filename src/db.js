@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const DB_FILE = "papera.db";
 
-export function connectDatabase() {
+function connectDatabase() {
   try {
     var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE, (error) => {
       if (error) {
@@ -59,17 +59,18 @@ export function connectDatabase() {
               PRIMARY KEY (PIFpaperID, PIFfolderID)
             );`)
   })
-  return (db, null)
+  return (db, null);
 }
 
-export function closeDatabase(db) {
+function closeDatabase(db) {
   db.close((e) => {
     if (e)
       return console.error(e)
-  })
+  });
 }
 
+export { connectDatabase, closeDatabase };
 export default {
   connect: connectDatabase,
   close: closeDatabase,
-}
+};
