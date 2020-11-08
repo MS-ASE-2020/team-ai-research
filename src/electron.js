@@ -1,5 +1,5 @@
 const electron = require('electron');
-const { protocol } = require('electron');
+const { protocol, ipcMain } = require('electron');
 
 // Register file:// with privilege. It's SHOULD BE replaced to a safer version when it really ships.
 // protocol.registerSchemesAsPrivileged([
@@ -18,6 +18,12 @@ const url = require('url');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+// Bypass the node-sqlite3 bug in electron (https://github.com/mapbox/node-sqlite3/issues/1370)
+app.allowRendererProcessReuse = false;
+
+// const db = require("./db");
+// let db_instance = null;
+
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -25,9 +31,10 @@ function createWindow() {
     height: 768,
     webPreferences: {
       // worldSafeExecuteJavaScript: true,
-      contextIsolation: true,
+      // contextIsolation: true,
       preload: path.join(__dirname, "/preload.js"),
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     },
   });
   mainWindow.setMenuBarVisibility(false);
@@ -38,6 +45,11 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   });
+
+  // ipcMain.on("mainWindowLoaded", function () {
+  //   db_instance = db.connect();
+	// });
+
   mainWindow.loadURL(startUrl);
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
