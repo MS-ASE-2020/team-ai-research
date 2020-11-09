@@ -13,3 +13,6 @@ papera.db
 logs
 *.log
 npm-debug.log*
+
+# pdfjs
+pdf.worker.min.data
