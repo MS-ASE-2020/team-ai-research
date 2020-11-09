@@ -16,9 +16,11 @@ class OpenFileZone extends Component {
   }
 
   handleLocalPathChange(event) {
-    this.setState({
-      filePath: "file://" + event.target.files[0].path,
-    });
+    if (event.target.files[0]) {
+      this.setState({
+        filePath: "file://" + event.target.files[0].path,
+      });
+    }
   }
 
   handleUrlPathChange(event) {

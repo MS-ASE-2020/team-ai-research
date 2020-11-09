@@ -86,7 +86,7 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 
 app.whenReady().then(() => {
   protocol.registerFileProtocol('file', (request, callback) => {
-    const pathname = request.url.replace('file:///', '');
+    const pathname = decodeURI(request.url.replace('file:///', ''));
     callback(pathname);
   });
   installExtension(REACT_DEVELOPER_TOOLS)
