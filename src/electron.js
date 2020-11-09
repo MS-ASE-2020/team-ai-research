@@ -21,9 +21,6 @@ let mainWindow;
 // Bypass the node-sqlite3 bug in electron (https://github.com/mapbox/node-sqlite3/issues/1370)
 app.allowRendererProcessReuse = false;
 
-// const db = require("./db");
-// let db_instance = null;
-
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -31,7 +28,7 @@ function createWindow() {
     height: 768,
     webPreferences: {
       // worldSafeExecuteJavaScript: true,
-      // contextIsolation: true,
+      contextIsolation: false,
       preload: path.join(__dirname, "/preload.js"),
       webSecurity: false,
       nodeIntegration: true
@@ -45,10 +42,6 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   });
-
-  // ipcMain.on("mainWindowLoaded", function () {
-  //   db_instance = db.connect();
-	// });
 
   mainWindow.loadURL(startUrl);
   // Open the DevTools.
