@@ -2,16 +2,12 @@ const sqlite3 = require('sqlite3').verbose();
 const DB_FILE = "papera.db";
 
 function connectDatabase() {
-  try {
-    var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
-      if (error) {
-        console.error(error)
-        throw error
-      }
-    });
-  } catch (error) {
-    return (null, error)
-  }
+  var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (error) => {
+    if (error) {
+      console.error(error)
+      throw error
+    }
+  });
   db.serialize(() => {
     /*
      *  `paper` entity table
@@ -59,7 +55,7 @@ function connectDatabase() {
               PRIMARY KEY (PIFpaperID, PIFfolderID)
             );`)
   })
-  return (db, null);
+  return db;
 }
 
 function closeDatabase(db) {
