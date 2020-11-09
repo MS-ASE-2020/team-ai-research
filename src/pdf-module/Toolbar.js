@@ -92,6 +92,13 @@ class AnnotatorToolBar extends React.Component {
                 <div className="spacer"></div>
 
                 <button className="clear" title="Clear" data-tooltype="clear">×</button>
+
+                <div className="spacer"></div>
+
+                <button className="save" title="Save" data-tooltype="save" onClick={() => {
+                    let annotations = this.props.PDFJSAnnotate.getStoreAdapter().getAllAnnotations();
+                    console.log(annotations);
+                }}>💾</button>
             </div>
         );
     }
@@ -313,7 +320,7 @@ function scaleAnnotationInit(UI, RENDER_OPTIONS, render) {
         scale = parseFloat(scale, 10);
         // rotate = parseInt(rotate, 10);
 
-        if (RENDER_OPTIONS.scale !== scale 
+        if (RENDER_OPTIONS.scale !== scale
             // || RENDER_OPTIONS.rotate !== rotate
             ) {
             RENDER_OPTIONS.scale = scale;

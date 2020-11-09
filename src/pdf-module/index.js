@@ -22,10 +22,9 @@ class Annotator extends React.Component {
     }
 
     load(props) {
-        // global.pdfjsViewer = pdfjsViewer;
         const { UI } = PDFJSAnnotate;
         PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
-        const documentId = props.file;
+        const documentId = props.docid;
         let RENDER_OPTIONS = {
             documentId,
             pdfDocument: null,
@@ -77,7 +76,7 @@ class Annotator extends React.Component {
         try {
             this.rendered = false;
             const loadingTask = pdfjsLib.getDocument({
-                url: this.RENDER_OPTIONS.documentId,
+                url: this.props.file,
                 cMapUrl: 'shared/cmaps/',
                 cMapPacked: true
             });

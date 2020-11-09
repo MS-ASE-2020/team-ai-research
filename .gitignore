@@ -16,3 +16,7 @@ npm-debug.log*
 
 # pdfjs
 pdf.worker.min.data
+
+# editors and IDEs
+.vscode/
+.idea/
