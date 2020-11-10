@@ -25,7 +25,8 @@
     "dev": "node src/pdf-worker-copyer.js && nf start -p 3000",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
-    "postinstall": "install-app-deps"
+    "postinstall": "install-app-deps",
+    "update-pdf-annotate.js": "node src/update-pdf-annotate.js"
   },
   "author": "",
   "license": "MIT",
