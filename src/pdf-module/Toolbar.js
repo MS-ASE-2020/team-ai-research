@@ -96,8 +96,11 @@ class AnnotatorToolBar extends React.Component {
                 <div className="spacer"></div>
 
                 <button className="save" title="Save" data-tooltype="save" onClick={() => {
-                    let annotations = this.props.PDFJSAnnotate.getStoreAdapter().getAllAnnotations();
-                    console.log(annotations);
+                    this.props.PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.props.RENDER_OPTIONS.documentId)
+                        .then(annotations => {
+                            console.log(annotations);
+                            // TODO: save to sqlite
+                        });
                 }}>💾</button>
             </div>
         );
