@@ -52,6 +52,8 @@ function connectDatabase() {
                 PRIMARY KEY (PIFpaperID, PIFfolderID)
               );`).run();
 
+  db.prepare(`INSERT OR IGNORE INTO folder VALUES (0, '/', 'root', '', null);`).run();
+
   return db;
 }
 
