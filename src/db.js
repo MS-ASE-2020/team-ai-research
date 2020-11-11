@@ -2,67 +2,83 @@ const sqlite3 = require('sqlite3').verbose();
 const DB_FILE = "papera.db";
 
 function connectDatabase() {
-  var db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE | sqlite3.OPEN_FULLMUTEX, (error) => {
-    if (error) {
-      console.error(error)
-      throw error
-    }
-    db.serialize(() => {
-      /*
-       *  `paper` entity table
-       *  - `paperID`: using the "rowid" technic of SQlite3
-       *  - `paperLastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-       *  - `paperQA`: Question&Answer notes of this paper. Notice that this is a sub-table property.
-       *  - `paperMarks`
-       */
-      db.run(`CREATE TABLE IF NOT EXISTS paper(
-                paperID INTEGER PRIMARY KEY,
-                paperName TEXT UNIQUE NOT NULL,
-                paperTitle TEXT NOT NULL,
-                paperKeywords TEXT,
-                paperYear INTEGER,
-                paperConference TEXT,
-                paperLastedit TEXT,
-                paperQA,
-                paperMarks
-              );`)
-      /*
-       *  `folder` entity table
-       *  - `folderID`: using the "rowid" technic of SQlite3
-       *  - `folderCreatetime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-       */
-        .run(`CREATE TABLE IF NOT EXISTS folder(
-                folderID INTEGER PRIMARY KEY,
-                folderName TEXT NOT NULL,
-                folderDescription TEXT,
-                folderCreatetime TEXT,
-                folderFatherID INTEGER,
-                FOREIGN KEY (folderFatherID) REFERENCES folder (folderID)
-                  ON DELETE CASCADE ON UPDATE CASCADE,
-                UNIQUE(folderName, folderFatherID)
-              );`)
-      /*
-       *  `paperInFolder` relation table
-       */
-        .run(`CREATE TABLE IF NOT EXISTS paperInFolder(
-                PIFpaperID INTEGER,
-                PIFfolderID INTEGER,
-                FOREIGN KEY (PIFpaperID) REFERENCES paper (paperID)
-                  ON DELETE CASCADE ON UPDATE CASCADE,
-                FOREIGN KEY (PIFfolderID) REFERENCES folder (folderID)
-                  ON DELETE CASCADE ON UPDATE CASCADE,
-                PRIMARY KEY (PIFpaperID, PIFfolderID)
-              );`)
+  var db;
+  (new Promise((resolve, reject) => {
+    db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE, e => e ? reject(e) : resolve());
+  })).catch(e => {
+    db = new sqlite3.Database(DB_FILE, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, e => {
+      if (e) {
+        console.error(e);
+        throw e;
+      }
+      db.serialize(() => {
+        /*
+         *  `paper` entity table
+         *  - `ID`: using the "rowid" technic of SQlite3
+         *  - `keywords`: a list of keywords seperated by some special charactor
+         *  - `lastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+         *  - `QandA`: Question&Answer notes of this paper
+         *  - `annotations`
+         */
+        db.run(`CREATE TABLE paper(
+                  ID INTEGER PRIMARY KEY,
+                  name TEXT UNIQUE NOT NULL,
+                  title TEXT NOT NULL,
+                  keywords TEXT,
+                  year INTEGER,
+                  conference TEXT,
+                  lastedit TEXT,
+                  QandA,
+                  annotations
+                );`)
+        /*
+         *  `folder` entity table
+         *  - `ID`: using the "rowid" technic of SQlite3
+         *  - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+         */
+          .run(`CREATE TABLE folder(
+                  ID INTEGER PRIMARY KEY,
+                  name TEXT NOT NULL,
+                  description TEXT,
+                  createtime TEXT,
+                  fatherID INTEGER,
+                  FOREIGN KEY (fatherID) REFERENCES folder (ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                  UNIQUE(name, fatherID)
+                );`)
+        /*
+         *  `paperInFolder` relation table
+         */
+          .run(`CREATE TABLE paperInFolder(
+                  paperID INTEGER,
+                  folderID INTEGER,
+                  FOREIGN KEY (paperID) REFERENCES paper (ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                  FOREIGN KEY (folderID) REFERENCES folder (ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                  PRIMARY KEY (paperID, folderID)
+                );`)
+        /*
+         *  insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
+         */
+          .run(`INSERT INTO folder VALUES (0, '/', 'root', datetime('now','localtime'), null);`, e => {
+            if (e) {
+              console.error(e);
+              throw e;
+            }
+          });
+      });
     })
-  });
-  
+  })
   return db;
 }
 
 function closeDatabase(db) {
   db.close((e) => {
-    if (e)
-      return console.error(e)
+    if (e) {
+      console.error(e);
+      throw e;
+    }
   });
 }
 
