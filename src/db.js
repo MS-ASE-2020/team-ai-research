@@ -65,6 +65,24 @@ function closeDatabase(db) {
   });
 }
 
+function example(db) {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run('BEGIN TRANSACTION');
+
+      db.run('SELECT * FROM PAPER');
+
+      db.run('END TRANSACTION', error => {
+        if (error) {
+          return reject(error);
+        }
+
+        return resolve();
+      });
+    })
+  });
+}
+
 module.exports = {
   connect: connectDatabase,
   close: closeDatabase
