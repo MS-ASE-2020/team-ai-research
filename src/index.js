@@ -5,7 +5,6 @@ import App from './App';
 
 // db init
 const db = window.api.database.connect();
-console.log(db);
 window.db = db;  // let db in global for now.
 
 ReactDOM.render(
