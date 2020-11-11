@@ -30,7 +30,12 @@ function connectDatabase() {
                   lastedit TEXT,
                   QandA,
                   annotations
-                );`)
+                );`, e => {
+                  if (e) {
+                    console.error(e);
+                    throw e;
+                  }
+                })
         /*
          *  `folder` entity table
          *  - `ID`: using the "rowid" technic of SQlite3
@@ -45,7 +50,12 @@ function connectDatabase() {
                   FOREIGN KEY (fatherID) REFERENCES folder (ID)
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   UNIQUE(name, fatherID)
-                );`)
+                );`, e => {
+                  if (e) {
+                    console.error(e);
+                    throw e;
+                  }
+                })
         /*
          *  `paperInFolder` relation table
          */
@@ -57,7 +67,12 @@ function connectDatabase() {
                   FOREIGN KEY (folderID) REFERENCES folder (ID)
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   PRIMARY KEY (paperID, folderID)
-                );`)
+                );`, e => {
+                  if (e) {
+                    console.error(e);
+                    throw e;
+                  }
+                })
         /*
          *  insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
          */
