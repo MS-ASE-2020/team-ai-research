@@ -42,11 +42,11 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
+    "better-sqlite3": "^7.1.1",
     "bootstrap": "^5.0.0-alpha2",
     "popper.js": "^1.16.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "sqlite3": "^5.0.0",
     "tsutils": "^3.17.1"
   },
   "browserslist": {
