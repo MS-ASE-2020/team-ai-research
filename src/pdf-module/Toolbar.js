@@ -16,7 +16,6 @@ class AnnotatorToolBar extends React.Component {
             penAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
             buttonsAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
             scaleAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS, this.props.render);
-            clearAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS, this.props.NUM_PAGES);
             this.setState({ loaded: true });
         }
     }
@@ -75,23 +74,33 @@ class AnnotatorToolBar extends React.Component {
                 <a className="rotate-cw" title="Rotate Clockwise">⟳</a> */}
 
                 <button className="undo" title="Undo annotations" data-tooltype="undo" onClick={() => {
-                    this.props.PDFJSAnnotate.getStoreAdapter().undo(this.props.RENDER_OPTIONS.documentId);
-                    for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
-                        // TODO: it is slow. Better solutions?
-                        this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
-                    }
+                    this.props.PDFJSAnnotate.getStoreAdapter().undo(this.props.RENDER_OPTIONS.documentId).then(() => {
+                        for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
+                            this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
+                        }
+                    });
+                    
                 }}>⟲</button>
                 <button className="redo" title="Redo annotations" data-tooltype="redo" onClick={() => {
-                    this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId);
-                    for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
-                        // TODO: it is slow. Better solutions?
-                        this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
-                    }
+                    this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId).then(() => {
+                        for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
+                            this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
+                        }
+                    });
+                    
                 }}>⟳</button>
 
                 <div className="spacer"></div>
 
-                <button className="clear" title="Clear" data-tooltype="clear">×</button>
+                <button className="clear" title="Clear" data-tooltype="clear" onClick={() => {
+                    if (window.confirm('Are you sure you want to clear annotations? This operation cannot be undone.')) {
+                        for (let i = 0; i < this.props.NUM_PAGES; i++) {
+                            document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
+                        }
+            
+                        localStorage.removeItem(`${this.props.RENDER_OPTIONS.documentId}/annotations`);
+                    }
+                }}>×</button>
 
                 <div className="spacer"></div>
 
@@ -352,20 +361,6 @@ function scaleAnnotationInit(UI, RENDER_OPTIONS, render) {
     document.querySelector('.toolbar select.scale').addEventListener('change', handleScaleChange);
     // document.querySelector('.toolbar .rotate-ccw').addEventListener('click', handleRotateCCWClick);
     // document.querySelector('.toolbar .rotate-cw').addEventListener('click', handleRotateCWClick);
-}
-
-// Clear toolbar button
-function clearAnnotationInit(UI, RENDER_OPTIONS, NUM_PAGES) {
-    function handleClearClick(e) {
-        if (window.confirm('Are you sure you want to clear annotations? This operation cannot be undone.')) {
-            for (let i = 0; i < NUM_PAGES; i++) {
-                document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
-            }
-
-            localStorage.removeItem(`${RENDER_OPTIONS.documentId}/annotations`);
-        }
-    }
-    document.querySelector('button.clear').addEventListener('click', handleClearClick);
 }
 
 export default AnnotatorToolBar;
