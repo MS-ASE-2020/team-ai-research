@@ -23,6 +23,13 @@ class AnnotatorComment extends React.Component {
         this.load()
     }
 
+    componentWillUnmount() {
+        if (this.props.UI != null) {
+            this.props.UI.removeAllEventListener('annotation:click');
+            this.props.UI.removeAllEventListener('annotation:blur');
+        }
+    }
+
     render() {
         return (
             <div id="comment-wrapper">

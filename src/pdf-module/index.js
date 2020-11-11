@@ -23,6 +23,7 @@ class Annotator extends React.Component {
 
     load(props) {
         const { UI } = PDFJSAnnotate;
+        // TODO: load sqlite contents to localstorage
         PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
         const documentId = props.docid;
         let RENDER_OPTIONS = {
@@ -83,7 +84,7 @@ class Annotator extends React.Component {
 
             loadingTask.promise.then((pdf) => {
                 this.RENDER_OPTIONS.pdfDocument = pdf;
-                let viewer = document.getElementById('viewer');
+                let viewer = this.viewer;
                 if (viewer) {
                     viewer.innerHTML = '';
                     for (let i = 0; i < pdf.numPages; i++) {
@@ -119,7 +120,7 @@ class Annotator extends React.Component {
                 <div id="content-wrapper"
                     onScroll={this.contentWrapperScroll.bind(this)}
                     ref={el => this.wrapper = el}>
-                    <div id="viewer" className="pdfViewer"></div>
+                    <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
                 </div>
                 <AnnotatorComment
                     UI={this.UI}
