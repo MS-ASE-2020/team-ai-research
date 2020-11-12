@@ -115,6 +115,46 @@ class Annotator extends React.Component {
         }
     }
 
+    save() {
+        let fileId = this.RENDER_OPTIONS.documentId;
+        if (!this.paperID) {
+            PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+                .then(annotations => {
+                    console.log(annotations);
+                    window.api.database.savePaper(window.db, {
+                        ID: null,
+                        name: 'placeholder' + fileId + Math.random().toString(6),
+                        title: 'placeholder' + fileId,
+                        keywords: 'placeholder' + fileId,
+                        year: 2038,
+                        conference: 'placeholder' + fileId,
+                        lastedit: 'placeholder' + fileId,
+                        QandA: 'placeholder' + fileId,
+                        annotations: JSON.stringify(annotations)
+                    }, (paperID) => {
+                        window.api.filesystem.save(this.file, paperID);
+                        this.paperID = paperID;
+                    });
+                });
+        } else {
+            PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+                .then(annotations => {
+                    console.log(annotations);
+                    window.api.database.savePaper(window.db, {
+                        ID: this.paperID,
+                        name: 'placeholder' + fileId + Math.random().toString(6),
+                        title: 'placeholder' + fileId,
+                        keywords: 'placeholder' + fileId,
+                        year: 2038,
+                        conference: 'placeholder' + fileId,
+                        lastedit: 'placeholder' + fileId,
+                        QandA: 'placeholder' + fileId,
+                        annotations: JSON.stringify(annotations)
+                    });
+                });
+        }
+    }
+
     render() {
         return (
             <div id="pdfwrapper" ref={el => this.el = el}>
@@ -126,7 +166,7 @@ class Annotator extends React.Component {
                     visiblePageNum={this.visiblePageNum}
                     render={this.PDFRender}
                     filename={this.file}
-                    paperID={this.paperID}></AnnotatorToolBar>
+                    saveFunc={this.save.bind(this)}></AnnotatorToolBar>
                 <div id="content-wrapper"
                     onScroll={this.contentWrapperScroll.bind(this)}
                     ref={el => this.wrapper = el}>

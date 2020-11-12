@@ -69,6 +69,7 @@ export default class OpenFile extends Component {
   render() {
     let listItems = [];
     let allPaperList = window.api.database.listPaper(window.db, null);
+    console.log(allPaperList);
     for (let i = 0; i < allPaperList.length; i++) {
       listItems.push((
         <div className="file-item" key={"item-" + i} onClick={() => {
