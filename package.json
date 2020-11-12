@@ -4,7 +4,7 @@
   "description": "Another Node.js project",
   "repository": "https://github.com/MS-ASE-2020/team-ai-research",
   "build": {
-    "appId": "com.example.app",
+    "appId": "com.msase.ai.research",
     "asar": true,
     "win": {},
     "directories": {
@@ -16,17 +16,18 @@
     ]
   },
   "main": "src/electron.js",
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cp -f src/electron.js build/electron.js",
+    "build": "react-scripts build && node utils/cp_batch.js src/electron.js src/preload.js src/db.js build/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "dev": "node src/pdf-worker-copyer.js && nf start -p 3000",
+    "dev": "node utils/cp.js node_modules/pdfjs-dist/build/pdf.worker.min.js src/pdf.worker.min.data && nf start -p 3000",
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "postinstall": "install-app-deps",
-    "update-pdf-annotate.js": "node src/update-pdf-annotate.js"
+    "update-pdf-annotate.js": "node utils/update-pdf-annotate.js"
   },
   "author": "",
   "license": "MIT",
