@@ -18,15 +18,21 @@ class Annotator extends React.Component {
         this.PAGE_HEIGHT = 0;
         this.renderedPages = [];
         this.file = null;
+        this.paperID = null;
 
         this.state = {};
     }
 
     load(props) {
         const { UI } = PDFJSAnnotate;
-        // TODO: load sqlite contents to localstorage
-        PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
         const documentId = props.docid;
+        // TODO: load sqlite contents to localstorage
+        this.paperID = this.props.paperID;
+        if (this.paperID) {
+            let annotation = window.api.database.getAnnotation(window.db, this.paperID);
+            localStorage.setItem(`${documentId}/annotations`, annotation);
+        }
+        PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
         let RENDER_OPTIONS = {
             documentId,
             pdfDocument: null,
@@ -119,7 +125,8 @@ class Annotator extends React.Component {
                     PDFJSAnnotate={PDFJSAnnotate}
                     visiblePageNum={this.visiblePageNum}
                     render={this.PDFRender}
-                    filename={this.file}></AnnotatorToolBar>
+                    filename={this.file}
+                    paperID={this.paperID}></AnnotatorToolBar>
                 <div id="content-wrapper"
                     onScroll={this.contentWrapperScroll.bind(this)}
                     ref={el => this.wrapper = el}>

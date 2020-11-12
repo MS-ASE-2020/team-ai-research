@@ -9,11 +9,18 @@ export default class Reader extends Component {
     };
   }
 
+  getPaperID(url) {
+    const protocol = "paper://";
+    if (url && url.startsWith(protocol)) {
+      return parseInt(url.slice(protocol.length));
+    }
+  }
+
   render() {
     const file = this.props.data.openFile;
     return (
       <div id="Reader" className="Reader">
-        <PDFReader key={file} file={file}></PDFReader>
+        <PDFReader key={file} file={file} paperID={this.getPaperID(file)}></PDFReader>
       </div>
     );
   }
