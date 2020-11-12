@@ -89,13 +89,14 @@ function savePaper(db, properties, afterwardsFunction = null) {
   if (properties.ID) {
     sqlStmt = db.prepare(`UPDATE paper
                           SET name = @name,
-                          title = @title,
-                          keywords = @keywords,
-                          year = @year,
-                          conference = @conference,
-                          lastedit = @lastedit,
-                          QandA = @QandA,
-                          annotations = @annotations;`);
+                              title = @title,
+                              keywords = @keywords,
+                              year = @year,
+                              conference = @conference,
+                              lastedit = @lastedit,
+                              QandA = @QandA,
+                              annotations = @annotations
+                          WHERE ID = @ID;`);
   } else {
     sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations)
                       VALUES (@name, @title, @keywords, @year, @conference, @lastedit, @QandA, @annotations);`);
