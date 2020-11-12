@@ -67,9 +67,15 @@ export default class OpenFile extends Component {
   }
 
   render() {
-    var placeholderItems = [];
-    for (let i = 0; i < 30; i++) {
-      placeholderItems.push(<div className="file-item" key={"item-" + i}>Item {i + 1}</div>);
+    let listItems = [];
+    let allPaperList = window.api.database.listPaper(window.db, null);
+    for (let i = 0; i < allPaperList.length; i++) {
+      listItems.push((
+        <div className="file-item" key={"item-" + i} onClick={() => {
+          console.log(allPaperList[i].ID);
+          this.openFile(window.api.filesystem.get(allPaperList[i].ID));
+        }}>{allPaperList[i].name} {i + 1}</div>
+      ));
     }
     return (
       <div id="OpenFile" className="OpenFile">
@@ -79,7 +85,7 @@ export default class OpenFile extends Component {
           </div>
           <div className="menu-item file-list__wrap">
             <div className="file-list__inner-wrap">
-              <div className="file-list">{placeholderItems}</div>
+              <div className="file-list">{listItems}</div>
             </div>
           </div>
           <div className="menu-item menu-title clickable">

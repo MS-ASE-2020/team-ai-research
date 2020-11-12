@@ -77,10 +77,14 @@ function closeDatabase(db) {
  * Set `properties.ID` to `null`/`undefined`/`false` for paper creation.
  * @param { BetterSqlite3.Database } db 
  * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String, QandA, annotations}} properties 
+ * @param { function } [afterwardsFunction]
  * @returns ID of created/updated paper.
  * @throws error object thrown by SQlite.
  */
-function savePaper(db, properties) {
+function savePaper(db, properties, afterwardsFunction = null) {
+  function getNewID() {
+    return db.prepare(`SELECT ID FROM paper WHERE name = ?;`).get(properties.name).ID
+  }
   let sqlStmt;
   if (properties.ID) {
     sqlStmt = db.prepare(`UPDATE paper
@@ -99,9 +103,12 @@ function savePaper(db, properties) {
   try {
     db.transaction(() => {
       sqlStmt.run(properties);
+      if (afterwardsFunction) {
+        afterwardsFunction(getNewID());
+      }
     })();
-    if (!properties.ID) {
-      properties.ID = db.prepare(`SELECT ID FROM paper WHERE name = ?;`).get(properties.name).ID;
+    if (!properties.ID && !afterwardsFunction) {
+      properties.ID = getNewID();
     }
   } catch (error) {
     console.error(error)
@@ -130,7 +137,7 @@ function listPaper(db, folderID) {
     sqlStmt = db.prepare(`SELECT ID, name FROM paper;`);
   }
   try {
-    var result = sqlStmt.run(properties).all();
+    var result = sqlStmt.all();
   } catch (error) {
     console.error(error)
     throw error;

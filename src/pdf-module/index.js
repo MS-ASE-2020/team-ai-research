@@ -17,6 +17,7 @@ class Annotator extends React.Component {
         this.NUM_PAGES = 0;
         this.PAGE_HEIGHT = 0;
         this.renderedPages = [];
+        this.file = null;
 
         this.state = {};
     }
@@ -35,6 +36,7 @@ class Annotator extends React.Component {
         this.UI = UI;
         this.RENDER_OPTIONS = RENDER_OPTIONS;
         this.rendered = true;
+        this.file = this.props.file;
         pdfjsLib.GlobalWorkerOptions.workerSrc = workerURL;
         this.PDFRender();
     }
@@ -116,7 +118,8 @@ class Annotator extends React.Component {
                     NUM_PAGES={this.NUM_PAGES}
                     PDFJSAnnotate={PDFJSAnnotate}
                     visiblePageNum={this.visiblePageNum}
-                    render={this.PDFRender}></AnnotatorToolBar>
+                    render={this.PDFRender}
+                    filename={this.file}></AnnotatorToolBar>
                 <div id="content-wrapper"
                     onScroll={this.contentWrapperScroll.bind(this)}
                     ref={el => this.wrapper = el}>
