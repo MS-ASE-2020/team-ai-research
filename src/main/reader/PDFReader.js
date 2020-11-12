@@ -6,12 +6,13 @@ export default class PDFReader extends Component {
     super(props);
     this.state = {
       file: this.props.file,
+      paperID: this.props.paperID
     };
   }
 
   render() {
     return (
-      <Annotator file={this.state.file} docid={this.state.file + "_id"}></Annotator>
+      <Annotator file={this.state.file} docid={this.state.file + "_id"} paperID={this.state.paperID}></Annotator>
     );
   }
 }

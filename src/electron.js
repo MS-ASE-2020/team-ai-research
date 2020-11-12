@@ -1,10 +1,9 @@
 const electron = require('electron');
 const { protocol, ipcMain } = require('electron');
 
-// Register file:// with privilege. It's SHOULD BE replaced to a safer version when it really ships.
-// protocol.registerSchemesAsPrivileged([
-//   { scheme: 'file', privileges: { corsEnabled: true } }
-// ])
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'paper', privileges: { supportFetchAPI: true } }
+])
 
 // Module to control application life.
 const app = electron.app;
@@ -99,6 +98,11 @@ if (isDev()) {
 app.whenReady().then(() => {
   protocol.registerFileProtocol('file', (request, callback) => {
     const pathname = decodeURI(request.url.replace('file:///', ''));
+    callback(pathname);
+  });
+  protocol.registerFileProtocol('paper', (request, callback) => {
+    const pathname = path.join(app.getPath('userData'), 'papers', request.url.replace('paper://', '') + '.pdf');
+    console.log(pathname);
     callback(pathname);
   });
   if (isDev()) {
