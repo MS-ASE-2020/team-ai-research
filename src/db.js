@@ -145,10 +145,81 @@ function listPaper(db, folderID) {
   return result;
 }
 
+/**
+ * List folders in a specific folder with given father folder ID.
+ * When `folderID` is null or 0 or undefined, the return array's length will be 0.
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @returns { Array< { ID:Number, name:String } > }
+ * @throws error object thrown by SQlite.
+ */
+function listFolder(db, folderID) {
+  let sqlStmt = db.prepare(`SELECT ID, name FROM folder
+                            WHERE fatherID = ?;`);
+  try {
+    if (folderID) {
+      var result = sqlStmt.all(folderID);
+    } else {
+      result = Array();
+    }
+  } catch (error) {
+    console.error(error)
+    throw error;
+  }
+  return result;
+}
+
+/**
+ * 
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @returns {{ID: Number, name: String, description: String, createtime: String, fatherID: Number}}
+ */
+function getFolderProperty(db, folderID) {
+  let sqlStmt = db.prepare(`SELECT ID, name, description, createtime, fatherID
+                            FROM folder WHERE ID = ?`);
+  try {
+    var result = sqlStmt.get(folderID)
+  } catch (error) {
+    console.error(error)
+    throw error;
+  }
+  return result;
+}
+
 function getAnnotation(db, paperID) {
   let sqlStmt = db.prepare(`SELECT annotations FROM paper WHERE ID = ?`);
   try {
     var result = sqlStmt.get(paperID).annotations
+  } catch (error) {
+    console.error(error)
+    throw error;
+  }
+  return result;
+}
+
+function getQandA(db, paperID) {
+  let sqlStmt = db.prepare(`SELECT QandA FROM paper WHERE ID = ?`);
+  try {
+    var result = sqlStmt.get(paperID).QandA
+  } catch (error) {
+    console.error(error)
+    throw error;
+  }
+  return result;
+}
+
+/**
+ * 
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} paperID 
+ * @returns {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String}}
+ */
+function getPaperProperty(db, paperID) {
+  let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit
+                            FROM paper WHERE ID = ?`);
+  try {
+    var result = sqlStmt.get(paperID)
   } catch (error) {
     console.error(error)
     throw error;
@@ -161,5 +232,8 @@ module.exports = {
   close: closeDatabase,
   savePaper: savePaper,
   listPaper: listPaper,
-  getAnnotation: getAnnotation
+  getAnnotation: getAnnotation,
+  listFolder: listFolder,
+  getQandA: getQandA,
+  getPaperProperty: getPaperProperty
 };
