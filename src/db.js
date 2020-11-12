@@ -1,12 +1,14 @@
 const Database = require('better-sqlite3');
 const DB_FILE = "papera.db";
 const process = require('process');
+const path = require('path');
 
-function connectDatabase() {
+function connectDatabase(directory = "./") {
+  const db_file = path.join(directory, DB_FILE);
   try {
-    var db = new Database(DB_FILE, {verbose: console.log, fileMustExist: true});
+    var db = new Database(db_file, {verbose: console.log, fileMustExist: true});
   } catch (error) {
-    db = new Database(DB_FILE, {verbose: console.log});
+    db = new Database(db_file, {verbose: console.log});
     /*
     * `paper` entity table
     * - `ID`: using the "rowid" technic of SQlite3
