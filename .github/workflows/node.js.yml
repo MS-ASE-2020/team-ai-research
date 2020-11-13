@@ -5,9 +5,11 @@ name: Node.js Lint CI
 
 on:
   push:
-    branches: [ "react*" ]
+    branches:
+      - "react*"
   pull_request:
-    branches: [ "react*" ]
+    branches:
+      - "react*"
 
 jobs:
   build:
