@@ -44,7 +44,7 @@ class NewBookmark extends Component {
 
 class InformationEdit extends Component {
     render() {
-      if (this.props.modify == false) {
+      if (this.props.modify === false) {
         return (
           <div className="InformationEditFalse">
             <input type="button" value="Edit" onClick={this.props.setModify}/>
