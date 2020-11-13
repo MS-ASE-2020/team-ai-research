@@ -106,7 +106,9 @@ class AnnotatorToolBar extends React.Component {
 
         <div className="spacer"></div>
 
-        <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>💾</button>
+        <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>
+          <span role="img" aria-label="save">💾</span>
+        </button>
       </div>
     );
   }
