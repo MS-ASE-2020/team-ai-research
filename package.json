@@ -1,7 +1,7 @@
 {
   "name": "msase-ai-research",
-  "version": "1.0.0",
-  "description": "Another Node.js project",
+  "version": "0.0.1",
+  "description": "Papera: A paper-reading assistant",
   "repository": "https://github.com/MS-ASE-2020/team-ai-research",
   "build": {
     "appId": "com.msase.ai.research",
