@@ -119,6 +119,46 @@ function savePaper(db, properties, afterwardsFunction = null) {
 }
 
 /**
+ * Save properties into table `folder`,
+ * no matter whether or not it is new for papera.
+ * Set `properties.ID` to `null`/`undefined`/`false` for folder creation.
+ * @param { BetterSqlite3.Database } db 
+ * @param {{ID: Number, name: String, description: String, createtime: String, fatherID: Number}} properties 
+ * @returns ID of created/updated folder.
+ * @throws error object thrown by SQlite.
+ */
+function saveFolder(db, properties) {
+  function getNewID() {
+    return db.prepare(`SELECT ID FROM folder WHERE name = ? and fatherID = ?;`).get(properties.name, properties.fatherID).ID
+  }
+  let sqlStmt;
+  if (properties.ID) {
+    sqlStmt = db.prepare(`UPDATE folder
+                          SET name = @name,
+                              description = @description,
+                              createtime = @createtime,
+                              fatherID = @fatherID
+                          WHERE ID = @ID;`);
+  } else {
+    sqlStmt = db.prepare(`INSERT INTO folder (name, description, createtime, fatherID)
+                          VALUES (@name, @description, @createtime, @fatherID);`);
+  }
+  try {
+    db.transaction(() => {
+      sqlStmt.run(properties);
+    })();
+    if (!properties.ID) {
+      properties.ID = getNewID();
+    }
+  } catch (error) {
+    console.error(error)
+    throw error;
+  }
+  return properties.ID;
+}
+
+
+/**
  * List papers in a specific folder with given folder ID.
  * List all papers in papera when `folderID` is `null` or `false` or `undefined`
  * @param { BetterSqlite3.Database } db 
@@ -236,5 +276,7 @@ module.exports = {
   getAnnotation: getAnnotation,
   listFolder: listFolder,
   getQandA: getQandA,
-  getPaperProperty: getPaperProperty
+  getPaperProperty: getPaperProperty,
+  getFolderProperty: getFolderProperty,
+  saveFolder: saveFolder
 };
