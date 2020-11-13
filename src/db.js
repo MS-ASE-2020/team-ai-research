@@ -59,7 +59,7 @@ function connectDatabase(directory = "./") {
     /*
     * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
     */
-    db.prepare(`INSERT INTO folder VALUES (1, '/', 'root', datetime('now','localtime'), null);`).run();
+    db.prepare(`INSERT INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
 
     db.prepare(`CREATE UNIQUE INDEX idx_paper_name ON paper (name);`).run();
   }
