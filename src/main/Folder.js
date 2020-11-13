@@ -147,7 +147,7 @@ export default class Folder extends Component {
               newBookmark={this.state.newBookmark} stopCreate={this.stopCreateBookmark.bind(this)}/>
             <br/>
           </div>
-          <div classname="FolderInformation">
+          <div className="FolderInformation">
             <br/>
               <FolderInformation folderID={this.props.folderID}/>
             <br/>
