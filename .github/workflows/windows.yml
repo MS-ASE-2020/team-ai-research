@@ -2,11 +2,8 @@ name: Papera Windows Build
 
 on:
   push:
-    branches:
-      - "react"
-  pull_request:
-    branches:
-      - "react"
+    tags:
+      - v*
 
 jobs:
   build:
