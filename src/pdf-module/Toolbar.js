@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import initColorPicker from './initColorPicker';
 import './toolbar.css';
 
@@ -109,6 +111,15 @@ class AnnotatorToolBar extends React.Component {
     );
   }
 }
+
+AnnotatorToolBar.propTypes = {
+  UI: PropTypes.object,
+  RENDER_OPTIONS: PropTypes.object,
+  render: PropTypes.func,
+  PDFJSAnnotate: PropTypes.object,
+  NUM_PAGES: PropTypes.number,
+  saveFunc: PropTypes.func
+};
 
 function textAnnotationInit(UI, RENDER_OPTIONS) {
   let textSize;

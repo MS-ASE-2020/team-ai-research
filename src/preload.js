@@ -1,7 +1,7 @@
-const {
-  contextBridge,
-  ipcRenderer
-} = require("electron");
+// const {
+//   contextBridge,
+//   ipcRenderer
+// } = require("electron");
 
 const { app, remote } = require("electron").remote;
 

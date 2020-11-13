@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 
 class OpenFileZone extends Component {
   constructor(props) {
@@ -101,3 +103,11 @@ export default class OpenFile extends Component {
     );
   }
 }
+
+OpenFileZone.propTypes = {
+  openFile: PropTypes.func.isRequired,
+};
+
+OpenFile.propTypes = {
+  onOpenFile: PropTypes.func.isRequired,
+};

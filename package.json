@@ -32,11 +32,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "babel-eslint": "10.1.0",
     "electron": "^10.1.5",
     "electron-builder": "^22.9.1",
     "electron-devtools-installer": "^3.1.1",
-    "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5",
+    "eslint": "^6.6.0",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
     "pdf-annotate.js": "taoky/pdf-annotate.js#master",
@@ -48,6 +49,7 @@
     "better-sqlite3": "^7.1.1",
     "bootstrap": "^5.0.0-alpha2",
     "popper.js": "^1.16.1",
+    "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "tsutils": "^3.17.1"

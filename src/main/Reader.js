@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 import PDFReader from "./reader/PDFReader";
 
 export default class Reader extends Component {
@@ -25,3 +27,7 @@ export default class Reader extends Component {
     );
   }
 }
+
+Reader.propTypes = {
+  data: PropTypes.object.isRequired
+};

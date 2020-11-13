@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 import Annotator from 'pdf-module';
 
 export default class PDFReader extends Component {
@@ -16,3 +18,8 @@ export default class PDFReader extends Component {
     );
   }
 }
+
+PDFReader.propTypes = {
+  file: PropTypes.string,
+  paperID: PropTypes.number
+};

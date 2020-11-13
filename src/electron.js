@@ -1,5 +1,6 @@
 const electron = require('electron');
-const { protocol, ipcMain } = require('electron');
+const { protocol } = require('electron');
+// const { ipcMain } = require('electron');
 
 protocol.registerSchemesAsPrivileged([
   { scheme: 'paper', privileges: { supportFetchAPI: true } }

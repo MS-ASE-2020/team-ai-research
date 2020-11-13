@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 import OpenFile from "./OpenFile";
 
 export default class FileManager extends Component {
@@ -10,3 +12,7 @@ export default class FileManager extends Component {
     );
   }
 }
+
+FileManager.propTypes = {
+  actions: PropTypes.object.isRequired
+};

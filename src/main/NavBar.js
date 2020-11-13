@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 
 export default class NavBar extends Component {
   render() {
@@ -28,3 +30,9 @@ export default class NavBar extends Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  items: PropTypes.array.isRequired,
+  active: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired
+};

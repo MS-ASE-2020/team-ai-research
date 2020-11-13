@@ -70,7 +70,7 @@ export default class App extends Component {
       const TheComponent = CONTENT_TABS[i].component;
 
       components.push(
-        <div className={i == this.state.activeTab ? "absolute" : "d-none"}>
+        <div key={i} className={i === this.state.activeTab ? "absolute" : "d-none"}>
           <TheComponent versions={this.state.versions} data={data} actions={actions} />
         </div>
       );

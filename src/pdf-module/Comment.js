@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 
 class AnnotatorComment extends React.Component {
   constructor(props) {
@@ -46,6 +48,11 @@ class AnnotatorComment extends React.Component {
     );
   }
 }
+
+AnnotatorComment.propTypes = {
+  UI: PropTypes.object,
+  PDFJSAnnotate: PropTypes.object
+};
 
 function htmlEscape(text) {
   return text

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
+
 
 // this.props.folderID/forward(newPath,newFolderID)/subfolder
 
@@ -68,6 +70,12 @@ class NewBookmark extends Component {
   }
 }
 
+NewBookmark.propTypes = {
+  folderID: PropTypes.number.isRequired,
+  stopCreate: PropTypes.func.isRequired,
+  newBookmark: PropTypes.bool.isRequired
+};
+
 class InformationEdit extends Component {
   render() {
     if (this.props.modify === false) {
@@ -87,6 +95,11 @@ class InformationEdit extends Component {
     }
   }
 }
+
+InformationEdit.propTypes = {
+  modify: PropTypes.bool.isRequired,
+  setModify: PropTypes.func.isRequired
+};
 
 class FolderInformation extends Component {
   constructor(props) {
@@ -109,7 +122,8 @@ class FolderInformation extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
     if (nextProps.folderID !== this.props.folderID) {
       this.setState({ folder: this.getFolder(nextProps.folderID) });
     }
@@ -155,6 +169,10 @@ class FolderInformation extends Component {
     );
   }
 }
+
+FolderInformation.propTypes = {
+  folderID: PropTypes.number.isRequired
+};
 
 export default class Folder extends Component {
   constructor(props) {
@@ -211,3 +229,9 @@ export default class Folder extends Component {
     );
   }
 }
+
+
+Folder.propTypes = {
+  folderID: PropTypes.number.isRequired,
+  forward: PropTypes.func.isRequired
+};
