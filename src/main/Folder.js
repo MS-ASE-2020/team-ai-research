@@ -3,25 +3,41 @@ import React, { Component } from "react";
 // this.props.folderID/forward(newPath,newFolderID)/subfolder
 
 class NewBookmark extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      description: ""
+    };
+  }
+
+  handleChanges(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [[name]]: value
+    });
+  }
+
   createNewBookmark() {
-    let folder = {
-      name: document.getElementById("newBookmarkName").value,
-      description: document.getElementById("newBookmarkDescription").value,
-      fatherID: this.props.folderID
-    }
     try {
       window.api.database.saveFolder(window.db, {
         ID: null,
-        name: folder.name,
-        description: folder.description,
+        name: this.state.name,
+        description: this.state.description,
         createtime: 0,
-        fatherID: folder.fatherID
+        fatherID: this.props.folderID
       });
       alert("Success!")
-      document.getElementById("newBookmarkName").value = "";
-      document.getElementById("newBookmarkDescription").value = "";
+      this.setState({
+        name: "",
+        description: ""
+      });
       this.props.stopCreate()
     } catch (error) {
+      console.error(error)
       alert("ID already EXISTS!")
     }
   }
@@ -31,14 +47,20 @@ class NewBookmark extends Component {
       return (
         <div className="newBookmark">
           <h3>Create New Bookmark</h3>
-          <div className="newBookmarkName">
-            Name: <input id="newBookmarkName" type="text" />
-          </div>
-          <div className="newBookmarkDescription">
-            Description: <input id="newBookmarkDescription" type="text" />
-          </div>
-          <input type="button" value="Create" onClick={this.createNewBookmark.bind(this)} />
-          <input type="button" value="Cancel" onClick={this.props.stopCreate} />
+          <form>
+            <div className="newBookmarkName">
+              <label>
+                Name: <input id="newBookmarkName" type="text" value={this.state.name} name="name" onChange={this.handleChanges.bind(this)} />
+              </label>
+            </div>
+            <div className="newBookmarkDescription">
+              <label>
+                Description: <input id="newBookmarkDescription" type="text" value={this.state.description} name="description" onChange={this.handleChanges.bind(this)} />
+              </label>
+            </div>
+            <input type="button" value="Create" onClick={this.createNewBookmark.bind(this)} />
+            <input type="button" value="Cancel" onClick={this.props.stopCreate} />
+          </form>
         </div>
       )
     }
