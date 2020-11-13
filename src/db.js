@@ -105,18 +105,15 @@ function savePaper(db, properties, afterwardsFunction = null) {
     sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations)
                       VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations);`);
   }
-  try {
-    db.transaction(() => {
-      sqlStmt.run(properties);
-      if (afterwardsFunction) {
-        afterwardsFunction(getNewID());
-      }
-    })();
-    if (!properties.ID && !afterwardsFunction) {
-      properties.ID = getNewID();
+
+  db.transaction(() => {
+    sqlStmt.run(properties);
+    if (afterwardsFunction) {
+      afterwardsFunction(getNewID());
     }
-  } catch (error) {
-    throw error;
+  })();
+  if (!properties.ID && !afterwardsFunction) {
+    properties.ID = getNewID();
   }
   return properties.ID;
 }
@@ -149,16 +146,14 @@ function saveFolder(db, properties) {
     sqlStmt = db.prepare(`INSERT INTO folder (name, description, createtime, fatherID)
                           VALUES (@name, @description, datetime('now','localtime'), @fatherID);`);
   }
-  try {
-    db.transaction(() => {
-      sqlStmt.run(properties);
-    })();
-    if (!properties.ID) {
-      properties.ID = getNewID();
-    }
-  } catch (error) {
-    throw error;
+
+  db.transaction(() => {
+    sqlStmt.run(properties);
+  })();
+  if (!properties.ID) {
+    properties.ID = getNewID();
   }
+
   return properties.ID;
 }
 

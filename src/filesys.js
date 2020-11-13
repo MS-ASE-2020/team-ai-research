@@ -20,7 +20,7 @@ function savePaper(src, id) {
     // download from web
     // async
     const file = fs.createWriteStream(path.join(targetFolder, id + ".pdf"));
-    const request = https.get(src, response => {
+    https.get(src, response => {
       response.pipe(file);
     });
   }

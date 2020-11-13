@@ -58,7 +58,7 @@ export default class App extends Component {
   }
 
   render() {
-    const ActiveComponent = CONTENT_TABS[this.state.activeTab].component;
+    // const ActiveComponent = CONTENT_TABS[this.state.activeTab].component;
     const data = {
       openFile: this.state.openFile,
     };
