@@ -5,6 +5,7 @@ const path = require('path');
 
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
+  
   try {
     var db = new Database(db_file, {verbose: console.log, fileMustExist: true});
   } catch (error) {
