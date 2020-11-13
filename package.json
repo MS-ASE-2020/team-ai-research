@@ -27,7 +27,8 @@
     "pack": "electron-builder --dir",
     "dist": "npm run build && electron-builder",
     "postinstall": "install-app-deps",
-    "update-pdf-annotate.js": "node utils/update-pdf-annotate.js"
+    "update-pdf-annotate.js": "node utils/update-pdf-annotate.js",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "MIT",
