@@ -5,22 +5,21 @@ import React, { Component } from "react";
 class NewBookmark extends Component {
     createNewBookmark() {
       let folder = {
-        ID: 2,
+        ID: 5,
         name: document.getElementById("newBookmarkName").value,
         description: document.getElementById("newBookmarkDescription").value,
         fatherID: this.props.folderID
       }
-      alert(JSON.stringify(folder))
-        try {
-            window.db.prepare(`INSERT INTO folder VALUES (${folder.ID}, ${folder.name}, 
-                ${folder.description}, datetime('now','localtime'), ${folder.fatherID});`).run();
-            alert("Success!")
-            document.getElementById("newBookmarkName").value = "";
-            document.getElementById("newBookmarkDescription").value = "";
-            this.props.stopCreate()
-          } catch (error) {
-            alert("ID already EXISTS!")
-          }
+      alert(JSON.stringify(folder))   
+      try {
+          window.db.prepare(`INSERT INTO folder VALUES (${folder.ID}, ${folder.name}, ${folder.description}, datetime('now','localtime'), ${folder.fatherID});`).run();
+          alert("Success!")
+          document.getElementById("newBookmarkName").value = "";
+          document.getElementById("newBookmarkDescription").value = "";
+          this.props.stopCreate()
+      } catch (error) {
+          alert("ID already EXISTS!")
+      }
     }
   
     render() {
@@ -120,21 +119,18 @@ export default class Folder extends Component {
       this.setState({
         newBookmark: false
       })
-      document.getElementById("newBookmarkName").value = "";
-      document.getElementById("newBookmarkDescription").value = "";
     }
 
     render() {
       let listItem = []
-      const folder = window.api.database.getFolderProperty(window.db, this.props.folderID)
-      alert(JSON.stringify(folder))
       let dirlist = window.api.database.listFolder(window.db, this.props.folderID)
       for (let k = 0; k < dirlist.length; k++) {
         listItem.push((
           <div className="Subfolder">
-            <input type="button" value={dirlist[k].name} onClick={() => 
-                this.props.forward(dirlist[k].name, dirlist[k].ID)
-            }/>
+            <input type="button" value={dirlist[k].name} onClick={() => {
+              this.props.forward(dirlist[k].name + "/", dirlist[k].ID);
+              this.stopCreateBookmark();
+            }}/>
           </div>
         ));
       }
@@ -153,12 +149,11 @@ export default class Folder extends Component {
           </div>
           <div classname="FolderInformation">
             <br/>
-              
+              <FolderInformation folderID={this.props.folderID}/>
             <br/>
           </div>
         </div>
       );
-      // <FolderInformation folderID={this.props.folderID}/>
     }
 }
   

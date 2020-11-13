@@ -45,6 +45,7 @@
   "dependencies": {
     "better-sqlite3": "^7.1.1",
     "bootstrap": "^5.0.0-alpha2",
+    "dependencies": "0.0.1",
     "popper.js": "^1.16.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
