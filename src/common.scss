@@ -1,5 +1,9 @@
 //@import "bootstrap";
 
+.absolute {
+  @include absolute;
+}
+
 .btn {
   font: inherit;
   font-size: 0.8em;
@@ -12,6 +16,10 @@
 
 .clickable {
   @include clickable;
+}
+
+.d-none {
+  display: none !important;
 }
 
 .form-row {

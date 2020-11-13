@@ -22,7 +22,7 @@ const CONTENT_TABS = [
   },
   {
     id: "bookmarks",
-    title: "Bookmarks",
+    title: "Library",
     icon: "briefcase",
     component: Bookmarks,
   },
@@ -53,7 +53,7 @@ export default class App extends Component {
 
   handleSwitchTab(tab) {
     this.setState({
-      activeTab: tab
+      activeTab: tab,
     });
   }
 
@@ -65,11 +65,21 @@ export default class App extends Component {
     const actions = {
       openFile: this.handleOpenFile.bind(this),
     };
+    let components = [];
+    for (let i = 0; i < CONTENT_TABS.length; i++) {
+      const TheComponent = CONTENT_TABS[i].component;
+
+      components.push(
+        <div className={i == this.state.activeTab ? "absolute" : "d-none"}>
+          <TheComponent versions={this.state.versions} data={data} actions={actions} />
+        </div>
+      );
+    }
     return (
       <div id="App" className="App">
         <NavBar items={CONTENT_TABS} active={this.state.activeTab} onClick={(tab) => this.handleSwitchTab(tab)} />
         <div id="main" className="main">
-          <ActiveComponent versions={this.state.versions} data={data} actions={actions} />
+          {components}
         </div>
       </div>
     );

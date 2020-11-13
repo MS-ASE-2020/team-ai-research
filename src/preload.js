@@ -3,7 +3,7 @@ const {
     ipcRenderer
 } = require("electron");
 
-const { app } = require("electron").remote;
+const { app, remote } = require("electron").remote;
 
 const db = require("./db");
 const filesystem = require("./filesys");
@@ -16,5 +16,5 @@ window.api = {
   version_info: process.versions,
   database: db,
   filesystem: filesystem,
-  userDataDir: app.getPath('userData')
+  userDataDir: app.getPath('userData') || remote.app.getPath('userData'),
 };
