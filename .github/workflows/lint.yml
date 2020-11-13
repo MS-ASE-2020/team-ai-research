@@ -1,4 +1,4 @@
-name: Node.js Lint CI
+name: Node.js Build & Lint CI
 
 on:
   push:
@@ -33,3 +33,4 @@ jobs:
           ${{ runner.os }}-
     - run: npm ci
     - run: npm run lint
+    - run: npm run build  # running npm run dist may take too much time...
