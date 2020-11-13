@@ -6,10 +6,10 @@ name: Node.js Lint CI
 on:
   push:
     branches:
-      - "react*"
+      - "react"
   pull_request:
     branches:
-      - "react*"
+      - "react"
 
 jobs:
   build:
