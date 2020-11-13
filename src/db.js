@@ -80,7 +80,9 @@ function closeDatabase(db) {
  * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, QandA, annotations}} properties 
  * @param { function } [afterwardsFunction]
  * @returns ID of created/updated paper.
- * @throws error object thrown by SQlite.
+ * @throws error object thrown by SQlite, and should be handled by upper caller.
+ *         Mostly because:
+ *         - some other paper have the same name
  */
 function savePaper(db, properties, afterwardsFunction = null) {
   function getNewID() {
@@ -113,7 +115,6 @@ function savePaper(db, properties, afterwardsFunction = null) {
       properties.ID = getNewID();
     }
   } catch (error) {
-    console.error(error)
     throw error;
   }
   return properties.ID;
@@ -127,7 +128,10 @@ function savePaper(db, properties, afterwardsFunction = null) {
  * @param { BetterSqlite3.Database } db 
  * @param {{ID: Number, name: String, description: String, fatherID: Number}} properties 
  * @returns ID of created/updated folder.
- * @throws error object thrown by SQlite.
+ * @throws error object thrown by SQlite, and should be handled by upper caller.
+ *         Mostly because:
+ *         - some other folder have the same name within the same father folder
+ *         - illegal `properties.fatherID`
  */
 function saveFolder(db, properties) {
   function getNewID() {
@@ -152,7 +156,6 @@ function saveFolder(db, properties) {
       properties.ID = getNewID();
     }
   } catch (error) {
-    console.error(error)
     throw error;
   }
   return properties.ID;
@@ -165,7 +168,6 @@ function saveFolder(db, properties) {
  * @param { BetterSqlite3.Database } db 
  * @param { Number } folderID 
  * @returns { Array< { ID:Number, name:String } > }
- * @throws error object thrown by SQlite.
  */
 function listPaper(db, folderID) {
   let sqlStmt;
@@ -178,12 +180,7 @@ function listPaper(db, folderID) {
   } else {
     sqlStmt = db.prepare(`SELECT ID, name FROM paper;`);
   }
-  try {
-    var result = sqlStmt.all();
-  } catch (error) {
-    console.error(error)
-    throw error;
-  }
+  var result = sqlStmt.all();
   return result;
 }
 
@@ -193,20 +190,14 @@ function listPaper(db, folderID) {
  * @param {BetterSqlite3.Database} db 
  * @param {Number} folderID 
  * @returns { Array< { ID:Number, name:String } > }
- * @throws error object thrown by SQlite.
  */
 function listFolder(db, folderID) {
   let sqlStmt = db.prepare(`SELECT ID, name FROM folder
                             WHERE fatherID = ?;`);
-  try {
-    if (folderID) {
-      var result = sqlStmt.all(folderID);
-    } else {
-      result = Array();
-    }
-  } catch (error) {
-    console.error(error)
-    throw error;
+  if (folderID) {
+    var result = sqlStmt.all(folderID);
+  } else {
+    result = Array();
   }
   return result;
 }
@@ -220,34 +211,19 @@ function listFolder(db, folderID) {
 function getFolderProperty(db, folderID) {
   let sqlStmt = db.prepare(`SELECT ID, name, description, createtime, fatherID
                             FROM folder WHERE ID = ?`);
-  try {
-    var result = sqlStmt.get(folderID)
-  } catch (error) {
-    console.error(error)
-    throw error;
-  }
+  var result = sqlStmt.get(folderID);
   return result;
 }
 
 function getAnnotation(db, paperID) {
   let sqlStmt = db.prepare(`SELECT annotations FROM paper WHERE ID = ?`);
-  try {
-    var result = sqlStmt.get(paperID).annotations
-  } catch (error) {
-    console.error(error)
-    throw error;
-  }
+  var result = sqlStmt.get(paperID).annotations
   return result;
 }
 
 function getQandA(db, paperID) {
   let sqlStmt = db.prepare(`SELECT QandA FROM paper WHERE ID = ?`);
-  try {
-    var result = sqlStmt.get(paperID).QandA
-  } catch (error) {
-    console.error(error)
-    throw error;
-  }
+  var result = sqlStmt.get(paperID).QandA
   return result;
 }
 
@@ -260,12 +236,7 @@ function getQandA(db, paperID) {
 function getPaperProperty(db, paperID) {
   let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit
                             FROM paper WHERE ID = ?`);
-  try {
-    var result = sqlStmt.get(paperID)
-  } catch (error) {
-    console.error(error)
-    throw error;
-  }
+  var result = sqlStmt.get(paperID)
   return result;
 }
 
