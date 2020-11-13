@@ -30,15 +30,15 @@ class NewBookmark extends Component {
         createtime: 0,
         fatherID: this.props.folderID
       });
-      alert("Success!")
+      alert("Success!");
       this.setState({
         name: "",
         description: ""
       });
-      this.props.stopCreate()
+      this.props.stopCreate();
     } catch (error) {
-      console.error(error)
-      alert("ID already EXISTS!")
+      console.error(error);
+      alert("ID already EXISTS!");
     }
   }
 
@@ -62,7 +62,7 @@ class NewBookmark extends Component {
             <input type="button" value="Cancel" onClick={this.props.stopCreate} />
           </form>
         </div>
-      )
+      );
     }
     else return null;
   }
@@ -102,11 +102,11 @@ class FolderInformation extends Component {
   }
 
   setModify() {
-    document.getElementById("FolderName").disabled = !document.getElementById("FolderName").disabled
-    document.getElementById("FolderDescription").disabled = !document.getElementById("FolderDescription").disabled
+    document.getElementById("FolderName").disabled = !document.getElementById("FolderName").disabled;
+    document.getElementById("FolderDescription").disabled = !document.getElementById("FolderDescription").disabled;
     this.setState({
       modify: !this.state.modify
-    })
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -158,27 +158,27 @@ class FolderInformation extends Component {
 
 export default class Folder extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       newBookmark: false
-    }
+    };
   }
 
   createBookmark() {
     this.setState({
       newBookmark: true
-    })
+    });
   }
 
   stopCreateBookmark() {
     this.setState({
       newBookmark: false
-    })
+    });
   }
 
   render() {
-    let listItem = []
-    let dirlist = window.api.database.listFolder(window.db, this.props.folderID)
+    let listItem = [];
+    let dirlist = window.api.database.listFolder(window.db, this.props.folderID);
     for (let k = 0; k < dirlist.length; k++) {
       listItem.push((
         <div className="Subfolder" key={k}>

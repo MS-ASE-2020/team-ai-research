@@ -3,358 +3,358 @@ import initColorPicker from './initColorPicker';
 import './toolbar.css';
 
 class AnnotatorToolBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            loaded: false
-        };
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false
+    };
+  }
+
+  load() {
+    if (this.props.UI != null && this.props.RENDER_OPTIONS != null && this.state.loaded === false) {
+      textAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
+      penAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
+      buttonsAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
+      scaleAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS, this.props.render);
+      this.setState({ loaded: true });
     }
+  }
 
-    load() {
-        if (this.props.UI != null && this.props.RENDER_OPTIONS != null && this.state.loaded === false) {
-            textAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
-            penAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
-            buttonsAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS);
-            scaleAnnotationInit(this.props.UI, this.props.RENDER_OPTIONS, this.props.render);
-            this.setState({ loaded: true });
-        }
-    }
+  componentDidMount() {
+    this.load();
+  }
 
-    componentDidMount() {
-        this.load()
-    }
+  componentDidUpdate() {
+    this.load();
+  }
 
-    componentDidUpdate() {
-        this.load()
-    }
+  componentWillUnmount() {
 
-    componentWillUnmount() {
+  }
 
-    }
+  render() {
+    return (
+      <div className="toolbar">
+        <button className="cursor" type="button" title="Cursor" data-tooltype="cursor">➚</button>
+        <button className="eraser" type="button" title="Eraser" data-tooltype="eraser">⌫</button>
 
-    render() {
-        return (
-            <div className="toolbar">
-                <button className="cursor" type="button" title="Cursor" data-tooltype="cursor">➚</button>
-                <button className="eraser" type="button" title="Eraser" data-tooltype="eraser">⌫</button>
+        <div className="spacer"></div>
 
-                <div className="spacer"></div>
+        <button className="rectangle" type="button" title="Rectangle" data-tooltype="area">&nbsp;</button>
+        <button className="highlight" type="button" title="Highlight" data-tooltype="highlight">&nbsp;</button>
+        <button className="strikeout" type="button" title="Strikeout" data-tooltype="strikeout">&nbsp;</button>
 
-                <button className="rectangle" type="button" title="Rectangle" data-tooltype="area">&nbsp;</button>
-                <button className="highlight" type="button" title="Highlight" data-tooltype="highlight">&nbsp;</button>
-                <button className="strikeout" type="button" title="Strikeout" data-tooltype="strikeout">&nbsp;</button>
+        <div className="spacer"></div>
 
-                <div className="spacer"></div>
+        <button className="text" type="button" title="Text Tool" data-tooltype="text"></button>
+        <select className="text-size"></select>
+        <div className="text-color"></div>
 
-                <button className="text" type="button" title="Text Tool" data-tooltype="text"></button>
-                <select className="text-size"></select>
-                <div className="text-color"></div>
+        <div className="spacer"></div>
 
-                <div className="spacer"></div>
+        <button className="pen" type="button" title="Pen Tool" data-tooltype="draw">✎</button>
+        <select className="pen-size"></select>
+        <div className="pen-color"></div>
 
-                <button className="pen" type="button" title="Pen Tool" data-tooltype="draw">✎</button>
-                <select className="pen-size"></select>
-                <div className="pen-color"></div>
+        <div className="spacer"></div>
 
-                <div className="spacer"></div>
+        <button className="comment" type="button" title="Comment" data-tooltype="point">🗨</button>
 
-                <button className="comment" type="button" title="Comment" data-tooltype="point">🗨</button>
+        <div className="spacer"></div>
 
-                <div className="spacer"></div>
+        <select className="scale">
+          <option value=".5">50%</option>
+          <option value="1">100%</option>
+          <option value="1.33">133%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+        </select>
 
-                <select className="scale">
-                    <option value=".5">50%</option>
-                    <option value="1">100%</option>
-                    <option value="1.33">133%</option>
-                    <option value="1.5">150%</option>
-                    <option value="2">200%</option>
-                </select>
-
-                {/* <a className="rotate-ccw" title="Rotate Counter Clockwise">⟲</a>
+        {/* <a className="rotate-ccw" title="Rotate Counter Clockwise">⟲</a>
                 <a className="rotate-cw" title="Rotate Clockwise">⟳</a> */}
 
-                <button className="undo" title="Undo annotations" data-tooltype="undo" onClick={() => {
-                    this.props.PDFJSAnnotate.getStoreAdapter().undo(this.props.RENDER_OPTIONS.documentId).then(() => {
-                        for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
-                            this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
-                        }
-                    });
+        <button className="undo" title="Undo annotations" data-tooltype="undo" onClick={() => {
+          this.props.PDFJSAnnotate.getStoreAdapter().undo(this.props.RENDER_OPTIONS.documentId).then(() => {
+            for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
+              this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
+            }
+          });
                     
-                }}>⟲</button>
-                <button className="redo" title="Redo annotations" data-tooltype="redo" onClick={() => {
-                    this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId).then(() => {
-                        for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
-                            this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
-                        }
-                    });
+        }}>⟲</button>
+        <button className="redo" title="Redo annotations" data-tooltype="redo" onClick={() => {
+          this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId).then(() => {
+            for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
+              this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
+            }
+          });
                     
-                }}>⟳</button>
+        }}>⟳</button>
 
-                <div className="spacer"></div>
+        <div className="spacer"></div>
 
-                <button className="clear" title="Clear" data-tooltype="clear" onClick={() => {
-                    if (window.confirm('Are you sure you want to clear annotations? This operation cannot be undone.')) {
-                        for (let i = 0; i < this.props.NUM_PAGES; i++) {
-                            document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
-                        }
+        <button className="clear" title="Clear" data-tooltype="clear" onClick={() => {
+          if (window.confirm('Are you sure you want to clear annotations? This operation cannot be undone.')) {
+            for (let i = 0; i < this.props.NUM_PAGES; i++) {
+              document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
+            }
             
-                        localStorage.removeItem(`${this.props.RENDER_OPTIONS.documentId}/annotations`);
-                    }
-                }}>×</button>
+            localStorage.removeItem(`${this.props.RENDER_OPTIONS.documentId}/annotations`);
+          }
+        }}>×</button>
 
-                <div className="spacer"></div>
+        <div className="spacer"></div>
 
-                <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>💾</button>
-            </div>
-        );
-    }
+        <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>💾</button>
+      </div>
+    );
+  }
 }
 
 function textAnnotationInit(UI, RENDER_OPTIONS) {
-    let textSize;
-    let textColor;
+  let textSize;
+  let textColor;
 
-    function initText() {
-        let size = document.querySelector('.toolbar .text-size');
-        [8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 96].forEach((s) => {
-            size.appendChild(new Option(s, s));
-        });
+  function initText() {
+    let size = document.querySelector('.toolbar .text-size');
+    [8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 96].forEach((s) => {
+      size.appendChild(new Option(s, s));
+    });
 
-        setText(
-            localStorage.getItem(`${RENDER_OPTIONS.documentId}/text/size`) || 10,
-            localStorage.getItem(`${RENDER_OPTIONS.documentId}/text/color`) || '#000000'
-        );
+    setText(
+      localStorage.getItem(`${RENDER_OPTIONS.documentId}/text/size`) || 10,
+      localStorage.getItem(`${RENDER_OPTIONS.documentId}/text/color`) || '#000000'
+    );
 
-        initColorPicker(document.querySelector('.text-color'), textColor, function (value) {
-            setText(textSize, value);
-        });
+    initColorPicker(document.querySelector('.text-color'), textColor, function (value) {
+      setText(textSize, value);
+    });
+  }
+
+  function setText(size, color) {
+    let modified = false;
+
+    if (textSize !== size) {
+      modified = true;
+      textSize = size;
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/text/size`, textSize);
+      document.querySelector('.toolbar .text-size').value = textSize;
     }
 
-    function setText(size, color) {
-        let modified = false;
+    if (textColor !== color) {
+      modified = true;
+      textColor = color;
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/text/color`, textColor);
 
-        if (textSize !== size) {
-            modified = true;
-            textSize = size;
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/text/size`, textSize);
-            document.querySelector('.toolbar .text-size').value = textSize;
-        }
+      let selected = document.querySelector('.toolbar .text-color.color-selected');
+      if (selected) {
+        selected.classList.remove('color-selected');
+        selected.removeAttribute('aria-selected');
+      }
 
-        if (textColor !== color) {
-            modified = true;
-            textColor = color;
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/text/color`, textColor);
+      selected = document.querySelector(`.toolbar .text-color[data-color="${color}"]`);
+      if (selected) {
+        selected.classList.add('color-selected');
+        selected.setAttribute('aria-selected', true);
+      }
 
-            let selected = document.querySelector('.toolbar .text-color.color-selected');
-            if (selected) {
-                selected.classList.remove('color-selected');
-                selected.removeAttribute('aria-selected');
-            }
-
-            selected = document.querySelector(`.toolbar .text-color[data-color="${color}"]`);
-            if (selected) {
-                selected.classList.add('color-selected');
-                selected.setAttribute('aria-selected', true);
-            }
-
-        }
-
-        if (modified) {
-            UI.setText(textSize, textColor);
-        }
     }
 
-    function handleTextSizeChange(e) {
-        setText(e.target.value, textColor);
+    if (modified) {
+      UI.setText(textSize, textColor);
     }
+  }
 
-    document.querySelector('.toolbar .text-size').addEventListener('change', handleTextSizeChange);
+  function handleTextSizeChange(e) {
+    setText(e.target.value, textColor);
+  }
 
-    initText();
+  document.querySelector('.toolbar .text-size').addEventListener('change', handleTextSizeChange);
+
+  initText();
 }
 
 function penAnnotationInit(UI, RENDER_OPTIONS) {
-    let penSize;
-    let penColor;
+  let penSize;
+  let penColor;
 
-    function initPen() {
-        let size = document.querySelector('.toolbar .pen-size');
-        for (let i = 0; i < 20; i++) {
-            size.appendChild(new Option(i + 1, i + 1));
-        }
-
-        setPen(
-            localStorage.getItem(`${RENDER_OPTIONS.documentId}/pen/size`) || 1,
-            localStorage.getItem(`${RENDER_OPTIONS.documentId}/pen/color`) || '#000000'
-        );
-
-        initColorPicker(document.querySelector('.pen-color'), penColor, function (value) {
-            setPen(penSize, value);
-        });
+  function initPen() {
+    let size = document.querySelector('.toolbar .pen-size');
+    for (let i = 0; i < 20; i++) {
+      size.appendChild(new Option(i + 1, i + 1));
     }
 
-    function setPen(size, color) {
-        let modified = false;
+    setPen(
+      localStorage.getItem(`${RENDER_OPTIONS.documentId}/pen/size`) || 1,
+      localStorage.getItem(`${RENDER_OPTIONS.documentId}/pen/color`) || '#000000'
+    );
 
-        if (penSize !== size) {
-            modified = true;
-            penSize = size;
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/pen/size`, penSize);
-            document.querySelector('.toolbar .pen-size').value = penSize;
-        }
+    initColorPicker(document.querySelector('.pen-color'), penColor, function (value) {
+      setPen(penSize, value);
+    });
+  }
 
-        if (penColor !== color) {
-            modified = true;
-            penColor = color;
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/pen/color`, penColor);
+  function setPen(size, color) {
+    let modified = false;
 
-            let selected = document.querySelector('.toolbar .pen-color.color-selected');
-            if (selected) {
-                selected.classList.remove('color-selected');
-                selected.removeAttribute('aria-selected');
-            }
-
-            selected = document.querySelector(`.toolbar .pen-color[data-color="${color}"]`);
-            if (selected) {
-                selected.classList.add('color-selected');
-                selected.setAttribute('aria-selected', true);
-            }
-        }
-
-        if (modified) {
-            UI.setPen(penSize, penColor);
-        }
+    if (penSize !== size) {
+      modified = true;
+      penSize = size;
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/pen/size`, penSize);
+      document.querySelector('.toolbar .pen-size').value = penSize;
     }
 
-    function handlePenSizeChange(e) {
-        setPen(e.target.value, penColor);
+    if (penColor !== color) {
+      modified = true;
+      penColor = color;
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/pen/color`, penColor);
+
+      let selected = document.querySelector('.toolbar .pen-color.color-selected');
+      if (selected) {
+        selected.classList.remove('color-selected');
+        selected.removeAttribute('aria-selected');
+      }
+
+      selected = document.querySelector(`.toolbar .pen-color[data-color="${color}"]`);
+      if (selected) {
+        selected.classList.add('color-selected');
+        selected.setAttribute('aria-selected', true);
+      }
     }
 
-    document.querySelector('.toolbar .pen-size').addEventListener('change', handlePenSizeChange);
+    if (modified) {
+      UI.setPen(penSize, penColor);
+    }
+  }
 
-    initPen();
+  function handlePenSizeChange(e) {
+    setPen(e.target.value, penColor);
+  }
+
+  document.querySelector('.toolbar .pen-size').addEventListener('change', handlePenSizeChange);
+
+  initPen();
 }
 
 function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
-    let tooltype = localStorage.getItem(`${RENDER_OPTIONS.documentId}/tooltype`) || 'cursor';
-    if (tooltype) {
-        setActiveToolbarItem(tooltype, document.querySelector(`.toolbar button[data-tooltype=${tooltype}]`));
+  let tooltype = localStorage.getItem(`${RENDER_OPTIONS.documentId}/tooltype`) || 'cursor';
+  if (tooltype) {
+    setActiveToolbarItem(tooltype, document.querySelector(`.toolbar button[data-tooltype=${tooltype}]`));
+  }
+
+  function setActiveToolbarItem(type, button) {
+    if (type === 'clear' || type === 'undo' || type === 'redo') {
+      return;
+    }
+    let active = document.querySelector('.toolbar button.active');
+    if (active) {
+      active.classList.remove('active');
+
+      switch (tooltype) {
+      case 'cursor':
+        UI.disableEdit();
+        break;
+      case 'eraser':
+        UI.disableEraser();
+        break;
+      case 'draw':
+        UI.disablePen();
+        break;
+      case 'text':
+        UI.disableText();
+        break;
+      case 'point':
+        UI.disablePoint();
+        break;
+      case 'area':
+      case 'highlight':
+      case 'strikeout':
+        UI.disableRect();
+        break;
+      default:
+        console.warn("Unexpected default case when disabling funcs in setActiveToolbarItem().");
+      }
     }
 
-    function setActiveToolbarItem(type, button) {
-        if (type === 'clear' || type === 'undo' || type === 'redo') {
-            return;
-        }
-        let active = document.querySelector('.toolbar button.active');
-        if (active) {
-            active.classList.remove('active');
-
-            switch (tooltype) {
-                case 'cursor':
-                    UI.disableEdit();
-                    break;
-                case 'eraser':
-                    UI.disableEraser();
-                    break;
-                case 'draw':
-                    UI.disablePen();
-                    break;
-                case 'text':
-                    UI.disableText();
-                    break;
-                case 'point':
-                    UI.disablePoint();
-                    break;
-                case 'area':
-                case 'highlight':
-                case 'strikeout':
-                    UI.disableRect();
-                    break;
-                default:
-                    console.warn("Unexpected default case when disabling funcs in setActiveToolbarItem().")
-            }
-        }
-
-        if (button) {
-            button.classList.add('active');
-        }
-        if (tooltype !== type) {
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/tooltype`, type);
-        }
-        tooltype = type;
-
-        switch (type) {
-            case 'cursor':
-                UI.enableEdit();
-                break;
-            case 'eraser':
-                UI.enableEraser();
-                break;
-            case 'draw':
-                UI.enablePen();
-                break;
-            case 'text':
-                UI.enableText();
-                break;
-            case 'point':
-                UI.enablePoint();
-                break;
-            case 'area':
-            case 'highlight':
-            case 'strikeout':
-                UI.enableRect(type);
-                break;
-            default:
-                console.warn("Unexpected default case when enabling funcs in setActiveToolbarItem().")
-                console.log(type);
-        }
+    if (button) {
+      button.classList.add('active');
     }
-
-    function handleToolbarClick(e) {
-        if (e.target.nodeName === 'BUTTON') {
-            setActiveToolbarItem(e.target.getAttribute('data-tooltype'), e.target);
-        }
+    if (tooltype !== type) {
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/tooltype`, type);
     }
+    tooltype = type;
 
-    document.querySelector('.toolbar').addEventListener('click', handleToolbarClick);
+    switch (type) {
+    case 'cursor':
+      UI.enableEdit();
+      break;
+    case 'eraser':
+      UI.enableEraser();
+      break;
+    case 'draw':
+      UI.enablePen();
+      break;
+    case 'text':
+      UI.enableText();
+      break;
+    case 'point':
+      UI.enablePoint();
+      break;
+    case 'area':
+    case 'highlight':
+    case 'strikeout':
+      UI.enableRect(type);
+      break;
+    default:
+      console.warn("Unexpected default case when enabling funcs in setActiveToolbarItem().");
+      console.log(type);
+    }
+  }
+
+  function handleToolbarClick(e) {
+    if (e.target.nodeName === 'BUTTON') {
+      setActiveToolbarItem(e.target.getAttribute('data-tooltype'), e.target);
+    }
+  }
+
+  document.querySelector('.toolbar').addEventListener('click', handleToolbarClick);
 }
 
 function scaleAnnotationInit(UI, RENDER_OPTIONS, render) {
-    function setScale(scale
-                    //   , rotate
-                     ) {
-        scale = parseFloat(scale, 10);
-        // rotate = parseInt(rotate, 10);
+  function setScale(scale
+    //   , rotate
+  ) {
+    scale = parseFloat(scale, 10);
+    // rotate = parseInt(rotate, 10);
 
-        if (RENDER_OPTIONS.scale !== scale
-            // || RENDER_OPTIONS.rotate !== rotate
-            ) {
-            RENDER_OPTIONS.scale = scale;
-            // RENDER_OPTIONS.rotate = rotate;
+    if (RENDER_OPTIONS.scale !== scale
+    // || RENDER_OPTIONS.rotate !== rotate
+    ) {
+      RENDER_OPTIONS.scale = scale;
+      // RENDER_OPTIONS.rotate = rotate;
 
-            localStorage.setItem(`${RENDER_OPTIONS.documentId}/scale`, RENDER_OPTIONS.scale);
-            // localStorage.setItem(`${RENDER_OPTIONS.documentId}/rotate`, RENDER_OPTIONS.rotate % 360);
+      localStorage.setItem(`${RENDER_OPTIONS.documentId}/scale`, RENDER_OPTIONS.scale);
+      // localStorage.setItem(`${RENDER_OPTIONS.documentId}/rotate`, RENDER_OPTIONS.rotate % 360);
 
-            render();
-        }
+      render();
     }
+  }
 
-    function handleScaleChange(e) {
-        setScale(e.target.value, RENDER_OPTIONS.rotate);
-    }
+  function handleScaleChange(e) {
+    setScale(e.target.value, RENDER_OPTIONS.rotate);
+  }
 
-    // function handleRotateCWClick() {
-    //     setScale(RENDER_OPTIONS.scale, RENDER_OPTIONS.rotate + 90);
-    // }
+  // function handleRotateCWClick() {
+  //     setScale(RENDER_OPTIONS.scale, RENDER_OPTIONS.rotate + 90);
+  // }
 
-    // function handleRotateCCWClick() {
-    //     setScale(RENDER_OPTIONS.scale, RENDER_OPTIONS.rotate - 90);
-    // }
+  // function handleRotateCCWClick() {
+  //     setScale(RENDER_OPTIONS.scale, RENDER_OPTIONS.rotate - 90);
+  // }
 
-    document.querySelector('.toolbar select.scale').value = RENDER_OPTIONS.scale;
-    document.querySelector('.toolbar select.scale').addEventListener('change', handleScaleChange);
-    // document.querySelector('.toolbar .rotate-ccw').addEventListener('click', handleRotateCCWClick);
-    // document.querySelector('.toolbar .rotate-cw').addEventListener('click', handleRotateCWClick);
+  document.querySelector('.toolbar select.scale').value = RENDER_OPTIONS.scale;
+  document.querySelector('.toolbar select.scale').addEventListener('change', handleScaleChange);
+  // document.querySelector('.toolbar .rotate-ccw').addEventListener('click', handleRotateCCWClick);
+  // document.querySelector('.toolbar .rotate-cw').addEventListener('click', handleRotateCWClick);
 }
 
 export default AnnotatorToolBar;

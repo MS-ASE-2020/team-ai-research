@@ -87,7 +87,7 @@ function closeDatabase(db) {
  */
 function savePaper(db, properties, afterwardsFunction = null) {
   function getNewID() {
-    return db.prepare(`SELECT ID FROM paper WHERE name = ?;`).get(properties.name).ID
+    return db.prepare(`SELECT ID FROM paper WHERE name = ?;`).get(properties.name).ID;
   }
   let sqlStmt;
   if (properties.ID) {
@@ -136,7 +136,7 @@ function savePaper(db, properties, afterwardsFunction = null) {
  */
 function saveFolder(db, properties) {
   function getNewID() {
-    return db.prepare(`SELECT ID FROM folder WHERE name = ? and fatherID = ?;`).get(properties.name, properties.fatherID).ID
+    return db.prepare(`SELECT ID FROM folder WHERE name = ? and fatherID = ?;`).get(properties.name, properties.fatherID).ID;
   }
   let sqlStmt;
   if (properties.ID) {
@@ -218,13 +218,13 @@ function getFolderProperty(db, folderID) {
 
 function getAnnotation(db, paperID) {
   let sqlStmt = db.prepare(`SELECT annotations FROM paper WHERE ID = ?`);
-  var result = sqlStmt.get(paperID).annotations
+  var result = sqlStmt.get(paperID).annotations;
   return result;
 }
 
 function getQandA(db, paperID) {
   let sqlStmt = db.prepare(`SELECT QandA FROM paper WHERE ID = ?`);
-  var result = sqlStmt.get(paperID).QandA
+  var result = sqlStmt.get(paperID).QandA;
   return result;
 }
 
@@ -237,7 +237,7 @@ function getQandA(db, paperID) {
 function getPaperProperty(db, paperID) {
   let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit
                             FROM paper WHERE ID = ?`);
-  var result = sqlStmt.get(paperID)
+  var result = sqlStmt.get(paperID);
   return result;
 }
 
