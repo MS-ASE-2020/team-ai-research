@@ -75,8 +75,9 @@ function closeDatabase(db) {
  * Save annotations, Q&As and/or other properties into table `paper`,
  * no matter whether or not it is new for papera.
  * Set `properties.ID` to `null`/`undefined`/`false` for paper creation.
+ * Property `lastedit` will be automatically set by SQlite3.
  * @param { BetterSqlite3.Database } db 
- * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String, QandA, annotations}} properties 
+ * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, QandA, annotations}} properties 
  * @param { function } [afterwardsFunction]
  * @returns ID of created/updated paper.
  * @throws error object thrown by SQlite.
@@ -93,13 +94,13 @@ function savePaper(db, properties, afterwardsFunction = null) {
                               keywords = @keywords,
                               year = @year,
                               conference = @conference,
-                              lastedit = @lastedit,
+                              lastedit = datetime('now','localtime'),
                               QandA = @QandA,
                               annotations = @annotations
                           WHERE ID = @ID;`);
   } else {
     sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations)
-                      VALUES (@name, @title, @keywords, @year, @conference, @lastedit, @QandA, @annotations);`);
+                      VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations);`);
   }
   try {
     db.transaction(() => {
@@ -122,8 +123,9 @@ function savePaper(db, properties, afterwardsFunction = null) {
  * Save properties into table `folder`,
  * no matter whether or not it is new for papera.
  * Set `properties.ID` to `null`/`undefined`/`false` for folder creation.
+ * Property `createtime` will be automatically set by SQlite3.
  * @param { BetterSqlite3.Database } db 
- * @param {{ID: Number, name: String, description: String, createtime: String, fatherID: Number}} properties 
+ * @param {{ID: Number, name: String, description: String, fatherID: Number}} properties 
  * @returns ID of created/updated folder.
  * @throws error object thrown by SQlite.
  */
@@ -136,12 +138,11 @@ function saveFolder(db, properties) {
     sqlStmt = db.prepare(`UPDATE folder
                           SET name = @name,
                               description = @description,
-                              createtime = @createtime,
                               fatherID = @fatherID
                           WHERE ID = @ID;`);
   } else {
     sqlStmt = db.prepare(`INSERT INTO folder (name, description, createtime, fatherID)
-                          VALUES (@name, @description, @createtime, @fatherID);`);
+                          VALUES (@name, @description, datetime('now','localtime'), @fatherID);`);
   }
   try {
     db.transaction(() => {
