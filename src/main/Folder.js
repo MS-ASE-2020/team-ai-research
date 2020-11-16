@@ -29,10 +29,8 @@ class NewBookmark extends Component {
         ID: null,
         name: this.state.name,
         description: this.state.description,
-        createtime: 0,
         fatherID: this.props.folderID
       });
-      alert("Success!");
       this.setState({
         name: "",
         description: ""
@@ -40,7 +38,7 @@ class NewBookmark extends Component {
       this.props.stopCreate();
     } catch (error) {
       console.error(error);
-      alert("ID already EXISTS!");
+      alert("An error occurred when creating bookmark: ", error);
     }
   }
 
@@ -90,12 +88,29 @@ class FolderInformation extends Component {
   }
 
   operation(act) {
+    if (this.props.folderID === 1) {
+      return;
+      // not to change root folder.
+    }
     switch (act) {
     case 'edit': 
       break;
     case 'cancel': 
       break;
+    case 'save':
+      window.api.database.saveFolder(window.db, {
+        ID: this.props.folderID,
+        name: this.state.folder.name,
+        description: this.state.folder.description,
+        fatherID: this.state.folder.fatherID
+      });
+      this.props.updateLatest(this.state.folder.name);
+      break;
+    case 'delete':
+      // TODO: Delete operation
+      break;
     default: 
+      console.error("Hit default case");
       return;
     }
     this.setState({
@@ -124,6 +139,7 @@ class FolderInformation extends Component {
   }
 
   render() {
+    console.log("Current father ID:", this.state.folder.fatherID);
     return (
       <div className="FolderInformation">
         <h2>Folder Information</h2>
@@ -143,11 +159,11 @@ class FolderInformation extends Component {
           <div className="FolderCreateTime">
             Create time: {this.state.folder.createtime}
           </div>
-          <div className="FolderFatherID">
+          {/* <div className="FolderFatherID">
             Father ID: {this.state.folder.fatherID}
-          </div>
+          </div> */}
           <div>
-            { !this.state.modify ? 
+            { this.props.folderID !== 1 && (!this.state.modify ? 
               <div className="InformationEditFalse">
                 <input type="button" value="Edit" onClick={() => this.operation("edit")} />
                 <input type="button" value="Delete" onClick={() => this.operation("delete")} />
@@ -155,7 +171,7 @@ class FolderInformation extends Component {
               <div className="InformationEditTrue">
                 <input type="button" value="Save" onClick={() => this.operation("save")} />
                 <input type="button" value="Cancel" onClick={() => this.operation("cancel")} />
-              </div>
+              </div>)
             }
           </div>
         </form>
@@ -165,7 +181,8 @@ class FolderInformation extends Component {
 }
 
 FolderInformation.propTypes = {
-  folderID: PropTypes.number.isRequired
+  folderID: PropTypes.number.isRequired,
+  updateLatest: PropTypes.func.isRequired
 };
 
 export default class Folder extends Component {
@@ -216,7 +233,7 @@ export default class Folder extends Component {
         </div>
         <div className="FolderInformation">
           <br />
-          <FolderInformation folderID={this.props.folderID} />
+          <FolderInformation folderID={this.props.folderID} updateLatest={this.props.updateLatest} />
           <br />
         </div>
       </div>
@@ -227,5 +244,6 @@ export default class Folder extends Component {
 
 Folder.propTypes = {
   folderID: PropTypes.number.isRequired,
-  forward: PropTypes.func.isRequired
+  forward: PropTypes.func.isRequired,
+  updateLatest: PropTypes.func.isRequired,
 };
