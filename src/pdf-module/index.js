@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import PDFJSAnnotate from 'pdf-annotate.js';
 import "./wrapper.css";
 import AnnotatorToolBar from './Toolbar';
-import AnnotatorComment from './Comment';
+import AnnotatorSidebar from './Sidebar';
 import * as pdfjsLib from 'pdfjs-dist';
 import * as pdfjsViewer from 'pdfjs-dist/web/pdf_viewer';
 import 'pdfjs-dist/web/pdf_viewer.css';
@@ -174,10 +174,9 @@ class Annotator extends React.Component {
             ref={el => this.wrapper = el}>
             <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
           </div>
-          <AnnotatorComment
+          <AnnotatorSidebar
             UI={this.UI}
-            RENDER_OPTIONS={this.RENDER_OPTIONS}
-            PDFJSAnnotate={PDFJSAnnotate}></AnnotatorComment>
+            PDFJSAnnotate={PDFJSAnnotate}></AnnotatorSidebar>
         </div>
       );
     }
