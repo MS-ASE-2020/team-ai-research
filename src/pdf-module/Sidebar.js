@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnnotatorComment from './Comment';
+import AnnotatorQA from './QA';
 
 
 class AnnotatorSidebar extends React.Component {
@@ -19,6 +20,7 @@ class AnnotatorSidebar extends React.Component {
           <button onClick={() => this.setState({tab: 1})}>Q &amp; A</button>
         </div>
         <AnnotatorComment UI={this.props.UI} PDFAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
+        <AnnotatorQA></AnnotatorQA>
       </div>
     );
   }

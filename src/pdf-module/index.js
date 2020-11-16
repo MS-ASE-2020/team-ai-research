@@ -131,7 +131,7 @@ class Annotator extends React.Component {
               year: 2038,
               conference: 'placeholder' + fileId,
               lastedit: 'placeholder' + fileId,
-              QandA: 'placeholder' + fileId,
+              QandA: '',
               annotations: JSON.stringify(annotations)
             }, (paperID) => {
               window.api.filesystem.save(this.file, paperID);
@@ -150,7 +150,7 @@ class Annotator extends React.Component {
               year: 2038,
               conference: 'placeholder' + fileId,
               lastedit: 'placeholder' + fileId,
-              QandA: 'placeholder' + fileId,
+              QandA: '',
               annotations: JSON.stringify(annotations)
             });
           });
