@@ -198,27 +198,14 @@ function listFolder(db, folderID) {
   return result;
 }
 
-/**
- * 
- * @param {BetterSqlite3.Database} db 
- * @param {Number} folderID 
- * @returns {{ID: Number, name: String, description: String, createtime: String, fatherID: Number}}
- */
-function getFolderProperty(db, folderID) {
-  let sqlStmt = db.prepare(`SELECT ID, name, description, createtime, fatherID
-                            FROM folder WHERE ID = ?`);
-  var result = sqlStmt.get(folderID);
-  return result;
-}
-
 function getAnnotation(db, paperID) {
-  let sqlStmt = db.prepare(`SELECT annotations FROM paper WHERE ID = ?`);
+  let sqlStmt = db.prepare(`SELECT annotations FROM paper WHERE ID = ?;`);
   var result = sqlStmt.get(paperID).annotations;
   return result;
 }
 
 function getQandA(db, paperID) {
-  let sqlStmt = db.prepare(`SELECT QandA FROM paper WHERE ID = ?`);
+  let sqlStmt = db.prepare(`SELECT QandA FROM paper WHERE ID = ?;`);
   var result = sqlStmt.get(paperID).QandA;
   return result;
 }
@@ -227,13 +214,36 @@ function getQandA(db, paperID) {
  * 
  * @param {BetterSqlite3.Database} db 
  * @param {Number} paperID 
- * @returns {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String}}
+ * @returns {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String, QandA, annotations}}
  */
 function getPaperProperty(db, paperID) {
-  let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit
-                            FROM paper WHERE ID = ?`);
+  let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit, QandA, annotations
+                            FROM paper WHERE ID = ?;`);
   var result = sqlStmt.get(paperID);
   return result;
+}
+
+/**
+ * 
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @returns {{ID: Number, name: String, description: String, createtime: String, fatherID: Number}}
+ */
+function getFolderProperty(db, folderID) {
+  let sqlStmt = db.prepare(`SELECT ID, name, description, createtime, fatherID
+                            FROM folder WHERE ID = ?;`);
+  var result = sqlStmt.get(folderID);
+  return result;
+}
+
+function deletePaper(db, paperID) {
+  let sqlStmt = db.prepare(`DELETE FROM paper WHERE ID = ?;`).bind(paperID);
+  sqlStmt.run();
+}
+
+function deleteFolder(db, folderID) {
+  let sqlStmt = db.prepare(`DELETE FROM folder WHERE ID = ?;`).bind(folderID);
+  sqlStmt.run();
 }
 
 module.exports = {
@@ -246,5 +256,7 @@ module.exports = {
   getQandA: getQandA,
   getPaperProperty: getPaperProperty,
   getFolderProperty: getFolderProperty,
-  saveFolder: saveFolder
+  saveFolder: saveFolder,
+  deletePaper: deletePaper,
+  deleteFolder: deleteFolder
 };
