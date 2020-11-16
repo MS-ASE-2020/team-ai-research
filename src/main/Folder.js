@@ -76,31 +76,6 @@ NewBookmark.propTypes = {
   newBookmark: PropTypes.bool.isRequired
 };
 
-class InformationEdit extends Component {
-  render() {
-    if (this.props.modify === false) {
-      return (
-        <div className="InformationEditFalse">
-          <input type="button" value="Edit" onClick={this.props.setModify} />
-          <input type="button" value="Delete" />
-        </div>
-      );
-    } else {
-      return (
-        <div className="InformationEditTrue">
-          <input type="button" value="Save" onClick={this.props.setModify} />
-          <input type="button" value="Cancel" />
-        </div>
-      );
-    }
-  }
-}
-
-InformationEdit.propTypes = {
-  modify: PropTypes.bool.isRequired,
-  setModify: PropTypes.func.isRequired
-};
-
 class FolderInformation extends Component {
   constructor(props) {
     super(props);
@@ -114,9 +89,15 @@ class FolderInformation extends Component {
     return window.api.database.getFolderProperty(window.db, folderID);
   }
 
-  setModify() {
-    document.getElementById("FolderName").disabled = !document.getElementById("FolderName").disabled;
-    document.getElementById("FolderDescription").disabled = !document.getElementById("FolderDescription").disabled;
+  operation(act) {
+    switch (act) {
+    case 'edit': 
+      break;
+    case 'cancel': 
+      break;
+    default: 
+      return;
+    }
     this.setState({
       modify: !this.state.modify
     });
@@ -134,7 +115,7 @@ class FolderInformation extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    let copy = {...this.state.folder};
+    let copy = { ...this.state.folder };
     copy[[name]] = value;
 
     this.setState({
@@ -149,12 +130,14 @@ class FolderInformation extends Component {
         <form>
           <div className="FolderName">
             <label>
-              Name: <input id="FolderName" type="text" value={this.state.folder.name} name="name" onChange={this.handleChanges.bind(this)} disabled />
+              Name: <input id="FolderName" type="text" value={this.state.folder.name} name="name" 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
             </label>
           </div>
           <div className="FolderDescription">
             <label>
-            Description: <input id="FolderDescription" type="text" name="description" value={this.state.folder.description} onChange={this.handleChanges.bind(this)} disabled />
+              Description: <input id="FolderDescription" type="text" name="description" value={this.state.folder.description} 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
             </label>
           </div>
           <div className="FolderCreateTime">
@@ -163,7 +146,18 @@ class FolderInformation extends Component {
           <div className="FolderFatherID">
             Father ID: {this.state.folder.fatherID}
           </div>
-          <InformationEdit modify={this.state.modify} setModify={this.setModify.bind(this)} />
+          <div>
+            { !this.state.modify ? 
+              <div className="InformationEditFalse">
+                <input type="button" value="Edit" onClick={() => this.operation("edit")} />
+                <input type="button" value="Delete" onClick={() => this.operation("delete")} />
+              </div> :
+              <div className="InformationEditTrue">
+                <input type="button" value="Save" onClick={() => this.operation("save")} />
+                <input type="button" value="Cancel" onClick={() => this.operation("cancel")} />
+              </div>
+            }
+          </div>
         </form>
       </div>
     );
