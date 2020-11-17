@@ -246,6 +246,42 @@ function deleteFolder(db, folderID) {
   sqlStmt.run();
 }
 
+/**
+ * List folders in which a specific paper with `paperID` exists.
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} paperID 
+ * @returns { Array< { ID:Number, name:String } > }
+ */
+function listFolderOfPaper(db, paperID) {
+  let sqlStmt = db.prepare(`SELECT ID, name FROM folder
+                            WHERE ID IN (
+                              SELECT folderID FROM paperInFolder
+                              WHERE paperID = ?
+                            );`);
+  return sqlStmt.all(paperID);
+}
+
+/**
+ * Make a specific paper with `paperID` be in folders given an array of folderIDs.
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} paperID 
+ * @param { Array< Number > } folderIDs
+ * @throws error object thrown by SQlite3
+ */
+function saveFolderOfPaper(db, paperID, folderIDs) {
+  let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
+  let sqlStmtInsert = db.prepare(sql);
+  let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
+  try {
+    db.transaction(() => {
+      sqlStmtDelete.run();
+      sqlStmtInsert.run();
+    })();
+  } catch (error) {
+    throw error;
+  }
+}
+
 module.exports = {
   connect: connectDatabase,
   close: closeDatabase,
@@ -258,5 +294,7 @@ module.exports = {
   getFolderProperty: getFolderProperty,
   saveFolder: saveFolder,
   deletePaper: deletePaper,
-  deleteFolder: deleteFolder
+  deleteFolder: deleteFolder,
+  listFolderOfPaper: listFolderOfPaper,
+  saveFolderOfPaper: saveFolderOfPaper
 };
