@@ -118,43 +118,51 @@ class Annotator extends React.Component {
     }
 
     save() {
-      let fileId = this.RENDER_OPTIONS.documentId;
-      if (!this.paperID) {
-        PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
-          .then(annotations => {
-            console.log(annotations);
-            window.api.database.savePaper(window.db, {
-              ID: null,
-              name: 'placeholder' + fileId + Math.random().toString(6),
-              title: 'placeholder' + fileId,
-              keywords: 'placeholder' + fileId,
-              year: 2038,
-              conference: 'placeholder' + fileId,
-              lastedit: 'placeholder' + fileId,
-              QandA: 'placeholder' + fileId,
-              annotations: JSON.stringify(annotations)
-            }, (paperID) => {
-              window.api.filesystem.save(this.file, paperID);
-              this.paperID = paperID;
-            });
+      PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+        .then(annotations => {
+          this.props.openSaveDialog({
+            annotations: annotations,
+            ID: this.paperID
           });
-      } else {
-        PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
-          .then(annotations => {
-            console.log(annotations);
-            window.api.database.savePaper(window.db, {
-              ID: this.paperID,
-              name: 'placeholder' + fileId + Math.random().toString(6),
-              title: 'placeholder' + fileId,
-              keywords: 'placeholder' + fileId,
-              year: 2038,
-              conference: 'placeholder' + fileId,
-              lastedit: 'placeholder' + fileId,
-              QandA: 'placeholder' + fileId,
-              annotations: JSON.stringify(annotations)
-            });
-          });
-      }
+        });
+      
+      // let fileId = this.RENDER_OPTIONS.documentId;
+      // if (!this.paperID) {
+      //   PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+      //     .then(annotations => {
+      //       console.log(annotations);
+      //       window.api.database.savePaper(window.db, {
+      //         ID: null,
+      //         name: 'placeholder' + fileId + Math.random().toString(6),
+      //         title: 'placeholder' + fileId,
+      //         keywords: 'placeholder' + fileId,
+      //         year: 2038,
+      //         conference: 'placeholder' + fileId,
+      //         lastedit: 'placeholder' + fileId,
+      //         QandA: 'placeholder' + fileId,
+      //         annotations: JSON.stringify(annotations)
+      //       }, (paperID) => {
+      //         window.api.filesystem.save(this.file, paperID);
+      //         this.paperID = paperID;
+      //       });
+      //     });
+      // } else {
+      //   PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+      //     .then(annotations => {
+      //       console.log(annotations);
+      //       window.api.database.savePaper(window.db, {
+      //         ID: this.paperID,
+      //         name: 'placeholder' + fileId + Math.random().toString(6),
+      //         title: 'placeholder' + fileId,
+      //         keywords: 'placeholder' + fileId,
+      //         year: 2038,
+      //         conference: 'placeholder' + fileId,
+      //         lastedit: 'placeholder' + fileId,
+      //         QandA: 'placeholder' + fileId,
+      //         annotations: JSON.stringify(annotations)
+      //       });
+      //     });
+      // }
     }
 
     render() {
@@ -186,6 +194,7 @@ class Annotator extends React.Component {
 Annotator.propTypes = {
   paperID: PropTypes.number,
   file: PropTypes.string,
+  openSaveDialog: PropTypes.func.isRequired
 };
 
 export default Annotator;
