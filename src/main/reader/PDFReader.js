@@ -14,7 +14,7 @@ export default class PDFReader extends Component {
 
   render() {
     return (
-      <Annotator file={this.state.file} docid={this.state.file + "_id"} paperID={this.state.paperID}></Annotator>
+      <Annotator file={this.state.file} docid={this.state.file + "_id"} paperID={this.state.paperID} />
     );
   }
 }
