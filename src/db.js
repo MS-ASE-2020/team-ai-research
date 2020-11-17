@@ -109,7 +109,9 @@ function savePaper(db, properties, afterwardsFunction = null) {
   db.transaction(() => {
     sqlStmt.run(properties);
     if (afterwardsFunction) {
-      afterwardsFunction(getNewID());
+      const newID = getNewID();
+      afterwardsFunction(newID);
+      properties.ID = newID;
     }
   })();
   if (!properties.ID && !afterwardsFunction) {

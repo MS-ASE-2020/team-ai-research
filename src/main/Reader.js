@@ -27,23 +27,22 @@ export default class Reader extends Component {
     });
     if (info) {
       console.log(info);
-      this.setState = {
+      this.setState({
         paperSaveInfo: info
-      };
+      });
     }
   }
 
   save(ID, name, title, keywords, year, conference, QandA, annotations) {
     let newID = null;
     let callback = null;
-    if (ID) {
+    if (!ID) {
       callback = (paperID) => {
-        window.api.filesystem.save(this.file, paperID);
-        newID = paperID;
+        window.api.filesystem.save(this.props.data.openFile, paperID);
       };
     }
     
-    window.api.database.savePaper(window.db, {
+    newID = window.api.database.savePaper(window.db, {
       ID: ID,
       name: name,
       title: title,
@@ -54,7 +53,15 @@ export default class Reader extends Component {
       annotations: JSON.stringify(annotations)
     }, callback);
 
+    if (ID) {
+      newID = null;  // we don't need this value.
+    }
+
     this.switchSaveDialog();
+    console.log(newID);
+    if (newID) {
+      this.props.actions.openFile("paper://" + newID);
+    }
   }
 
   render() {
@@ -76,5 +83,6 @@ export default class Reader extends Component {
 }
 
 Reader.propTypes = {
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  actions: PropTypes.object.isRequired
 };

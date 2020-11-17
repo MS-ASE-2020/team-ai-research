@@ -20,7 +20,8 @@ export default class SaveDialog extends Component {
           <h2 className="save-lead">Year</h2>
           <h2 className="save-lead">Conference</h2>
           <h2 className="save-lead">Library</h2>
-          <button onClick={() => this.props.save()}>Save</button>
+          <button onClick={() => this.props.save(
+            this.props.info.ID, 'test' + Math.random().toString(3), 'test', 'test', 2038, 'fjwtql', '', this.props.info.annotations)}>Save</button>
           <button onClick={() => this.props.close()}>Cancel</button>
         </div>
       </div>
