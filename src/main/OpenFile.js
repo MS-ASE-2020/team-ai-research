@@ -77,7 +77,7 @@ export default class OpenFile extends Component {
         <div className="file-item" key={"item-" + i} onClick={() => {
           console.log(allPaperList[i].ID);
           this.openFile("paper://" + allPaperList[i].ID);
-        }}>{allPaperList[i].name} {i + 1}</div>
+        }}>{allPaperList[i].name}</div>
       ));
     }
     return (
