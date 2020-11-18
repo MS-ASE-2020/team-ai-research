@@ -22,14 +22,24 @@ export default class Reader extends Component {
     }
   }
 
-  switchSaveDialog(info = null, postCloseDialog = null) {
-    if (this.state.isShowSaveDialog) {
-      // going to close dialog
-      this.state.postCloseDialog && this.state.postCloseDialog();
+  switchSaveDialog(info = null, postCloseDialog = null, quickSave = false) {
+    if (quickSave && this.state.isShowSaveDialog) {
+      console.warn("quickSave is true when showing save dialog.");
     }
-    this.setState({
-      isShowSaveDialog: !this.state.isShowSaveDialog
-    });
+    if (!quickSave) {
+      if (this.state.isShowSaveDialog) {
+        // going to close dialog
+        this.state.postCloseDialog && this.state.postCloseDialog();
+      }
+      this.setState({
+        isShowSaveDialog: !this.state.isShowSaveDialog
+      });
+    } else {
+      let properties = window.api.database.getPaperProperty(window.db, info.ID);
+      properties.annotations = JSON.stringify(info.annotations);
+      console.log(properties);
+      window.api.database.savePaper(window.db, properties);
+    }
     if (info) {
       console.log(info);
       this.setState({
