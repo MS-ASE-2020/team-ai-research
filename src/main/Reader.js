@@ -10,7 +10,8 @@ export default class Reader extends Component {
     this.state = {
       openFile: undefined,
       isShowSaveDialog: false,
-      paperSaveInfo: null
+      paperSaveInfo: null,
+      postCloseDialog: null
     };
   }
 
@@ -21,14 +22,19 @@ export default class Reader extends Component {
     }
   }
 
-  switchSaveDialog(info = null) {
+  switchSaveDialog(info = null, postCloseDialog = null) {
+    if (this.state.isShowSaveDialog) {
+      // going to close dialog
+      this.state.postCloseDialog && this.state.postCloseDialog();
+    }
     this.setState({
       isShowSaveDialog: !this.state.isShowSaveDialog
     });
     if (info) {
       console.log(info);
       this.setState({
-        paperSaveInfo: info
+        paperSaveInfo: info,
+        postCloseDialog: postCloseDialog
       });
     }
   }
