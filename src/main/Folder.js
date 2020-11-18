@@ -23,23 +23,31 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
+        {this.props.folderID === 1? 
+        <div className="AllArticles">
+          <h3>All Articles Folder: </h3>
+          <input type="button" value="All Articles" onClick={() => this.props.setChooseFolder(null)} />
+        </div> : null}
+        {this.props.folderID !== null?
         <div className="SubfolderList">
           <h3>Sub Folder List: </h3>
           {folderItem}
-        </div>
+        </div> : null}
         <div className="PaperList">
           <h3>Paper List: </h3>
           {paperItem}
         </div>
+        {this.props.folderID !== null?
         <div className="CreateNewBookmark">
           <h3>Create New Bookmark: </h3>
           <input type="button" value="New Bookmark" onClick={this.props.setNewBookmark}/>
-        </div>
+        </div> : null}
       </div>
     );
   }
 }
-
+/*/
 Folder.propTypes = {
   folderID: PropTypes.number.isRequired,
 };
+/*/

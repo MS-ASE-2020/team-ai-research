@@ -81,7 +81,9 @@ class FolderInformation extends Component {
     super(props);
     this.state = {
       modify: false,
-      folder: this.getFolder(props.folderID)
+      folder: props.folderID !== null ? this.getFolder(props.folderID) : {
+        "name": "All Articles"
+      }
     };
   }
 
@@ -106,7 +108,6 @@ class FolderInformation extends Component {
       case 'cancel': 
         this.setState({
           modify: false,
-          folder: this.getFolder(this.props.folderID) 
         });
         break;
       case 'save':
@@ -117,7 +118,7 @@ class FolderInformation extends Component {
           fatherID: this.state.folder.fatherID
         });
         this.props.updateLatest(this.state.folder.name);
-        alert("Successfully edit the bookmark!");
+        alert("Successfully edit the information of bookmark!");
         this.props.setChooseFolder(this.props.folderID);
         this.setState({
           modify: !this.state.modify
@@ -155,6 +156,19 @@ class FolderInformation extends Component {
   }
 
   render() {
+    if (this.props.folderID === null) {
+      return (
+        <div className="FolderInformation">
+          <h3>Folder Information</h3>
+          <label>
+            This is a special bookmark with all articles stored here.
+            <div className="InformationEditFalse">
+              <input type="button" value="Open" onClick={() => this.operation("open")} />
+            </div>
+          </label>
+        </div>
+      )
+    }
     return (
       <div className="FolderInformation">
         <h3>Folder Information</h3>
@@ -193,16 +207,145 @@ class FolderInformation extends Component {
     );
   }
 }
-
+/*/
 FolderInformation.propTypes = {
   folderID: PropTypes.number.isRequired,
   updateLatest: PropTypes.func.isRequired
 };
-
+/*/
 class PaperInformation extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modify: false,
+      paper: this.getPaper(props.paperID)
+    };
+  }
+
+  getPaper(paperID) {
+    return window.api.database.getPaperProperty(window.db, paperID);
+  }
+
+  operation(act) {
+    switch (act) {
+      case 'open':
+        alert("Placeholder!");
+        break;
+      case 'edit': 
+        this.setState({
+          modify: true
+        });
+        break;
+      case 'cancel': 
+        this.setState({
+          modify: false,
+          paper: this.getPaper(this.props.paperID)
+        });
+        break;
+      case 'save':
+        window.api.database.savePaper(window.db, {
+          ID: this.props.paperID,
+          name: this.state.paper.name,
+          title: this.state.paper.title,
+          keywords: this.state.paper.keywords,
+          year: this.state.paper.year,
+          conference: this.state.paper.conference,
+          QandA: this.state.paper.QandA,
+          annotations: this.state.paper.annotations
+        });
+        alert("Successfully edit the information of paper!");
+        this.setState({
+          modify: !this.state.modify,
+          paper: this.getPaper(this.props.paperID)
+        });
+        break;
+      case 'delete':
+        window.api.database.deletePaper(window.db, this.props.paperID);
+        alert("Successfully delete the paper!");
+        this.props.cleanInfoZone();
+        break;
+      default: 
+        console.error("Hit default case");
+        return;
+    }  
+  }
+
+  handleChanges(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    let copy = { ...this.state.paper };
+    copy[[name]] = value;
+
+    this.setState({
+      paper: copy
+    });
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+    if (nextProps.paperID !== this.props.paperID) {
+      this.setState({ paper: this.getPaper(nextProps.paperID) });
+    }
+  }
+
   render() {
     return (
-      <h3>Hello world!</h3>
+      <div className="PaperInformation">
+        <h3>Paper Information</h3>
+        <form>
+          <div className="PaperName">
+            <label>
+              Name: <input id="PaperName" type="text" value={this.state.paper.name} name="name" 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
+            </label>
+          </div>
+          <div className="PaperTitle">
+            <label>
+              Title: <input id="PaperTitle" type="text" name="title" value={this.state.paper.title} 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
+            </label>
+          </div>
+          <div className="PaperKeywords">
+            <label>
+              Keywords: <input id="PaperKeywords" type="text" name="keywords" value={this.state.paper.keywords} 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
+            </label>
+          </div>
+          <div className="PaperYear">
+            <label>
+              Year: <input id="PaperYear" type="text" name="year" value={this.state.paper.year} 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
+            </label>
+          </div>
+          <div className="PaperConference">
+            <label>
+              Conference: <input id="PaperConference" type="text" name="conference" value={this.state.paper.conference} 
+                onChange={this.handleChanges.bind(this)} disabled={!this.state.modify} />
+            </label>
+          </div>
+          <div className="PaperLastEdit">
+            <label>
+              Last Edit: {this.state.paper.lastedit} 
+            </label>
+          </div>
+          <div className="Operations">
+            {!this.state.modify ? 
+              <div className="InformationEditFalse">
+                <input type="button" value="Open" onClick={() => this.operation("open")} />
+                <input type="button" value="Edit" onClick={() => this.operation("edit")} />
+                <input type="button" value="Delete" onClick={() => this.operation("delete")} />
+              </div> :
+              <div className="InformationEditTrue">
+                <input type="button" value="Open" disabled />
+                <input type="button" value="Save" onClick={() => this.operation("save")} />
+                <input type="button" value="Cancel" onClick={() => this.operation("cancel")} />
+              </div>
+            }
+          </div>
+        </form>
+      </div>
     );
   }
 }

@@ -47,6 +47,14 @@ export default class BookmarksZone extends Component {
   }
 
   backward() {
+    if (this.state.folderID === null) {
+      this.setState({
+        filePath: [],
+        folderID: 1
+      });
+      this.cleanInfoZone();
+      return;
+    }
     let folder = window.api.database.getFolderProperty(window.db, this.state.folderID);
     let newFolderID = folder.fatherID;
     if (newFolderID === null) {
@@ -89,6 +97,10 @@ export default class BookmarksZone extends Component {
       <div className="BookmarksZone">
         <input type="button" value="↑" onClick={this.backward.bind(this)} disabled={this.state.filePath.length === 0} />
         <input id="filePath" type="text" value={"/" + this.state.filePath.join("")} disabled/>
+        <div className="ClearInfoZone">
+          <h3>Clear Infomation Zone</h3> 
+          <input type="button" value="Clear" onClick={this.cleanInfoZone.bind(this)} />
+        </div>
         <Folder folderID={this.state.folderID} setNewBookmark={this.setNewBookmark.bind(this)} 
           setChooseFolder={this.setChooseFolder.bind(this)} setChoosePaper={this.setChoosePaper.bind(this)} />
         <InfoZone folderID={this.state.folderID} cleanInfoZone={this.cleanInfoZone.bind(this)} forward={this.forward.bind(this)} updateLatest={this.updateLatest.bind(this)}
