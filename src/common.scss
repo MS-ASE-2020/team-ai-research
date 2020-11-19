@@ -5,13 +5,26 @@
 }
 
 .btn {
-  font: inherit;
+  font-family: inherit;
   font-size: 0.8em;
+  background-color: $theme-color-lighter;
+  border: 1px solid $theme-color-dark;
+  border-radius: 4px;
+  cursor: pointer;
 
   padding: 0.25em 0.4em;
   margin: -0.25em 0;
   border: 1px solid;
   border-radius: 4px;
+
+  &:active {
+    background-color: $theme-color-light;
+    border: 2px solid $theme-color-active;
+  }
+
+  + .btn {
+    margin-left: 0.5em;
+  }
 }
 
 .clickable {
@@ -42,4 +55,25 @@
 
 .form-action {
   line-height: 1.5;
+}
+
+.has-select {
+  position: relative;
+
+  input:before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+input + label {
+  margin-left: 0.5em;
+}
+
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
 }

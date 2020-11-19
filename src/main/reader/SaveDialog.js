@@ -10,7 +10,7 @@ export default class SaveDialog extends Component {
       keywords: "",
       year: "",
       conference: "",
-      library: ""
+      library: "",
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,7 +26,7 @@ export default class SaveDialog extends Component {
     }
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -34,24 +34,91 @@ export default class SaveDialog extends Component {
     return (
       <div className="save-wrapper">
         <div className="save-dialog">
-          <h2 className="save-lead">Name<input name="name" value={this.state.name} onChange={this.handleInputChange}></input></h2>
-          <h2 className="save-lead">Title<input name="title" value={this.state.title} onChange={this.handleInputChange}></input></h2>
-          <h2 className="save-lead">Keywords<input name="keywords" value={this.state.keywords} onChange={this.handleInputChange}></input></h2>
-          <h2 className="save-lead">Year<input name="year" type="number" value={this.state.year} onChange={this.handleInputChange}></input></h2>
-          <h2 className="save-lead">Conference<input name="conference" value={this.state.conference} onChange={this.handleInputChange}></input></h2>
-          <h2 className="save-lead">Library<input name="library" value={this.state.library} onChange={this.handleInputChange}></input></h2>
-          <button onClick={() => this.props.save(
-            this.props.info.ID, this.state.name, this.state.title, this.state.keywords, this.state.year, this.state.conference, this.state.library, this.props.info.annotations)}>Save</button>
-          <button onClick={() => this.props.close()}>Cancel</button>
+          <div className="row">
+            <div className="save-label">Name</div>
+            <input
+              className="save-input"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row">
+            <div className="save-label">Title</div>
+            <input
+              className="save-input"
+              name="title"
+              value={this.state.title}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row">
+            <div className="save-label">Keywords</div>
+            <input
+              className="save-input"
+              name="keywords"
+              value={this.state.keywords}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row">
+            <div className="save-label">Year</div>
+            <input
+              className="save-input"
+              name="year"
+              type="number"
+              value={this.state.year}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row">
+            <div className="save-label">Conference</div>
+            <input
+              className="save-input"
+              name="conference"
+              value={this.state.conference}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row">
+            <div className="save-label">Library</div>
+            <input
+              className="save-input"
+              name="library"
+              value={this.state.library}
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="row actions mx-auto">
+            <button
+              className="btn"
+              onClick={() =>
+                this.props.save(
+                  this.props.info.ID,
+                  this.state.name,
+                  this.state.title,
+                  this.state.keywords,
+                  this.state.year,
+                  this.state.conference,
+                  this.state.library,
+                  this.props.info.annotations
+                )
+              }
+            >
+              Save
+            </button>
+            <button className="btn" onClick={() => this.props.close()}>
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-
 SaveDialog.propTypes = {
   save: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  info: PropTypes.object
+  info: PropTypes.object,
 };

@@ -1,7 +1,9 @@
 $theme-color: #ed7d31;
 $theme-color-foreground: white;
 $theme-color-light: mix($theme-color, white, 24%);
+$theme-color-lighter: mix($theme-color-light, white, 44%);
 $theme-color-dark: mix($theme-color, #231e04, 85%);
+$theme-color-darker: mix($theme-color-dark, #231e04, 80%);
 $theme-color-active: mix($theme-color, #231e04, 70%);
 $theme-color-active-foreground: white;
 $theme-color-highlight: white;

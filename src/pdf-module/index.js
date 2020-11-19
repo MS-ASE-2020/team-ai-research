@@ -134,6 +134,9 @@ class Annotator extends React.Component {
   }
 
   save() {
+    if (this.props.file === null) {
+      return;
+    }
     const newfile = !this.props.file.startsWith("paper://");
     // if we are going to pop a dialog, disableUI() shall be called.
     let postCloseDialog = null;
@@ -141,7 +144,7 @@ class Annotator extends React.Component {
       postCloseDialog = this.enableUI.bind(this);
       this.disableUI();
     }
-    
+
     PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
       .then(annotations => {
         this.props.openSaveDialog({
