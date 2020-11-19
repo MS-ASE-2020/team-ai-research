@@ -38,5 +38,9 @@
     border: 1px solid $theme-color-dark;
     border-radius: 4px;
     background-color: $theme-color-lighter;
+
+    &:active, &:focus {
+      background-color: white;
+    }
   }
 }
