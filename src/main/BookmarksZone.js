@@ -10,7 +10,8 @@ export default class BookmarksZone extends Component {
       folderID: 1,
       newBookmark: false,
       chooseFolder: 0,
-      choosePaper: 0
+      choosePaper: 0,
+      search: false
     };
   }
   
@@ -18,7 +19,8 @@ export default class BookmarksZone extends Component {
     this.setState({
       newBookmark: false,
       chooseFolder: 0,
-      choosePaper: 0
+      choosePaper: 0,
+      search: false
     })
   }
 
@@ -26,7 +28,8 @@ export default class BookmarksZone extends Component {
     this.setState({
       newBookmark: true,
       chooseFolder: 0,
-      choosePaper: 0
+      choosePaper: 0,
+      search: false
     })
   }
 
@@ -34,7 +37,8 @@ export default class BookmarksZone extends Component {
     this.setState({
       newBookmark: false,
       chooseFolder: folderID,
-      choosePaper: 0
+      choosePaper: 0,
+      search: false
     })
   }
 
@@ -42,7 +46,17 @@ export default class BookmarksZone extends Component {
     this.setState({
       newBookmark: false,
       chooseFolder: 0,
-      choosePaper: paperID
+      choosePaper: paperID,
+      search: false
+    })
+  }
+
+  setSearch(){
+    this.setState({
+      newBookmark: false,
+      chooseFolder: 0,
+      choosePaper: 0,
+      search: true
     })
   }
 
@@ -52,22 +66,16 @@ export default class BookmarksZone extends Component {
         filePath: [],
         folderID: 1
       });
-      this.cleanInfoZone();
-      return;
-    }
-    let folder = window.api.database.getFolderProperty(window.db, this.state.folderID);
-    let newFolderID = folder.fatherID;
-    if (newFolderID === null) {
-      console.error("Backward: It's already root now.");
     } else {
+      let folder = window.api.database.getFolderProperty(window.db, this.state.folderID);
       let newFilePath = this.state.filePath.slice();
       newFilePath.pop();
       this.setState({
         filePath: newFilePath,
-        folderID: newFolderID
+        folderID: folder.fatherID
       });
-      this.cleanInfoZone();
     }
+    this.cleanInfoZone();
   }
 
   forward(newPath, newFolderID) {
@@ -97,14 +105,12 @@ export default class BookmarksZone extends Component {
       <div className="BookmarksZone">
         <input type="button" value="↑" onClick={this.backward.bind(this)} disabled={this.state.filePath.length === 0} />
         <input id="filePath" type="text" value={"/" + this.state.filePath.join("")} disabled/>
-        <div className="ClearInfoZone">
-          <h3>Clear Infomation Zone</h3> 
-          <input type="button" value="Clear" onClick={this.cleanInfoZone.bind(this)} />
-        </div>
-        <Folder folderID={this.state.folderID} setNewBookmark={this.setNewBookmark.bind(this)} 
+        <input type="button" value="Search" onClick={this.setSearch.bind(this)} />
+        <Folder folderID={this.state.folderID} chooseFolder={this.state.chooseFolder} choosePaper={this.state.choosePaper}
+          setNewBookmark={this.setNewBookmark.bind(this)} forward={this.forward.bind(this)}
           setChooseFolder={this.setChooseFolder.bind(this)} setChoosePaper={this.setChoosePaper.bind(this)} />
         <InfoZone folderID={this.state.folderID} cleanInfoZone={this.cleanInfoZone.bind(this)} forward={this.forward.bind(this)} updateLatest={this.updateLatest.bind(this)}
-          newBookmark={this.state.newBookmark} chooseFolder={this.state.chooseFolder} choosePaper={this.state.choosePaper} 
+          newBookmark={this.state.newBookmark} chooseFolder={this.state.chooseFolder} choosePaper={this.state.choosePaper} search={this.state.search}
           setChooseFolder={this.setChooseFolder.bind(this)} setChoosePaper={this.setChoosePaper.bind(this)} />
       </div>
     );

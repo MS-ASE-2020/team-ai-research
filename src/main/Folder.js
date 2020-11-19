@@ -4,13 +4,16 @@ import PropTypes from 'prop-types';
 export default class Folder extends Component {
   render() {
     let folderItem = [];
-    const folderList = window.api.database.listFolder(window.db, this.props.folderID);
-    for (let k = 0; k < folderList.length; k++) {
-      folderItem.push((
+    if (this.props.folderID !== null) {
+      const folderList = window.api.database.listFolder(window.db, this.props.folderID);
+      for (let k = 0; k < folderList.length; k++) {
+        folderItem.push((
         <div className="Subfolder" key={k}>
-          <input type="button" value={folderList[k].name} onClick={() => this.props.setChooseFolder(folderList[k].ID)} />
+          <input type="button" value={folderList[k].name} onClick={() => folderList[k].ID === this.props.chooseFolder ? 
+            this.props.forward(folderList[k].name, folderList[k].ID) : this.props.setChooseFolder(folderList[k].ID)} />
         </div>
-      ));
+        ));
+      }
     }
     let paperItem = [];
     const paperList = window.api.database.listPaper(window.db, this.props.folderID);
@@ -23,24 +26,20 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
-        {this.props.folderID === 1? 
+        {this.props.folderID === 1 ? 
         <div className="AllArticles">
-          <h3>All Articles Folder: </h3>
-          <input type="button" value="All Articles" onClick={() => this.props.setChooseFolder(null)} />
+          <input type="button" value="All Articles" onClick={() => this.props.forward("All Articles", null)}/>
         </div> : null}
-        {this.props.folderID !== null?
+        {this.props.folderID !== null ?
         <div className="SubfolderList">
-          <h3>Sub Folder List: </h3>
           {folderItem}
         </div> : null}
         <div className="PaperList">
-          <h3>Paper List: </h3>
           {paperItem}
         </div>
-        {this.props.folderID !== null?
+        {this.props.folderID !== null ?
         <div className="CreateNewBookmark">
-          <h3>Create New Bookmark: </h3>
-          <input type="button" value="New Bookmark" onClick={this.props.setNewBookmark}/>
+          <input type="button" value="+" onClick={this.props.setNewBookmark}/>
         </div> : null}
       </div>
     );

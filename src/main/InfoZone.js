@@ -43,7 +43,7 @@ class NewBookmark extends Component {
       this.stopCreateNewBookmark();
     } catch (error) {
       console.error(error);
-      alert("An error occurred when creating bookmark: ", error);
+      alert("Fail to create!");
     }
   }
 
@@ -81,9 +81,7 @@ class FolderInformation extends Component {
     super(props);
     this.state = {
       modify: false,
-      folder: props.folderID !== null ? this.getFolder(props.folderID) : {
-        "name": "All Articles"
-      }
+      folder: this.getFolder(props.chooseFolder)
     };
   }
 
@@ -92,14 +90,7 @@ class FolderInformation extends Component {
   }
 
   operation(act) {
-    if (this.props.folderID === 1) {
-      return;
-      // not to change root folder.
-    }
     switch (act) {
-      case 'open':
-        this.props.forward(this.state.folder.name, this.props.folderID);
-        break;
       case 'edit': 
         this.setState({
           modify: true
@@ -108,24 +99,29 @@ class FolderInformation extends Component {
       case 'cancel': 
         this.setState({
           modify: false,
+          folder: this.getFolder(this.props.chooseFolder)
         });
         break;
       case 'save':
-        window.api.database.saveFolder(window.db, {
-          ID: this.props.folderID,
-          name: this.state.folder.name,
-          description: this.state.folder.description,
-          fatherID: this.state.folder.fatherID
-        });
-        this.props.updateLatest(this.state.folder.name);
-        alert("Successfully edit the information of bookmark!");
-        this.props.setChooseFolder(this.props.folderID);
-        this.setState({
-          modify: !this.state.modify
-        });
+        try {
+          window.api.database.saveFolder(window.db, {
+            ID: this.props.chooseFolder,
+            name: this.state.folder.name,
+            description: this.state.folder.description,
+            fatherID: this.state.folder.fatherID
+          });
+          alert("Successfully edit the information of bookmark!");
+          this.props.setChooseFolder(this.props.chooseFolder);
+          this.setState({
+            modify: !this.state.modify
+          });
+        } catch (error) {
+          console.error(error);
+          alert("Fail to edit!")
+        }
         break;
       case 'delete':
-        window.api.database.deleteFolder(window.db, this.props.folderID);
+        window.api.database.deleteFolder(window.db, this.props.chooseFolder);
         alert("Successfully delete the bookmark!");
         this.props.cleanInfoZone();
         break;
@@ -137,8 +133,8 @@ class FolderInformation extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    if (nextProps.folderID !== this.props.folderID) {
-      this.setState({ folder: this.getFolder(nextProps.folderID) });
+    if (nextProps.chooseFolder !== this.props.chooseFolder) {
+      this.setState({ folder: this.getFolder(nextProps.chooseFolder) });
     }
   }
 
@@ -156,19 +152,6 @@ class FolderInformation extends Component {
   }
 
   render() {
-    if (this.props.folderID === null) {
-      return (
-        <div className="FolderInformation">
-          <h3>Folder Information</h3>
-          <label>
-            This is a special bookmark with all articles stored here.
-            <div className="InformationEditFalse">
-              <input type="button" value="Open" onClick={() => this.operation("open")} />
-            </div>
-          </label>
-        </div>
-      )
-    }
     return (
       <div className="FolderInformation">
         <h3>Folder Information</h3>
@@ -191,12 +174,10 @@ class FolderInformation extends Component {
           <div className="Operations">
             {!this.state.modify ? 
               <div className="InformationEditFalse">
-                <input type="button" value="Open" onClick={() => this.operation("open")} />
                 <input type="button" value="Edit" onClick={() => this.operation("edit")} />
                 <input type="button" value="Delete" onClick={() => this.operation("delete")} />
               </div> :
               <div className="InformationEditTrue">
-                <input type="button" value="Open" disabled />
                 <input type="button" value="Save" onClick={() => this.operation("save")} />
                 <input type="button" value="Cancel" onClick={() => this.operation("cancel")} />
               </div>
@@ -218,7 +199,7 @@ class PaperInformation extends Component {
     super(props);
     this.state = {
       modify: false,
-      paper: this.getPaper(props.paperID)
+      paper: this.getPaper(props.choosePaper)
     };
   }
 
@@ -239,28 +220,34 @@ class PaperInformation extends Component {
       case 'cancel': 
         this.setState({
           modify: false,
-          paper: this.getPaper(this.props.paperID)
+          paper: this.getPaper(this.props.choosePaper)
         });
         break;
       case 'save':
-        window.api.database.savePaper(window.db, {
-          ID: this.props.paperID,
-          name: this.state.paper.name,
-          title: this.state.paper.title,
-          keywords: this.state.paper.keywords,
-          year: this.state.paper.year,
-          conference: this.state.paper.conference,
-          QandA: this.state.paper.QandA,
-          annotations: this.state.paper.annotations
-        });
-        alert("Successfully edit the information of paper!");
-        this.setState({
-          modify: !this.state.modify,
-          paper: this.getPaper(this.props.paperID)
-        });
+        try {
+          window.api.database.savePaper(window.db, {
+            ID: this.props.choosePaper,
+            name: this.state.paper.name,
+            title: this.state.paper.title,
+            keywords: this.state.paper.keywords,
+            year: this.state.paper.year,
+            conference: this.state.paper.conference,
+            QandA: this.state.paper.QandA,
+            annotations: this.state.paper.annotations
+          });
+          alert("Successfully edit the information of paper!");
+          this.props.setChoosePaper(this.props.choosePaper);
+          this.setState({
+            modify: !this.state.modify,
+            paper: this.getPaper(this.props.choosePaper)
+          });
+        } catch (error) {
+          console.error(error);
+          alert("Fail to edit!")
+        }
         break;
       case 'delete':
-        window.api.database.deletePaper(window.db, this.props.paperID);
+        window.api.database.deletePaper(window.db, this.props.choosePaper);
         alert("Successfully delete the paper!");
         this.props.cleanInfoZone();
         break;
@@ -285,8 +272,8 @@ class PaperInformation extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    if (nextProps.paperID !== this.props.paperID) {
-      this.setState({ paper: this.getPaper(nextProps.paperID) });
+    if (nextProps.choosePaper !== this.props.choosePaper) {
+      this.setState({ paper: this.getPaper(nextProps.choosePaper) });
     }
   }
 
@@ -361,16 +348,22 @@ export default class InfoZone extends Component {
     } else if (this.props.chooseFolder !== 0) {
       return (
         <div className="InfoZone">
-          <FolderInformation folderID={this.props.chooseFolder} updateLatest={this.props.updateLatest} forward={this.props.forward}
+          <FolderInformation chooseFolder={this.props.chooseFolder} updateLatest={this.props.updateLatest} forward={this.props.forward}
           setChooseFolder={this.props.setChooseFolder} cleanInfoZone={this.props.cleanInfoZone}/>
         </div>
       )
     } else if (this.props.choosePaper !== 0){
       return (
         <div className="InfoZone">
-          <PaperInformation paperID={this.props.choosePaper} setChoosePaper={this.props.setChoosePaper} cleanInfoZone={this.props.cleanInfoZone}/>
+          <PaperInformation choosePaper={this.props.choosePaper} setChoosePaper={this.props.setChoosePaper} cleanInfoZone={this.props.cleanInfoZone}/>
         </div>
       )
+    } else if (this.props.search === true) {
+      return (
+        <div className="Search">
+          Placeholder for search area.
+        </div>
+      );
     } else {
       return null;
     }
