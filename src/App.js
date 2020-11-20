@@ -32,6 +32,12 @@ const CONTENT_TABS = [
     icon: "chart-network",
     component: Sharing,
   },
+  {
+    id: "debug",
+    title: "Debug",
+    icon: "bug",
+    component: Sharing,
+  },
 ];
 
 export default class App extends Component {
