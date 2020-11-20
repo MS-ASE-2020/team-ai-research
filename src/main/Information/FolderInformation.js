@@ -30,17 +30,21 @@ export default class FolderInformation extends Component {
         break;
       case "save":
         try {
-          window.api.database.saveFolder(window.db, {
-            ID: this.props.chooseFolder,
-            name: this.state.folder.name,
-            description: this.state.folder.description,
-            fatherID: this.state.folder.fatherID,
-          });
-          alert("Successfully edit the information of bookmark!");
-          this.props.setChooseFolder(this.props.chooseFolder);
-          this.setState({
-            modify: !this.state.modify,
-          });
+          if (this.state.folder.name === "") {
+            alert("Please input the name!");
+          } else {
+            window.api.database.saveFolder(window.db, {
+              ID: this.props.chooseFolder,
+              name: this.state.folder.name,
+              description: this.state.folder.description,
+              fatherID: this.state.folder.fatherID,
+            });
+            alert("Successfully edit the information of bookmark!");
+            this.props.setChooseFolder(this.props.chooseFolder);
+            this.setState({
+              modify: !this.state.modify,
+            });
+          }
         } catch (error) {
           console.error(error);
           alert("Fail to edit!");

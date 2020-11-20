@@ -32,14 +32,18 @@ export default class NewBookmark extends Component {
 
   createNewBookmark() {
     try {
-      window.api.database.saveFolder(window.db, {
-        ID: null,
-        name: this.state.name,
-        description: this.state.description,
-        fatherID: this.props.folderID,
-      });
-      alert("Successfully create the new bookmark!");
-      this.stopCreateNewBookmark();
+      if (this.state.name === "") {
+        alert("Please input the name!");
+      } else {
+        window.api.database.saveFolder(window.db, {
+          ID: null,
+          name: this.state.name,
+          description: this.state.description,
+          fatherID: this.props.folderID,
+        });
+        alert("Successfully create the new bookmark!");
+        this.stopCreateNewBookmark();
+      }
     } catch (error) {
       console.error(error);
       alert("Fail to create!");
