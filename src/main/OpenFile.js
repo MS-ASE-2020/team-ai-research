@@ -44,7 +44,7 @@ class OpenFileZone extends Component {
               name="file-source"
               onChange={this.handleFileSourceChange.bind(this)}
             />
-            <label for="file-local">Local File</label>
+            <label htmlFor="file-local">Local File</label>
           </h3>
           <div className="section-content">
             <input
@@ -63,7 +63,7 @@ class OpenFileZone extends Component {
               name="file-source"
               onChange={this.handleFileSourceChange.bind(this)}
             />
-            <label for="file-url">From URL</label>
+            <label htmlFor="file-url">From URL</label>
           </h3>
           <div className="section-content">
             <input

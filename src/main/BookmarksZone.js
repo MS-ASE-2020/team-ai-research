@@ -21,7 +21,7 @@ export default class BookmarksZone extends Component {
       chooseFolder: 0,
       choosePaper: 0,
       search: false
-    })
+    });
   }
 
   setNewBookmark() {
@@ -30,7 +30,7 @@ export default class BookmarksZone extends Component {
       chooseFolder: 0,
       choosePaper: 0,
       search: false
-    })
+    });
   }
 
   setChooseFolder(folderID) {
@@ -39,7 +39,7 @@ export default class BookmarksZone extends Component {
       chooseFolder: folderID,
       choosePaper: 0,
       search: false
-    })
+    });
   }
 
   setChoosePaper(paperID) {
@@ -48,7 +48,7 @@ export default class BookmarksZone extends Component {
       chooseFolder: 0,
       choosePaper: paperID,
       search: false
-    })
+    });
   }
 
   setSearch(){
@@ -57,7 +57,7 @@ export default class BookmarksZone extends Component {
       chooseFolder: 0,
       choosePaper: 0,
       search: true
-    })
+    });
   }
 
   backward() {

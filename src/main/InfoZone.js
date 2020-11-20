@@ -91,43 +91,43 @@ class FolderInformation extends Component {
 
   operation(act) {
     switch (act) {
-      case 'edit': 
-        this.setState({
-          modify: true
+    case 'edit': 
+      this.setState({
+        modify: true
+      });
+      break;
+    case 'cancel': 
+      this.setState({
+        modify: false,
+        folder: this.getFolder(this.props.chooseFolder)
+      });
+      break;
+    case 'save':
+      try {
+        window.api.database.saveFolder(window.db, {
+          ID: this.props.chooseFolder,
+          name: this.state.folder.name,
+          description: this.state.folder.description,
+          fatherID: this.state.folder.fatherID
         });
-        break;
-      case 'cancel': 
+        alert("Successfully edit the information of bookmark!");
+        this.props.setChooseFolder(this.props.chooseFolder);
         this.setState({
-          modify: false,
-          folder: this.getFolder(this.props.chooseFolder)
+          modify: !this.state.modify
         });
-        break;
-      case 'save':
-        try {
-          window.api.database.saveFolder(window.db, {
-            ID: this.props.chooseFolder,
-            name: this.state.folder.name,
-            description: this.state.folder.description,
-            fatherID: this.state.folder.fatherID
-          });
-          alert("Successfully edit the information of bookmark!");
-          this.props.setChooseFolder(this.props.chooseFolder);
-          this.setState({
-            modify: !this.state.modify
-          });
-        } catch (error) {
-          console.error(error);
-          alert("Fail to edit!")
-        }
-        break;
-      case 'delete':
-        window.api.database.deleteFolder(window.db, this.props.chooseFolder);
-        alert("Successfully delete the bookmark!");
-        this.props.cleanInfoZone();
-        break;
-      default: 
-        console.error("Hit default case");
-        return;
+      } catch (error) {
+        console.error(error);
+        alert("Fail to edit!");
+      }
+      break;
+    case 'delete':
+      window.api.database.deleteFolder(window.db, this.props.chooseFolder);
+      alert("Successfully delete the bookmark!");
+      this.props.cleanInfoZone();
+      break;
+    default: 
+      console.error("Hit default case");
+      return;
     }  
   }
 
@@ -209,51 +209,51 @@ class PaperInformation extends Component {
 
   operation(act) {
     switch (act) {
-      case 'open':
-        alert("Placeholder!");
-        break;
-      case 'edit': 
-        this.setState({
-          modify: true
+    case 'open':
+      alert("Placeholder!");
+      break;
+    case 'edit': 
+      this.setState({
+        modify: true
+      });
+      break;
+    case 'cancel': 
+      this.setState({
+        modify: false,
+        paper: this.getPaper(this.props.choosePaper)
+      });
+      break;
+    case 'save':
+      try {
+        window.api.database.savePaper(window.db, {
+          ID: this.props.choosePaper,
+          name: this.state.paper.name,
+          title: this.state.paper.title,
+          keywords: this.state.paper.keywords,
+          year: this.state.paper.year,
+          conference: this.state.paper.conference,
+          QandA: this.state.paper.QandA,
+          annotations: this.state.paper.annotations
         });
-        break;
-      case 'cancel': 
+        alert("Successfully edit the information of paper!");
+        this.props.setChoosePaper(this.props.choosePaper);
         this.setState({
-          modify: false,
+          modify: !this.state.modify,
           paper: this.getPaper(this.props.choosePaper)
         });
-        break;
-      case 'save':
-        try {
-          window.api.database.savePaper(window.db, {
-            ID: this.props.choosePaper,
-            name: this.state.paper.name,
-            title: this.state.paper.title,
-            keywords: this.state.paper.keywords,
-            year: this.state.paper.year,
-            conference: this.state.paper.conference,
-            QandA: this.state.paper.QandA,
-            annotations: this.state.paper.annotations
-          });
-          alert("Successfully edit the information of paper!");
-          this.props.setChoosePaper(this.props.choosePaper);
-          this.setState({
-            modify: !this.state.modify,
-            paper: this.getPaper(this.props.choosePaper)
-          });
-        } catch (error) {
-          console.error(error);
-          alert("Fail to edit!")
-        }
-        break;
-      case 'delete':
-        window.api.database.deletePaper(window.db, this.props.choosePaper);
-        alert("Successfully delete the paper!");
-        this.props.cleanInfoZone();
-        break;
-      default: 
-        console.error("Hit default case");
-        return;
+      } catch (error) {
+        console.error(error);
+        alert("Fail to edit!");
+      }
+      break;
+    case 'delete':
+      window.api.database.deletePaper(window.db, this.props.choosePaper);
+      alert("Successfully delete the paper!");
+      this.props.cleanInfoZone();
+      break;
+    default: 
+      console.error("Hit default case");
+      return;
     }  
   }
 
@@ -349,15 +349,15 @@ export default class InfoZone extends Component {
       return (
         <div className="InfoZone">
           <FolderInformation chooseFolder={this.props.chooseFolder} updateLatest={this.props.updateLatest} forward={this.props.forward}
-          setChooseFolder={this.props.setChooseFolder} cleanInfoZone={this.props.cleanInfoZone}/>
+            setChooseFolder={this.props.setChooseFolder} cleanInfoZone={this.props.cleanInfoZone}/>
         </div>
-      )
+      );
     } else if (this.props.choosePaper !== 0){
       return (
         <div className="InfoZone">
           <PaperInformation choosePaper={this.props.choosePaper} setChoosePaper={this.props.setChoosePaper} cleanInfoZone={this.props.cleanInfoZone}/>
         </div>
-      )
+      );
     } else if (this.props.search === true) {
       return (
         <div className="Search">

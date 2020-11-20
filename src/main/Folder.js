@@ -8,10 +8,10 @@ export default class Folder extends Component {
       const folderList = window.api.database.listFolder(window.db, this.props.folderID);
       for (let k = 0; k < folderList.length; k++) {
         folderItem.push((
-        <div className="Subfolder" key={k}>
-          <input type="button" value={folderList[k].name} onClick={() => folderList[k].ID === this.props.chooseFolder ? 
-            this.props.forward(folderList[k].name, folderList[k].ID) : this.props.setChooseFolder(folderList[k].ID)} />
-        </div>
+          <div className="Subfolder" key={k}>
+            <input type="button" value={folderList[k].name} onClick={() => folderList[k].ID === this.props.chooseFolder ? 
+              this.props.forward(folderList[k].name, folderList[k].ID) : this.props.setChooseFolder(folderList[k].ID)} />
+          </div>
         ));
       }
     }
@@ -27,20 +27,20 @@ export default class Folder extends Component {
     return (
       <div className="Folder">
         {this.props.folderID === 1 ? 
-        <div className="AllArticles">
-          <input type="button" value="All Articles" onClick={() => this.props.forward("All Articles", null)}/>
-        </div> : null}
+          <div className="AllArticles">
+            <input type="button" value="All Articles" onClick={() => this.props.forward("All Articles", null)}/>
+          </div> : null}
         {this.props.folderID !== null ?
-        <div className="SubfolderList">
-          {folderItem}
-        </div> : null}
+          <div className="SubfolderList">
+            {folderItem}
+          </div> : null}
         <div className="PaperList">
           {paperItem}
         </div>
         {this.props.folderID !== null ?
-        <div className="CreateNewBookmark">
-          <input type="button" value="+" onClick={this.props.setNewBookmark}/>
-        </div> : null}
+          <div className="CreateNewBookmark">
+            <input type="button" value="+" onClick={this.props.setNewBookmark}/>
+          </div> : null}
       </div>
     );
   }

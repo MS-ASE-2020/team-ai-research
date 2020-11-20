@@ -274,14 +274,10 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
   let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
   let sqlStmtInsert = db.prepare(sql);
   let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
-  try {
-    db.transaction(() => {
-      sqlStmtDelete.run();
-      sqlStmtInsert.run();
-    })();
-  } catch (error) {
-    throw error;
-  }
+  db.transaction(() => {
+    sqlStmtDelete.run();
+    sqlStmtInsert.run();
+  })();
 }
 
 module.exports = {
