@@ -69,13 +69,12 @@ class NewBookmark extends Component {
     );
   }
 }
-/*/
+
 NewBookmark.propTypes = {
   folderID: PropTypes.number.isRequired,
-  stopCreate: PropTypes.func.isRequired,
-  newBookmark: PropTypes.bool.isRequired
+  cleanInfoZone: PropTypes.func.isRequired,
 };
-/*/
+
 class FolderInformation extends Component {
   constructor(props) {
     super(props);
@@ -188,12 +187,13 @@ class FolderInformation extends Component {
     );
   }
 }
-/*/
+
 FolderInformation.propTypes = {
-  folderID: PropTypes.number.isRequired,
-  updateLatest: PropTypes.func.isRequired
+  chooseFolder: PropTypes.number.isRequired,
+  setChooseFolder: PropTypes.func.isRequired,
+  cleanInfoZone: PropTypes.func.isRequired
 };
-/*/
+
 class PaperInformation extends Component {
   constructor(props) {
     super(props);
@@ -337,6 +337,12 @@ class PaperInformation extends Component {
   }
 }
 
+PaperInformation.propTypes = {
+  choosePaper: PropTypes.number.isRequired,
+  setChoosePaper: PropTypes.func.isRequired,
+  cleanInfoZone: PropTypes.func.isRequired
+};
+
 export default class InfoZone extends Component {
   render() {
     if (this.props.newBookmark === true) {
@@ -370,10 +376,17 @@ export default class InfoZone extends Component {
   }
 }
 
-/*/
-Folder.propTypes = {
-  folderID: PropTypes.number.isRequired,
-  forward: PropTypes.func.isRequired,
+
+InfoZone.propTypes = {
+  newBookmark: PropTypes.bool.isRequired,
+  folderID: PropTypes.number,
+  chooseFolder: PropTypes.number.isRequired,
+  choosePaper: PropTypes.number.isRequired,
+  search: PropTypes.bool.isRequired,
+  cleanInfoZone: PropTypes.func.isRequired,
   updateLatest: PropTypes.func.isRequired,
+  forward: PropTypes.func.isRequired,
+  setChooseFolder: PropTypes.func.isRequired,
+  setChoosePaper: PropTypes.func.isRequired
 };
-/*/
+

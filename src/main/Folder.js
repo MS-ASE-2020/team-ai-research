@@ -45,8 +45,12 @@ export default class Folder extends Component {
     );
   }
 }
-/*/
+
 Folder.propTypes = {
-  folderID: PropTypes.number.isRequired,
+  folderID: PropTypes.number,
+  forward: PropTypes.func.isRequired,
+  setNewBookmark: PropTypes.func.isRequired,
+  setChooseFolder: PropTypes.func.isRequired,
+  setChoosePaper: PropTypes.func.isRequired,
+  chooseFolder: PropTypes.number.isRequired
 };
-/*/
