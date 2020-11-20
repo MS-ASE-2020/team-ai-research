@@ -1,3 +1,19 @@
+# Update in Nov.20, 2020, Double680
+
+## 功能更新
+
+1.`Keywords`分词展示和新建删除功能。
+
+2.为所有的`Delete`按钮增加了一个`Confirm`步。
+
+3.修改了文件路径逻辑，现在`NewBookmark`，`FolderInformation`和`PaperInformation`部分将分别放置于"\main\Information\"下。
+
+## Unsolved Bugs
+
+1.`Keywords`部分暂时无法更改文本框内容。
+
+2.在执行成功一步保存或删除操作后，所有`<input type="text" />`类型框将不可增添字符，只可删除。
+
 # Update in Nov.19, 2020, Double680
 
 ## 功能更新
