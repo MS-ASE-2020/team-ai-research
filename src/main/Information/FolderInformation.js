@@ -17,49 +17,49 @@ export default class FolderInformation extends Component {
 
   operation(act) {
     switch (act) {
-      case "edit":
-        this.setState({
-          modify: true,
-        });
-        break;
-      case "cancel":
-        this.setState({
-          modify: false,
-          folder: this.getFolder(this.props.chooseFolder),
-        });
-        break;
-      case "save":
-        try {
-          if (this.state.folder.name === "") {
-            alert("Please input the name!");
-          } else {
-            window.api.database.saveFolder(window.db, {
-              ID: this.props.chooseFolder,
-              name: this.state.folder.name,
-              description: this.state.folder.description,
-              fatherID: this.state.folder.fatherID,
-            });
-            alert("Successfully edit the information of bookmark!");
-            this.props.setChooseFolder(this.props.chooseFolder);
-            this.setState({
-              modify: !this.state.modify,
-            });
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Fail to edit!");
+    case "edit":
+      this.setState({
+        modify: true,
+      });
+      break;
+    case "cancel":
+      this.setState({
+        modify: false,
+        folder: this.getFolder(this.props.chooseFolder),
+      });
+      break;
+    case "save":
+      try {
+        if (this.state.folder.name === "") {
+          alert("Please input the name!");
+        } else {
+          window.api.database.saveFolder(window.db, {
+            ID: this.props.chooseFolder,
+            name: this.state.folder.name,
+            description: this.state.folder.description,
+            fatherID: this.state.folder.fatherID,
+          });
+          alert("Successfully edit the information of bookmark!");
+          this.props.setChooseFolder(this.props.chooseFolder);
+          this.setState({
+            modify: !this.state.modify,
+          });
         }
-        break;
-      case "delete":
-        if (window.confirm("Are you surely want to delete this bookmark?")) {
-          window.api.database.deleteFolder(window.db, this.props.chooseFolder);
-          alert("Successfully delete the bookmark!");
-          this.props.cleanInfoZone();
-        }
-        break;
-      default:
-        console.error("Hit default case");
-        return;
+      } catch (error) {
+        console.error(error);
+        alert("Fail to edit!");
+      }
+      break;
+    case "delete":
+      if (window.confirm("Are you surely want to delete this bookmark?")) {
+        window.api.database.deleteFolder(window.db, this.props.chooseFolder);
+        alert("Successfully delete the bookmark!");
+        this.props.cleanInfoZone();
+      }
+      break;
+    default:
+      console.error("Hit default case");
+      return;
     }
   }
 

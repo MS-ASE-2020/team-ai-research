@@ -109,20 +109,30 @@ export default class PaperInformation extends Component {
     let keywordItem = [];
     for (let k = 0; k < this.state.keywords.length; k++) {
       keywordItem.push(( this.state.modify ? 
-        <input id="PaperKeywords" type="text" name="keywords" value={this.state.keywords[k]} 
-                onChange={this.handleChanges} disabled={!this.state.modify} /> :         
+        <input
+          id="PaperKeywords" 
+          type="text" 
+          name="keywords" 
+          value={this.state.keywords[k]} 
+          onChange={this.handleChanges} /> :         
         this.state.keywords[k] + (k === this.state.keywords.length-1 ? "" : ", ")
       ));
       if (this.state.modify) {
         keywordItem.push((
-          <input id="PaperKeywordsRemove" type="button" value="×" 
+          <input 
+            id="PaperKeywordsRemove" 
+            type="button" 
+            value="×" 
             onClick={() => this.removeKeyword(k)}/>
         ));
       }
     }
     if (this.state.modify) {
       keywordItem.push((
-        <input id="PaperKeywordsAdd" type="button" value="+" 
+        <input 
+          id="PaperKeywordsAdd" 
+          type="button" 
+          value="+" 
           onClick={() => this.addKeywords()}/>
       ));
     }
@@ -133,15 +143,23 @@ export default class PaperInformation extends Component {
           <div className="PaperName">
             <label>
               Name: {this.state.modify ?  
-              <input id="PaperName" type="text" value={this.state.paper.name} name="name" 
-                onChange={this.handleChanges} /> : this.state.paper.name}
+                <input 
+                  id="PaperName" 
+                  type="text" 
+                  value={this.state.paper.name} 
+                  name="name" 
+                  onChange={this.handleChanges} /> : this.state.paper.name}
             </label>
           </div>
           <div className="PaperTitle">
             <label>
               Title: {this.state.modify ? 
-              <input id="PaperTitle" type="text" name="title" value={this.state.paper.title} 
-                onChange={this.handleChanges} /> : this.state.paper.title}
+                <input 
+                  id="PaperTitle" 
+                  type="text" 
+                  name="title" 
+                  value={this.state.paper.title} 
+                  onChange={this.handleChanges} /> : this.state.paper.title}
             </label>
           </div>
           <div className="PaperKeywords">
@@ -152,15 +170,25 @@ export default class PaperInformation extends Component {
           <div className="PaperYear">
             <label>
               Year: {this.state.modify ? 
-              <input id="PaperYear" type="text" name="year" value={this.state.paper.year} 
-                onChange={this.handleChanges} disabled={!this.state.modify} /> : this.state.paper.year}
+                <input 
+                  id="PaperYear" 
+                  type="text" 
+                  name="year" 
+                  value={this.state.paper.year} 
+                  onChange={this.handleChanges} 
+                  disabled={!this.state.modify} /> : this.state.paper.year}
             </label>
           </div>
           <div className="PaperConference">
             <label>
               Conference: {this.state.modify ? 
-              <input id="PaperConference" type="text" name="conference" value={this.state.paper.conference} 
-                onChange={this.handleChanges} disabled={!this.state.modify} /> : this.state.paper.conference}
+                <input 
+                  id="PaperConference" 
+                  type="text" 
+                  name="conference" 
+                  value={this.state.paper.conference} 
+                  onChange={this.handleChanges} 
+                  disabled={!this.state.modify} /> : this.state.paper.conference}
             </label>
           </div>
           <div className="PaperLastEdit">
