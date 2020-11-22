@@ -1,3 +1,9 @@
+# Update in Nov.22, 2020, Double680
+
+## 功能更新
+
+修复了`Keywords`分词部分无法编辑的问题。
+
 # Update in Nov.20, 2020, Double680
 
 ## 功能更新

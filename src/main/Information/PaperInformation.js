@@ -82,6 +82,19 @@ export default class PaperInformation extends Component {
     });
   }
 
+  handleKeywords(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const index = event.target.getAttribute("data-index");
+
+    let copy = this.state.keywords.slice();
+    copy[[index]] = value;
+    
+    this.setState({
+      keywords: copy,
+    });
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
     if (nextProps.choosePaper !== this.props.choosePaper) {
@@ -112,9 +125,11 @@ export default class PaperInformation extends Component {
         <input
           id="PaperKeywords" 
           type="text" 
-          name="keywords" 
+          name="keywords"
+          key={k} 
+          data-index={k}
           value={this.state.keywords[k]} 
-          onChange={this.handleChanges} /> :         
+          onChange={this.handleKeywords.bind(this)} /> :         
         this.state.keywords[k] + (k === this.state.keywords.length-1 ? "" : ", ")
       ));
       if (this.state.modify) {
