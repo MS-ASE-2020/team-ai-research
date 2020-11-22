@@ -7,9 +7,11 @@ export default class PaperInformation extends Component {
     this.state = {
       modify: false,
       paper: this.getPaper(props.choosePaper),
-      keywords: this.getPaper(props.choosePaper).keywords.split(",")
+      keywords: this.getPaper(props.choosePaper).keywords === "" ? 
+        [] : this.getPaper(props.choosePaper).keywords.split(",")
     };
     this.handleChanges = this.handleChanges.bind(this);
+    this.handleKeywords = this.handleKeywords.bind(this);
   }
 
   getPaper(paperID) {
@@ -112,7 +114,7 @@ export default class PaperInformation extends Component {
 
   addKeywords() {
     let newKeywords = this.state.keywords.slice();
-    newKeywords.splice(newKeywords.length, 0, "New Keywords"); 
+    newKeywords.splice(newKeywords.length, 0, "New Keyword"); 
     this.setState({
       keywords: newKeywords
     });
@@ -125,11 +127,9 @@ export default class PaperInformation extends Component {
         <input
           id="PaperKeywords" 
           type="text" 
-          name="keywords"
-          key={k} 
           data-index={k}
           value={this.state.keywords[k]} 
-          onChange={this.handleKeywords.bind(this)} /> :         
+          onChange={this.handleKeywords} /> :         
         this.state.keywords[k] + (k === this.state.keywords.length-1 ? "" : ", ")
       ));
       if (this.state.modify) {
