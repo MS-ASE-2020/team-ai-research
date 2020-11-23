@@ -7,8 +7,8 @@ export default class PaperInformation extends Component {
     this.state = {
       modify: false,
       paper: this.getPaper(props.choosePaper),
-      keywords: this.getPaper(props.choosePaper).keywords === "" ? 
-        [] : this.getPaper(props.choosePaper).keywords.split(",")
+      //keywords: this.getPaper(props.choosePaper).keywords === "" ? 
+      //  [] : this.getPaper(props.choosePaper).keywords.split(",")
     };
     this.handleChanges = this.handleChanges.bind(this);
     this.handleKeywords = this.handleKeywords.bind(this);
@@ -32,7 +32,7 @@ export default class PaperInformation extends Component {
       this.setState({
         modify: false,
         paper: this.getPaper(this.props.choosePaper),
-        keywords: this.getPaper(this.props.choosePaper).keywords.split(",")
+        //keywords: this.getPaper(this.props.choosePaper).keywords.split(",")
       });
       break;
     case 'save':
@@ -41,7 +41,7 @@ export default class PaperInformation extends Component {
           ID: this.props.choosePaper,
           name: this.state.paper.name,
           title: this.state.paper.title,
-          keywords: this.state.keywords.join(","),
+          keywords: this.state.paper.keywords,
           year: this.state.paper.year,
           conference: this.state.paper.conference,
           QandA: this.state.paper.QandA,
@@ -51,7 +51,7 @@ export default class PaperInformation extends Component {
         this.props.setChoosePaper(this.props.choosePaper);
         this.setState({
           modify: !this.state.modify,
-          paper: this.getPaper(this.props.choosePaper)
+          //paper: this.getPaper(this.props.choosePaper)
         });
       } catch (error) {
         console.error(error);
@@ -89,11 +89,11 @@ export default class PaperInformation extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const index = event.target.getAttribute("data-index");
 
-    let copy = this.state.keywords.slice();
+    let copy = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
     copy[[index]] = value;
     
     this.setState({
-      keywords: copy,
+      keywords: copy.join(","),
     });
   }
 
@@ -105,32 +105,34 @@ export default class PaperInformation extends Component {
   }
 
   removeKeyword(k) {
-    let newKeywords = this.state.keywords.slice();
+    let newKeywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
     newKeywords.splice(k, 1);
     this.setState({
-      keywords: newKeywords
+      keywords: newKeywords.join(",")
     });
   }
 
   addKeywords() {
-    let newKeywords = this.state.keywords.slice();
+    let newKeywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
     newKeywords.splice(newKeywords.length, 0, "New Keyword"); 
     this.setState({
-      keywords: newKeywords
+      keywords: newKeywords.join(",")
     });
   }
 
   render() {
+    console.log(this.state)
     let keywordItem = [];
-    for (let k = 0; k < this.state.keywords.length; k++) {
+    let keywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
+    for (let k = 0; k < keywords.length; k++) {
       keywordItem.push(( this.state.modify ? 
         <input
           id="PaperKeywords" 
           type="text" 
           data-index={k}
-          value={this.state.keywords[k]} 
+          value={keywords[k]} 
           onChange={this.handleKeywords} /> :         
-        this.state.keywords[k] + (k === this.state.keywords.length-1 ? "" : ", ")
+        keywords[k] + (k === keywords.length-1 ? "" : ", ")
       ));
       if (this.state.modify) {
         keywordItem.push((
