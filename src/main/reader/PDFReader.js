@@ -14,12 +14,14 @@ export default class PDFReader extends Component {
 
   render() {
     return (
-      <Annotator file={this.state.file} docid={this.state.file + "_id"} paperID={this.state.paperID} />
+      <Annotator file={this.state.file} docid={this.state.file + "_id"} paperID={this.state.paperID} 
+        openSaveDialog={this.props.openSaveDialog.bind(this)} />
     );
   }
 }
 
 PDFReader.propTypes = {
   file: PropTypes.string,
-  paperID: PropTypes.number
+  paperID: PropTypes.number,
+  openSaveDialog: PropTypes.func.isRequired
 };

@@ -33,8 +33,10 @@ class AnnotatorComment extends React.Component {
   }
 
   render() {
+    const displaySidebar = this.state.loaded && this.props.RENDER_OPTIONS.documentId;
+
     return (
-      <div id="comment-wrapper">
+      <div id="comment-wrapper" style={{ display: displaySidebar ? null : 'none' }}>
         <h4>Comments</h4>
         <div className="comment-list">
           <div className="comment-list-container">
@@ -51,7 +53,8 @@ class AnnotatorComment extends React.Component {
 
 AnnotatorComment.propTypes = {
   UI: PropTypes.object,
-  PDFJSAnnotate: PropTypes.object
+  PDFJSAnnotate: PropTypes.object,
+  RENDER_OPTIONS: PropTypes.object
 };
 
 function htmlEscape(text) {

@@ -58,133 +58,170 @@ class Annotator extends React.Component {
     // }
   }
 
-    visiblePageNum = () => {
-      return Math.round(this.wrapper.scrollTop / this.PAGE_HEIGHT) + 1;
+  visiblePageNum = () => {
+    return Math.round(this.wrapper.scrollTop / this.PAGE_HEIGHT) + 1;
+  }
+
+  contentWrapperScroll(e) {
+    let visiblePageNum = Math.round(e.target.scrollTop / this.PAGE_HEIGHT) + 1;
+    let visiblePage = document.querySelector(`.page[data-page-number="${visiblePageNum}"][data-loaded="false"]`);
+    let okToRender;
+    if (this.renderedPages.indexOf(visiblePageNum) === -1) {
+      okToRender = true;
+      this.renderedPages.push(visiblePageNum);
+    }
+    else {
+      okToRender = false;
     }
 
-    contentWrapperScroll(e) {
-      let visiblePageNum = Math.round(e.target.scrollTop / this.PAGE_HEIGHT) + 1;
-      let visiblePage = document.querySelector(`.page[data-page-number="${visiblePageNum}"][data-loaded="false"]`);
-      let okToRender;
-      if (this.renderedPages.indexOf(visiblePageNum) === -1) {
-        okToRender = true;
-        this.renderedPages.push(visiblePageNum);
-      }
-      else {
-        okToRender = false;
-      }
-
-      if (visiblePage && okToRender) {
-        setTimeout(() => this.UI.renderPage(visiblePageNum, this.RENDER_OPTIONS));
-      }
+    if (visiblePage && okToRender) {
+      setTimeout(() => this.UI.renderPage(visiblePageNum, this.RENDER_OPTIONS));
     }
+  }
 
-    PDFRender = () => {
-      if (this.rendered === false) {
-        return;
-      }
-      try {
-        this.rendered = false;
-        const loadingTask = pdfjsLib.getDocument({
-          url: this.props.file,
-          cMapUrl: 'shared/cmaps/',
-          cMapPacked: true
-        });
+  PDFRender = () => {
+    if (this.rendered === false) {
+      return;
+    }
+    try {
+      this.rendered = false;
+      const loadingTask = pdfjsLib.getDocument({
+        url: this.props.file,
+        cMapUrl: 'shared/cmaps/',
+        cMapPacked: true
+      });
 
-        loadingTask.promise.then((pdf) => {
-          this.RENDER_OPTIONS.pdfDocument = pdf;
-          let viewer = this.viewer;
-          if (viewer) {
-            viewer.innerHTML = '';
-            for (let i = 0; i < pdf.numPages; i++) {
-              let page = this.UI.createPage(i + 1);
-              viewer.appendChild(page);
-            }
-
-            this.NUM_PAGES = pdf.numPages;
-            window.pdfjsViewer = pdfjsViewer;
-            // eslint-disable-next-line no-unused-vars
-            this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
-              let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
-              this.PAGE_HEIGHT = viewport.height;
-              this.rendered = true;
-              this.setState({});
-            });
+      loadingTask.promise.then((pdf) => {
+        this.RENDER_OPTIONS.pdfDocument = pdf;
+        let viewer = this.viewer;
+        if (viewer) {
+          viewer.innerHTML = '';
+          for (let i = 0; i < pdf.numPages; i++) {
+            let page = this.UI.createPage(i + 1);
+            viewer.appendChild(page);
           }
-        });
-      } catch {
-        this.rendered = true;
-      }
+
+          this.NUM_PAGES = pdf.numPages;
+          window.pdfjsViewer = pdfjsViewer;
+          // eslint-disable-next-line no-unused-vars
+          this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
+            let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
+            this.PAGE_HEIGHT = viewport.height;
+            this.rendered = true;
+            this.setState({});
+          });
+        }
+      });
+    } catch {
+      this.rendered = true;
+    }
+  }
+
+  disableUI() {
+    this.UI.disableUI();
+    this.UI.disableEdit();
+    this.UI.disableEraser();
+    this.UI.disablePen();
+    this.UI.disableText();
+    this.UI.disablePoint();
+    this.UI.disableRect();
+  }
+
+  enableUI() {
+    // TODO: set correct active to toolbar button
+    this.UI.enableUI();
+    this.UI.enableEdit();
+  }
+
+  save() {
+    if (this.props.file === null) {
+      return;
+    }
+    const newfile = !this.props.file.startsWith("paper://");
+    // if we are going to pop a dialog, disableUI() shall be called.
+    let postCloseDialog = null;
+    if (newfile) {
+      postCloseDialog = this.enableUI.bind(this);
+      this.disableUI();
     }
 
-    save() {
-      let fileId = this.RENDER_OPTIONS.documentId;
-      if (!this.paperID) {
-        PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
-          .then(annotations => {
-            console.log(annotations);
-            window.api.database.savePaper(window.db, {
-              ID: null,
-              name: 'placeholder' + fileId + Math.random().toString(6),
-              title: 'placeholder' + fileId,
-              keywords: 'placeholder' + fileId,
-              year: 2038,
-              conference: 'placeholder' + fileId,
-              lastedit: 'placeholder' + fileId,
-              QandA: '',
-              annotations: JSON.stringify(annotations)
-            }, (paperID) => {
-              window.api.filesystem.save(this.file, paperID);
-              this.paperID = paperID;
-            });
-          });
-      } else {
-        PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
-          .then(annotations => {
-            console.log(annotations);
-            window.api.database.savePaper(window.db, {
-              ID: this.paperID,
-              name: 'placeholder' + fileId + Math.random().toString(6),
-              title: 'placeholder' + fileId,
-              keywords: 'placeholder' + fileId,
-              year: 2038,
-              conference: 'placeholder' + fileId,
-              lastedit: 'placeholder' + fileId,
-              QandA: '',
-              annotations: JSON.stringify(annotations)
-            });
-          });
-      }
-    }
+    PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+      .then(annotations => {
+        this.props.openSaveDialog({
+          annotations: annotations,
+          ID: this.paperID,
+        }, postCloseDialog, !newfile);
+      });
 
-    render() {
-      return (
-        <div id="pdfwrapper" ref={el => this.el = el}>
-          <AnnotatorToolBar
-            UI={this.UI}
-            RENDER_OPTIONS={this.RENDER_OPTIONS}
-            NUM_PAGES={this.NUM_PAGES}
-            PDFJSAnnotate={PDFJSAnnotate}
-            visiblePageNum={this.visiblePageNum}
-            render={this.PDFRender}
-            filename={this.file}
-            saveFunc={this.save.bind(this)}></AnnotatorToolBar>
-          <div id="content-wrapper"
-            onScroll={this.contentWrapperScroll.bind(this)}
-            ref={el => this.wrapper = el}>
-            <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
-          </div>
-          <AnnotatorSidebar
-            UI={this.UI}
-            PDFJSAnnotate={PDFJSAnnotate}></AnnotatorSidebar>
+    // let fileId = this.RENDER_OPTIONS.documentId;
+    // if (!this.paperID) {
+    //   PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+    //     .then(annotations => {
+    //       console.log(annotations);
+    //       window.api.database.savePaper(window.db, {
+    //         ID: null,
+    //         name: 'placeholder' + fileId + Math.random().toString(6),
+    //         title: 'placeholder' + fileId,
+    //         keywords: 'placeholder' + fileId,
+    //         year: 2038,
+    //         conference: 'placeholder' + fileId,
+    //         lastedit: 'placeholder' + fileId,
+    //         QandA: 'placeholder' + fileId,
+    //         annotations: JSON.stringify(annotations)
+    //       }, (paperID) => {
+    //         window.api.filesystem.save(this.file, paperID);
+    //         this.paperID = paperID;
+    //       });
+    //     });
+    // } else {
+    //   PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
+    //     .then(annotations => {
+    //       console.log(annotations);
+    //       window.api.database.savePaper(window.db, {
+    //         ID: this.paperID,
+    //         name: 'placeholder' + fileId + Math.random().toString(6),
+    //         title: 'placeholder' + fileId,
+    //         keywords: 'placeholder' + fileId,
+    //         year: 2038,
+    //         conference: 'placeholder' + fileId,
+    //         lastedit: 'placeholder' + fileId,
+    //         QandA: 'placeholder' + fileId,
+    //         annotations: JSON.stringify(annotations)
+    //       });
+    //     });
+    // }
+  }
+
+  render() {
+    return (
+      <div id="pdfwrapper" ref={el => this.el = el}>
+        <AnnotatorToolBar
+          UI={this.UI}
+          RENDER_OPTIONS={this.RENDER_OPTIONS}
+          NUM_PAGES={this.NUM_PAGES}
+          PDFJSAnnotate={PDFJSAnnotate}
+          visiblePageNum={this.visiblePageNum}
+          render={this.PDFRender}
+          filename={this.file}
+          saveFunc={this.save.bind(this)}></AnnotatorToolBar>
+        <div id="content-wrapper"
+          onScroll={this.contentWrapperScroll.bind(this)}
+          ref={el => this.wrapper = el}>
+          <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
         </div>
-      );
-    }
+        <AnnotatorComment
+          UI={this.UI}
+          RENDER_OPTIONS={this.RENDER_OPTIONS}
+          PDFJSAnnotate={PDFJSAnnotate}></AnnotatorComment>
+      </div>
+    );
+  }
 }
 
 Annotator.propTypes = {
   paperID: PropTypes.number,
   file: PropTypes.string,
+  openSaveDialog: PropTypes.func.isRequired
 };
 
 export default Annotator;

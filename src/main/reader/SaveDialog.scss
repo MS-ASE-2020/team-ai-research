@@ -7,13 +7,40 @@
 }
 
 .save-dialog {
+  font-size: 1.25em;
+  width: 32em;
   margin: 0 auto;
   padding: 1em;
   border: 1px solid $theme-color;
   border-radius: 4px;
   background: $theme-color-light;
 
-  h2 {
+  .row {
+    margin: 0.5em 0;
+  }
+
+  .row.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5em;
+  }
+
+  .save-label {
     font-weight: normal;
+    float: left;
+    width: 24%;
+  }
+
+  .save-input {
+    font-size: 0.833333em;
+    width: 74%;
+    margin-left: auto;
+    border: 1px solid $theme-color-dark;
+    border-radius: 4px;
+    background-color: $theme-color-lighter;
+
+    &:active, &:focus {
+      background-color: white;
+    }
   }
 }

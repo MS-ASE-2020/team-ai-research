@@ -36,8 +36,16 @@ class OpenFileZone extends Component {
       <div className="open-new-file">
         <h2 className="heading">Please choose a method to open a PDF file:</h2>
         <div className="section">
-          <input type="radio" value="local" name="file-source" onChange={this.handleFileSourceChange.bind(this)} />
-          <h3 className="section-title">Local File</h3>
+          <h3 className="section-title has-select">
+            <input
+              type="radio"
+              id="file-local"
+              value="local"
+              name="file-source"
+              onChange={this.handleFileSourceChange.bind(this)}
+            />
+            <label htmlFor="file-local">Local File</label>
+          </h3>
           <div className="section-content">
             <input
               type="file"
@@ -47,8 +55,16 @@ class OpenFileZone extends Component {
           </div>
         </div>
         <div className="section">
-          <input type="radio" value="url" name="file-source" onChange={this.handleFileSourceChange.bind(this)} />
-          <h3 className="section-title">From URL</h3>
+          <h3 className="section-title has-select">
+            <input
+              type="radio"
+              id="file-url"
+              value="url"
+              name="file-source"
+              onChange={this.handleFileSourceChange.bind(this)}
+            />
+            <label htmlFor="file-url">From URL</label>
+          </h3>
           <div className="section-content">
             <input
               type="text"
@@ -57,7 +73,9 @@ class OpenFileZone extends Component {
             />
           </div>
         </div>
-        <button onClick={() => this.props.openFile(this.state.filePath)}>Open</button>
+        <button onClick={() => this.props.openFile(this.state.filePath)}>
+          Open
+        </button>
       </div>
     );
   }
@@ -77,7 +95,7 @@ export default class OpenFile extends Component {
         <div className="file-item" key={"item-" + i} onClick={() => {
           console.log(allPaperList[i].ID);
           this.openFile("paper://" + allPaperList[i].ID);
-        }}>{allPaperList[i].name} {i + 1}</div>
+        }}>{allPaperList[i].name}</div>
       ));
     }
     return (
