@@ -34,7 +34,7 @@ class OpenFileZone extends Component {
   render() {
     return (
       <div className="open-new-file">
-        <h2 className="heading">Please choose a method to open a PDF file:</h2>
+        <h2 className="heading">Open a new file from</h2>
         <div className="section">
           <h3 className="section-title has-select">
             <input

@@ -1,0 +1,42 @@
+.Folder {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid $theme-color;
+
+  .AllArticles,
+  .CreateNewBookmark {
+    @include clickable;
+    @include clickable-proactive;
+    @include item-pad;
+    text-align: center;
+  }
+
+  .CreateNewBookmark {
+    border-top: 1px solid $theme-color;
+
+    > span {
+      margin-left: 0.3em;
+    }
+  }
+
+  .SubfolderList {
+    flex: 1 0 auto;
+
+    .Subfolder {
+      @include clickable;
+      @include clickable-reactive;
+      @include item-pad;
+    }
+  }
+
+  .PaperList {
+    border-top: 1px solid $theme-color;
+    flex: 1 0 auto;
+
+    .Paper {
+      @include clickable;
+      @include clickable-reactive;
+      @include item-pad;
+    }
+  }
+}

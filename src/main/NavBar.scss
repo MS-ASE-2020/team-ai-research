@@ -6,10 +6,9 @@
 
   .nav-item {
     @include clickable;
+    @include clickable-highlight;
     padding: 0.5em;
-    color: $theme-color-foreground;
     text-align: center;
-    transition: all 0.3s ease-in-out;
 
     &__icon {
       width: 100%;
@@ -26,16 +25,6 @@
     &__title {
       font-size: 0.8em;
       overflow-x: hidden;
-    }
-
-    &:hover {
-      background-color: $theme-color-highlight;
-      color: $theme-color-highlight-foreground;
-    }
-
-    &.active {
-      background-color: $theme-color-active;
-      color: $theme-color-active-foreground;
     }
   }
 }
