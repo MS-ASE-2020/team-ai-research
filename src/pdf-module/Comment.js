@@ -27,8 +27,7 @@ class AnnotatorComment extends React.Component {
 
   componentWillUnmount() {
     if (this.props.UI != null) {
-      this.props.UI.removeAllEventListener('annotation:click');
-      this.props.UI.removeAllEventListener('annotation:blur');
+      commentInit(this.props.PDFJSAnnotate, this.props.UI, true);
     }
   }
 
@@ -63,7 +62,7 @@ function htmlEscape(text) {
     .replace("'", '&#39;');
 }
 
-function commentInit(PDFJSAnnotate, UI) {
+function commentInit(PDFJSAnnotate, UI, cleanup = false) {
   let commentList = document.querySelector('#comment-wrapper .comment-list-container');
   let commentForm = document.querySelector('#comment-wrapper .comment-list-form');
   let commentText = commentForm.querySelector('input[type="text"]');
@@ -117,8 +116,17 @@ function commentInit(PDFJSAnnotate, UI) {
     }
   }
 
-  UI.addEventListener('annotation:click', handleAnnotationClick);
-  UI.addEventListener('annotation:blur', handleAnnotationBlur);
+  function removeListeners() {
+    UI.removeEventListener('annotation:click', handleAnnotationClick);
+    UI.removeEventListener('annotation:blur', handleAnnotationBlur);
+  }
+
+  if (!cleanup) {
+    UI.addEventListener('annotation:click', handleAnnotationClick);
+    UI.addEventListener('annotation:blur', handleAnnotationBlur);
+  } else {
+    removeListeners();
+  }
 }
 
 export default AnnotatorComment;

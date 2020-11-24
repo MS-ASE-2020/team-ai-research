@@ -13,8 +13,8 @@ class AnnotatorQA extends React.Component {
 
   render() {
     return (
-      <div>
-
+      <div id="qa-wrapper">
+        <h4>Q &amp; A</h4>
       </div>
     );
   }

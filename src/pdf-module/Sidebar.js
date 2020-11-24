@@ -18,11 +18,13 @@ class AnnotatorSidebar extends React.Component {
     return (
       <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}>
         <div className="sidebar-tab">
-          <button onClick={() => this.setState({tab: 0})}>Comments</button>
-          <button onClick={() => this.setState({tab: 1})}>Q &amp; A</button>
+          <button onClick={() => this.setState({ tab: 0 })}>Comments</button>
+          <button onClick={() => this.setState({ tab: 1 })}>Q &amp; A</button>
         </div>
-        <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
-        <AnnotatorQA></AnnotatorQA>
+        <div>
+          {this.state.tab === 0 && <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>}
+          {this.state.tab === 1 && <AnnotatorQA></AnnotatorQA>}
+        </div>
       </div>
     );
   }
