@@ -1,6 +1,24 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+/**
+ * 
+ * @param {String} keywords 
+ * @returns {Array<String>}
+ */
+function getKeywordArray(keywords) {
+  return (keywords === "" ? [] : keywords.split(","));
+}
+
+/**
+ * 
+ * @param {Array<String>} keywords
+ * @returns {String}
+ */
+function getKeywordString(keywords) {
+  return keywords.join(',');
+}
+
 export default class PaperInformation extends Component {
   constructor(props) {
     super(props);
@@ -18,15 +36,6 @@ export default class PaperInformation extends Component {
     return window.api.database.getPaperProperty(window.db, paperID);
   }
 
-  /**
-   * 
-   * @param {String} keywords 
-   * @returns {Array<String>}
-   */
-  getKeywordArray(keywords) {
-    return keywords === "" ? [] : keywords.split(",");
-  }
-  
   operation(act) {
     switch (act) {
     case 'open':
@@ -101,8 +110,10 @@ export default class PaperInformation extends Component {
     let copy = getKeywordArray(this.state.paper.keywords);
     copy[[index]] = value;
     
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = getKeywordString(copy);
     this.setState({
-      keywords: copy.join(","),
+      paper: paperCopy
     });
   }
 
@@ -116,16 +127,20 @@ export default class PaperInformation extends Component {
   removeKeyword(k) {
     let newKeywords = getKeywordArray(this.state.paper.keywords);
     newKeywords.splice(k, 1);
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = getKeywordString(newKeywords);
     this.setState({
-      keywords: newKeywords.join(",")
+      paper: paperCopy
     });
   }
 
   addKeywords() {
     let newKeywords = getKeywordArray(this.state.paper.keywords);
-    newKeywords.splice(newKeywords.length, 0, "New Keyword"); 
+    newKeywords.splice(newKeywords.length, 0, "New Keyword");
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = getKeywordString(newKeywords);
     this.setState({
-      keywords: newKeywords.join(",")
+      paper: paperCopy
     });
   }
 
@@ -140,7 +155,7 @@ export default class PaperInformation extends Component {
           type="text" 
           data-index={k}
           value={keywords[k]} 
-          onChange={this.handleKeywords} /> :         
+          onChange={this.handleKeywords}/> :         
         keywords[k] + (k === keywords.length-1 ? "" : ", ")
       ));
       if (this.state.modify) {
