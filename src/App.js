@@ -16,8 +16,8 @@ const CONTENT_TABS = [
   },
   {
     id: "reader",
-    title: "Read",
-    icon: "folder-open",
+    title: "Reader",
+    icon: "book-reader",
     component: Reader,
   },
   {
