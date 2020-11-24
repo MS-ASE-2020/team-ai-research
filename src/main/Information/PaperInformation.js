@@ -18,6 +18,15 @@ export default class PaperInformation extends Component {
     return window.api.database.getPaperProperty(window.db, paperID);
   }
 
+  /**
+   * 
+   * @param {String} keywords 
+   * @returns {Array<String>}
+   */
+  getKeywordArray(keywords) {
+    return keywords === "" ? [] : keywords.split(",");
+  }
+  
   operation(act) {
     switch (act) {
     case 'open':
@@ -51,7 +60,7 @@ export default class PaperInformation extends Component {
         this.props.setChoosePaper(this.props.choosePaper);
         this.setState({
           modify: !this.state.modify,
-          //paper: this.getPaper(this.props.choosePaper)
+          paper: this.getPaper(this.props.choosePaper)
         });
       } catch (error) {
         console.error(error);
@@ -89,7 +98,7 @@ export default class PaperInformation extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const index = event.target.getAttribute("data-index");
 
-    let copy = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
+    let copy = getKeywordArray(this.state.paper.keywords);
     copy[[index]] = value;
     
     this.setState({
@@ -105,7 +114,7 @@ export default class PaperInformation extends Component {
   }
 
   removeKeyword(k) {
-    let newKeywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
+    let newKeywords = getKeywordArray(this.state.paper.keywords);
     newKeywords.splice(k, 1);
     this.setState({
       keywords: newKeywords.join(",")
@@ -113,7 +122,7 @@ export default class PaperInformation extends Component {
   }
 
   addKeywords() {
-    let newKeywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
+    let newKeywords = getKeywordArray(this.state.paper.keywords);
     newKeywords.splice(newKeywords.length, 0, "New Keyword"); 
     this.setState({
       keywords: newKeywords.join(",")
@@ -123,7 +132,7 @@ export default class PaperInformation extends Component {
   render() {
     console.log(this.state)
     let keywordItem = [];
-    let keywords = this.state.paper.keywords === "" ? [] : this.state.paper.keywords.split(",");
+    let keywords = getKeywordArray(this.state.paper.keywords);
     for (let k = 0; k < keywords.length; k++) {
       keywordItem.push(( this.state.modify ? 
         <input
