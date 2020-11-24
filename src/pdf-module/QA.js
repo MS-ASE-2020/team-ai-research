@@ -15,6 +15,12 @@ class AnnotatorQA extends React.Component {
     return (
       <div id="qa-wrapper">
         <h4>Q &amp; A</h4>
+        <div className="qa-list">
+          <div className="qa-list-container">
+            <div className="qa-list-item">No QAs</div>
+          </div>
+          <button>Add a Q &amp; A</button>
+        </div>
       </div>
     );
   }
