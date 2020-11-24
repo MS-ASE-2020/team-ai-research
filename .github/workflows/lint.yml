@@ -31,6 +31,9 @@ jobs:
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
-    - run: npm ci
+    - name: Install NPM
+      run: |
+        npm install --also=dev
+        npm prune
     - run: npm run lint
     - run: npm run build  # running npm run dist may take too much time...
