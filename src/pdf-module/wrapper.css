@@ -29,7 +29,7 @@
     overflow: auto;
 }
 
-#comment-wrapper {
+#sidebar-wrapper {
     position: absolute;
     top: 35px;
     right: 0;
@@ -40,11 +40,11 @@
     border-left: 1px solid #d0d0d0;
 }
 
-#comment-wrapper h4 {
+#sidebar-wrapper h4 {
     margin: 10px;
 }
 
-#comment-wrapper .comment-list {
+#sidebar-wrapper .comment-list {
     font-size: 12px;
     position: absolute;
     top: 38px;
@@ -53,12 +53,12 @@
     bottom: 0;
 }
 
-#comment-wrapper .comment-list-item {
+#sidebar-wrapper .comment-list-item {
     border-bottom: 1px solid #d0d0d0;
     padding: 10px;
 }
 
-#comment-wrapper .comment-list-container {
+#sidebar-wrapper .comment-list-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -67,7 +67,7 @@
     overflow: auto;
 }
 
-#comment-wrapper .comment-list-form {
+#sidebar-wrapper .comment-list-form {
     position: absolute;
     left: 0;
     right: 0;
@@ -75,7 +75,7 @@
     padding: 10px;
 }
 
-#comment-wrapper .comment-list-form input {
+#sidebar-wrapper .comment-list-form input {
     padding: 5px;
     width: 100%;
 }

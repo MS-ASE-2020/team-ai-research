@@ -209,10 +209,10 @@ class Annotator extends React.Component {
           ref={el => this.wrapper = el}>
           <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
         </div>
-        <AnnotatorComment
+        <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
-          PDFJSAnnotate={PDFJSAnnotate}></AnnotatorComment>
+          PDFJSAnnotate={PDFJSAnnotate}></AnnotatorSidebar>
       </div>
     );
   }

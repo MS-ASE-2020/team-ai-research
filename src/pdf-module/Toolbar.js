@@ -35,7 +35,7 @@ class AnnotatorToolBar extends React.Component {
   }
 
   render() {
-    const displayToolbar = this.state.loaded && this.props.RENDER_OPTIONS.documentId;
+    const displayToolbar = this.state.loaded && this.props.RENDER_OPTIONS.pdfDocument;
 
     return (
       <div className="toolbar" style={{ display: displayToolbar ? null : 'none' }}>

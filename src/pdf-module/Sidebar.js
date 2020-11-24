@@ -13,13 +13,15 @@ class AnnotatorSidebar extends React.Component {
   }
 
   render() {
+    const displaySidebar = this.props.RENDER_OPTIONS.pdfDocument;
+
     return (
-      <div>
+      <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}>
         <div className="sidebar-tab">
           <button onClick={() => this.setState({tab: 0})}>Comments</button>
           <button onClick={() => this.setState({tab: 1})}>Q &amp; A</button>
         </div>
-        <AnnotatorComment UI={this.props.UI} PDFAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
+        <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
         <AnnotatorQA></AnnotatorQA>
       </div>
     );
@@ -28,7 +30,8 @@ class AnnotatorSidebar extends React.Component {
 
 AnnotatorSidebar.propTypes = {
   UI: PropTypes.object,
-  PDFJSAnnotate: PropTypes.object
+  PDFJSAnnotate: PropTypes.object,
+  RENDER_OPTIONS: PropTypes.object
 };
 
 export default AnnotatorSidebar;
