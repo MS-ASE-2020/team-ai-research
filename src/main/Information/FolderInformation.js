@@ -89,7 +89,7 @@ export default class FolderInformation extends Component {
         <h3>Folder Information</h3>
         <form>
           <div className="FolderName">
-            <label for="FolderName">Name</label>
+            <label htmlFor="FolderName">Name</label>
             <input
               id="FolderName"
               type="text"
@@ -100,7 +100,7 @@ export default class FolderInformation extends Component {
             />
           </div>
           <div className="FolderDescription">
-            <label for="FolderDescription">Description</label>
+            <label htmlFor="FolderDescription">Description</label>
             <input
               id="FolderDescription"
               type="text"
