@@ -41,24 +41,34 @@ export default class SaveDialog extends Component {
     let copy = this.state.keywordslist.slice();
     copy[[index]] = value;
 
+    let copy2 = copy.slice();
+    copy2.push("");
+
     this.setState({
       keywordslist: copy,
+      keywords: copy2.join(";")
     });
   }
 
   removeKeyword(k) {
     let newKeywords = this.state.keywordslist.slice();
     newKeywords.splice(k, 1);
+    let keywordsArray = newKeywords.slice();
+    keywordsArray.push("");
     this.setState({
-      keywordslist: newKeywords
+      keywordslist: newKeywords,
+      keywords: keywordsArray.join(";")
     });
   }
 
   addKeywords() {
     let newKeywords = this.state.keywordslist.slice();
-    newKeywords.splice(newKeywords.length, 0, "New Keyword");
+    newKeywords.splice(newKeywords.length, 0, "");
+    let keywordsArray = newKeywords.slice();
+    keywordsArray.push("");
     this.setState({
-      keywordslist: newKeywords
+      keywordslist: newKeywords,
+      keywords: keywordsArray.join(";")
     });
   }
 
@@ -92,7 +102,9 @@ export default class SaveDialog extends Component {
           type="text"
           data-index={k}
           value={this.state.keywordslist[k]}
-          onChange={this.handleKeywords} />
+          onChange={this.handleKeywords} 
+          placeholder="New Keyword" 
+          required="required" />
       );
       keywordItem.push((
         <input
@@ -191,14 +203,11 @@ export default class SaveDialog extends Component {
             <button
               className="btn"
               onClick={() => {
-                this.setState({
-                  keywords: this.state.keywordslist.join(",")
-                });
                 this.props.save(
                   this.props.info.ID,
                   this.state.name,
                   this.state.title,
-                  this.state.keywordslist.join(","),
+                  this.state.keywords,
                   this.state.year,
                   this.state.conference,
                   this.state.library,

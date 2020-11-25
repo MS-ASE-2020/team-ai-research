@@ -7,7 +7,9 @@ import PropTypes from "prop-types";
  * @returns {Array<String>}
  */
 function getKeywordArray(keywords) {
-  return (keywords === "" ? [] : keywords.split(","));
+  let keywordArray = keywords.split(";");
+  keywordArray.pop();
+  return keywordArray;
 }
 
 /**
@@ -16,7 +18,9 @@ function getKeywordArray(keywords) {
  * @returns {String}
  */
 function getKeywordString(keywords) {
-  return keywords.join(',');
+  let keywordArray = keywords;
+  keywords.push("");
+  return keywords.join(";");
 }
 
 export default class PaperInformation extends Component {
@@ -77,7 +81,7 @@ export default class PaperInformation extends Component {
       }
       break;
     case 'delete':
-      if (window.confirm("Are you surely want to delete this bookmark?")) {
+      if (window.confirm("Are you surely want to delete this paper?")) {
         window.api.database.deletePaper(window.db, this.props.choosePaper);
         alert("Successfully delete the paper!");
         this.props.cleanInfoZone();
@@ -119,9 +123,10 @@ export default class PaperInformation extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    if (nextProps.choosePaper !== this.props.choosePaper) {
-      this.setState({ paper: this.getPaper(nextProps.choosePaper) });
-    }
+    this.setState({ 
+      paper: this.getPaper(nextProps.choosePaper),
+      modify: false 
+    });
   }
 
   removeKeyword(k) {
@@ -136,7 +141,7 @@ export default class PaperInformation extends Component {
 
   addKeywords() {
     let newKeywords = getKeywordArray(this.state.paper.keywords);
-    newKeywords.splice(newKeywords.length, 0, "New Keyword");
+    newKeywords.splice(newKeywords.length, 0, "");
     let paperCopy = {...this.state.paper};
     paperCopy.keywords = getKeywordString(newKeywords);
     this.setState({
@@ -145,7 +150,6 @@ export default class PaperInformation extends Component {
   }
 
   render() {
-    console.log(this.state)
     let keywordItem = [];
     let keywords = getKeywordArray(this.state.paper.keywords);
     for (let k = 0; k < keywords.length; k++) {
@@ -155,8 +159,10 @@ export default class PaperInformation extends Component {
           type="text" 
           data-index={k}
           value={keywords[k]} 
-          onChange={this.handleKeywords}/> :         
-        keywords[k] + (k === keywords.length-1 ? "" : ", ")
+          onChange={this.handleKeywords} 
+          placeholder="New Keyword" 
+          required="required" /> :         
+        keywords[k] + (k === keywords.length-1 ? ". " : "; ")
       ));
       if (this.state.modify) {
         keywordItem.push((
@@ -182,35 +188,32 @@ export default class PaperInformation extends Component {
         <h3>Paper Information</h3>
         <form>
           <div className="PaperName">
-            <label>
-              Name: {this.state.modify ?  
+            <label>Name: </label>
+              {this.state.modify ?  
                 <input 
                   id="PaperName" 
                   type="text" 
                   value={this.state.paper.name} 
                   name="name" 
                   onChange={this.handleChanges} /> : this.state.paper.name}
-            </label>
           </div>
           <div className="PaperTitle">
-            <label>
-              Title: {this.state.modify ? 
+            <label>Title: </label>
+              {this.state.modify ? 
                 <input 
                   id="PaperTitle" 
                   type="text" 
                   name="title" 
                   value={this.state.paper.title} 
                   onChange={this.handleChanges} /> : this.state.paper.title}
-            </label>
           </div>
           <div className="PaperKeywords">
-            <label>
-              Keywords: {keywordItem}
-            </label>
+            <label>Keywords: </label>
+              {keywordItem}
           </div>
           <div className="PaperYear">
-            <label>
-              Year: {this.state.modify ? 
+            <label>Year: </label>
+              {this.state.modify ? 
                 <input 
                   id="PaperYear" 
                   type="text" 
@@ -218,11 +221,10 @@ export default class PaperInformation extends Component {
                   value={this.state.paper.year} 
                   onChange={this.handleChanges} 
                   disabled={!this.state.modify} /> : this.state.paper.year}
-            </label>
           </div>
           <div className="PaperConference">
-            <label>
-              Conference: {this.state.modify ? 
+            <label>Conference: </label>
+              {this.state.modify ? 
                 <input 
                   id="PaperConference" 
                   type="text" 
@@ -230,12 +232,10 @@ export default class PaperInformation extends Component {
                   value={this.state.paper.conference} 
                   onChange={this.handleChanges} 
                   disabled={!this.state.modify} /> : this.state.paper.conference}
-            </label>
           </div>
           <div className="PaperLastEdit">
-            <label>
-              Last Edit: {this.state.paper.lastedit} 
-            </label>
+            <label>Last Edit: </label>
+              {this.state.paper.lastedit} 
           </div>
           <div className="Operations">
             {!this.state.modify ? 

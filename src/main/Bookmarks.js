@@ -15,6 +15,18 @@ export default class Bookmarks extends Component {
     };
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+    this.setState({
+      filePath: [],
+      folderID: 1,
+      newBookmark: false,
+      chooseFolder: 0,
+      choosePaper: 0,
+      search: false,
+    });
+  }
+
   cleanInfoZone() {
     this.setState({
       newBookmark: false,
