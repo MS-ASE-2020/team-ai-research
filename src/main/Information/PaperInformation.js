@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
  * @returns {Array<String>}
  */
 function getKeywordArray(keywords) {
-  return (keywords === "" ? [] : keywords.split(","));
+  return JSON.parse(keywords);
 }
 
 /**
@@ -16,7 +16,7 @@ function getKeywordArray(keywords) {
  * @returns {String}
  */
 function getKeywordString(keywords) {
-  return keywords.join(',');
+  return JSON.stringify(keywords);
 }
 
 export default class PaperInformation extends Component {
