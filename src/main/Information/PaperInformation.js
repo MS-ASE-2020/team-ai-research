@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+<<<<<<< HEAD
 /**
  * 
  * @param {String} keywords 
@@ -23,6 +24,8 @@ function getKeywordString(keywords) {
   return keywords.join(";");
 }
 
+=======
+>>>>>>> react-fixKeywords
 export default class PaperInformation extends Component {
   constructor(props) {
     super(props);
@@ -111,11 +114,11 @@ export default class PaperInformation extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const index = event.target.getAttribute("data-index");
 
-    let copy = getKeywordArray(this.state.paper.keywords);
+    let copy = window.api.database.parseKeyword(this.state.paper.keywords);
     copy[[index]] = value;
     
     let paperCopy = {...this.state.paper};
-    paperCopy.keywords = getKeywordString(copy);
+    paperCopy.keywords = window.api.database.stringifyKeyword(copy);
     this.setState({
       paper: paperCopy
     });
@@ -130,20 +133,20 @@ export default class PaperInformation extends Component {
   }
 
   removeKeyword(k) {
-    let newKeywords = getKeywordArray(this.state.paper.keywords);
+    let newKeywords = window.api.database.parseKeyword(this.state.paper.keywords);
     newKeywords.splice(k, 1);
     let paperCopy = {...this.state.paper};
-    paperCopy.keywords = getKeywordString(newKeywords);
+    paperCopy.keywords = window.api.database.stringifyKeyword(newKeywords);
     this.setState({
       paper: paperCopy
     });
   }
 
   addKeywords() {
-    let newKeywords = getKeywordArray(this.state.paper.keywords);
-    newKeywords.splice(newKeywords.length, 0, "");
+    let newKeywords = window.api.database.parseKeyword(this.state.paper.keywords);
+    newKeywords.splice(newKeywords.length, 0, "New Keyword");
     let paperCopy = {...this.state.paper};
-    paperCopy.keywords = getKeywordString(newKeywords);
+    paperCopy.keywords = window.api.database.stringifyKeyword(newKeywords);
     this.setState({
       paper: paperCopy
     });
@@ -151,7 +154,7 @@ export default class PaperInformation extends Component {
 
   render() {
     let keywordItem = [];
-    let keywords = getKeywordArray(this.state.paper.keywords);
+    let keywords = window.api.database.parseKeyword(this.state.paper.keywords);
     for (let k = 0; k < keywords.length; k++) {
       keywordItem.push(( this.state.modify ? 
         <input

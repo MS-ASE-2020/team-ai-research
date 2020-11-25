@@ -3,6 +3,24 @@ const DB_FILE = "papera.db";
 const process = require('process');
 const path = require('path');
 
+/**
+ * 
+ * @param {String} keywords 
+ * @returns {Array<String>}
+ */
+function parseKeyword(keywords) {
+  return JSON.parse(keywords);
+}
+
+/**
+ * 
+ * @param {Array<String>} keywords
+ * @returns {String}
+ */
+function stringifyKeyword(keywords) {
+  return JSON.stringify(keywords);
+}
+
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
   
@@ -294,5 +312,7 @@ module.exports = {
   deletePaper: deletePaper,
   deleteFolder: deleteFolder,
   listFolderOfPaper: listFolderOfPaper,
-  saveFolderOfPaper: saveFolderOfPaper
+  saveFolderOfPaper: saveFolderOfPaper,
+  stringifyKeyword: stringifyKeyword,
+  parseKeyword: parseKeyword
 };
