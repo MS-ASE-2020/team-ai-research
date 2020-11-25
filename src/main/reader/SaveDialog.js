@@ -192,13 +192,13 @@ export default class SaveDialog extends Component {
               className="btn"
               onClick={() => {
                 this.setState({
-                  keywords: this.state.keywordslist.join(",")
+                  keywords: window.api.database.stringifyKeyword(this.state.keywordslist)
                 });
                 this.props.save(
                   this.props.info.ID,
                   this.state.name,
                   this.state.title,
-                  this.state.keywordslist.join(","),
+                  window.api.database.stringifyKeyword(this.state.keywordslist),
                   this.state.year,
                   this.state.conference,
                   this.state.library,
