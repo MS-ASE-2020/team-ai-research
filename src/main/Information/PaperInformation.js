@@ -1,31 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-<<<<<<< HEAD
-/**
- * 
- * @param {String} keywords 
- * @returns {Array<String>}
- */
-function getKeywordArray(keywords) {
-  let keywordArray = keywords.split(";");
-  keywordArray.pop();
-  return keywordArray;
-}
-
-/**
- * 
- * @param {Array<String>} keywords
- * @returns {String}
- */
-function getKeywordString(keywords) {
-  let keywordArray = keywords;
-  keywords.push("");
-  return keywords.join(";");
-}
-
-=======
->>>>>>> react-fixKeywords
 export default class PaperInformation extends Component {
   constructor(props) {
     super(props);
@@ -192,53 +167,53 @@ export default class PaperInformation extends Component {
         <form>
           <div className="PaperName">
             <label>Name: </label>
-              {this.state.modify ?  
-                <input 
-                  id="PaperName" 
-                  type="text" 
-                  value={this.state.paper.name} 
-                  name="name" 
-                  onChange={this.handleChanges} /> : this.state.paper.name}
+            {this.state.modify ?  
+              <input 
+                id="PaperName" 
+                type="text" 
+                value={this.state.paper.name} 
+                name="name" 
+                onChange={this.handleChanges} /> : this.state.paper.name}
           </div>
           <div className="PaperTitle">
             <label>Title: </label>
-              {this.state.modify ? 
-                <input 
-                  id="PaperTitle" 
-                  type="text" 
-                  name="title" 
-                  value={this.state.paper.title} 
-                  onChange={this.handleChanges} /> : this.state.paper.title}
+            {this.state.modify ? 
+              <input 
+                id="PaperTitle" 
+                type="text" 
+                name="title" 
+                value={this.state.paper.title} 
+                onChange={this.handleChanges} /> : this.state.paper.title}
           </div>
           <div className="PaperKeywords">
             <label>Keywords: </label>
-              {keywordItem}
+            {keywordItem}
           </div>
           <div className="PaperYear">
             <label>Year: </label>
-              {this.state.modify ? 
-                <input 
-                  id="PaperYear" 
-                  type="text" 
-                  name="year" 
-                  value={this.state.paper.year} 
-                  onChange={this.handleChanges} 
-                  disabled={!this.state.modify} /> : this.state.paper.year}
+            {this.state.modify ? 
+              <input 
+                id="PaperYear" 
+                type="text" 
+                name="year" 
+                value={this.state.paper.year} 
+                onChange={this.handleChanges} 
+                disabled={!this.state.modify} /> : this.state.paper.year}
           </div>
           <div className="PaperConference">
             <label>Conference: </label>
-              {this.state.modify ? 
-                <input 
-                  id="PaperConference" 
-                  type="text" 
-                  name="conference" 
-                  value={this.state.paper.conference} 
-                  onChange={this.handleChanges} 
-                  disabled={!this.state.modify} /> : this.state.paper.conference}
+            {this.state.modify ? 
+              <input 
+                id="PaperConference" 
+                type="text" 
+                name="conference" 
+                value={this.state.paper.conference} 
+                onChange={this.handleChanges} 
+                disabled={!this.state.modify} /> : this.state.paper.conference}
           </div>
           <div className="PaperLastEdit">
             <label>Last Edit: </label>
-              {this.state.paper.lastedit} 
+            {this.state.paper.lastedit} 
           </div>
           <div className="Operations">
             {!this.state.modify ? 
