@@ -6,13 +6,15 @@ class AnnotatorComment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false
+      loaded: false,
+      listeners: {}
     };
+    this.commentInit = commentInit.bind(this);
   }
 
   load() {
     if (this.props.UI != null && this.props.PDFJSAnnotate != null && this.state.loaded === false) {
-      commentInit(this.props.PDFJSAnnotate, this.props.UI);
+      this.commentInit(this.props.PDFJSAnnotate, this.props.UI);
       this.setState({ loaded: true });
     }
   }
@@ -27,7 +29,7 @@ class AnnotatorComment extends React.Component {
 
   componentWillUnmount() {
     if (this.props.UI != null) {
-      commentInit(this.props.PDFJSAnnotate, this.props.UI, true);
+      this.commentInit(this.props.PDFJSAnnotate, this.props.UI, true);
     }
   }
 
@@ -116,12 +118,23 @@ function commentInit(PDFJSAnnotate, UI, cleanup = false) {
     }
   }
 
-  function removeListeners() {
-    UI.removeEventListener('annotation:click', handleAnnotationClick);
-    UI.removeEventListener('annotation:blur', handleAnnotationBlur);
-  }
+  let removeListeners = () => {
+    for (const name in this.state.listeners) {
+      UI.removeEventListener(name, this.state.listeners[name]);
+    }
+    this.setState({
+      listeners: {}
+    });
+  };
 
   if (!cleanup) {
+    const listeners = {
+      'annotation:click': handleAnnotationClick,
+      'annotation:blur': handleAnnotationBlur
+    };
+    this.setState({
+      listeners: listeners
+    });
     UI.addEventListener('annotation:click', handleAnnotationClick);
     UI.addEventListener('annotation:blur', handleAnnotationBlur);
   } else {
