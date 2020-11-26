@@ -265,28 +265,28 @@ function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
       active.classList.remove('active');
 
       switch (tooltype) {
-      case 'cursor':
-        UI.disableEdit();
-        break;
-      case 'eraser':
-        UI.disableEraser();
-        break;
-      case 'draw':
-        UI.disablePen();
-        break;
-      case 'text':
-        UI.disableText();
-        break;
-      case 'point':
-        UI.disablePoint();
-        break;
-      case 'area':
-      case 'highlight':
-      case 'strikeout':
-        UI.disableRect();
-        break;
-      default:
-        console.warn("Unexpected default case when disabling funcs in setActiveToolbarItem().");
+        case 'cursor':
+          UI.disableEdit();
+          break;
+        case 'eraser':
+          UI.disableEraser();
+          break;
+        case 'draw':
+          UI.disablePen();
+          break;
+        case 'text':
+          UI.disableText();
+          break;
+        case 'point':
+          UI.disablePoint();
+          break;
+        case 'area':
+        case 'highlight':
+        case 'strikeout':
+          UI.disableRect();
+          break;
+        default:
+          console.warn("Unexpected default case when disabling funcs in setActiveToolbarItem().");
       }
     }
 
@@ -299,29 +299,29 @@ function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
     tooltype = type;
 
     switch (type) {
-    case 'cursor':
-      UI.enableEdit();
-      break;
-    case 'eraser':
-      UI.enableEraser();
-      break;
-    case 'draw':
-      UI.enablePen();
-      break;
-    case 'text':
-      UI.enableText();
-      break;
-    case 'point':
-      UI.enablePoint();
-      break;
-    case 'area':
-    case 'highlight':
-    case 'strikeout':
-      UI.enableRect(type);
-      break;
-    default:
-      console.warn("Unexpected default case when enabling funcs in setActiveToolbarItem().");
-      console.log(type);
+      case 'cursor':
+        UI.enableEdit();
+        break;
+      case 'eraser':
+        UI.enableEraser();
+        break;
+      case 'draw':
+        UI.enablePen();
+        break;
+      case 'text':
+        UI.enableText();
+        break;
+      case 'point':
+        UI.enablePoint();
+        break;
+      case 'area':
+      case 'highlight':
+      case 'strikeout':
+        UI.enableRect(type);
+        break;
+      default:
+        console.warn("Unexpected default case when enabling funcs in setActiveToolbarItem().");
+        console.log(type);
     }
   }
 
