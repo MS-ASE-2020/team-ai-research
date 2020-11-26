@@ -8,34 +8,28 @@ export default class InfoZone extends Component {
   render() {
     if (this.props.newBookmark === true) {
       return (
-        <div className="InfoZone">
-          <NewBookmark
-            folderID={this.props.folderID}
-            cleanInfoZone={this.props.cleanInfoZone}
-          />
-        </div>
+        <NewBookmark
+          folderID={this.props.folderID}
+          cleanInfoZone={this.props.cleanInfoZone}
+        />
       );
     } else if (this.props.chooseFolder !== 0) {
       return (
-        <div className="InfoZone">
-          <FolderInformation
-            chooseFolder={this.props.chooseFolder}
-            updateLatest={this.props.updateLatest}
-            forward={this.props.forward}
-            setChooseFolder={this.props.setChooseFolder}
-            cleanInfoZone={this.props.cleanInfoZone}
-          />
-        </div>
+        <FolderInformation
+          chooseFolder={this.props.chooseFolder}
+          updateLatest={this.props.updateLatest}
+          forward={this.props.forward}
+          setChooseFolder={this.props.setChooseFolder}
+          cleanInfoZone={this.props.cleanInfoZone}
+        />
       );
     } else if (this.props.choosePaper !== 0) {
       return (
-        <div className="InfoZone">
-          <PaperInformation
-            choosePaper={this.props.choosePaper}
-            setChoosePaper={this.props.setChoosePaper}
-            cleanInfoZone={this.props.cleanInfoZone}
-          />
-        </div>
+        <PaperInformation
+          choosePaper={this.props.choosePaper}
+          setChoosePaper={this.props.setChoosePaper}
+          cleanInfoZone={this.props.cleanInfoZone}
+        />
       );
     } else if (this.props.search === true) {
       return <div className="Search">Placeholder for search area.</div>;

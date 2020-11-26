@@ -12,7 +12,7 @@ export default class Folder extends Component {
       for (let k = 0; k < folderList.length; k++) {
         folderItem.push(
           <div
-            className="Subfolder"
+            className="item"
             key={k}
             onClick={() =>
               folderList[k].ID === this.props.chooseFolder
@@ -33,7 +33,7 @@ export default class Folder extends Component {
     for (let k = 0; k < paperList.length; k++) {
       paperItem.push(
         <div
-          className="Paper"
+          className="item"
           key={k}
           onClick={() => this.props.setChoosePaper(paperList[k].ID)}
         >
@@ -52,9 +52,9 @@ export default class Folder extends Component {
           </div>
         ) : null}
         {this.props.folderID !== null ? (
-          <div className="SubfolderList">{folderItem}</div>
+          <div className="item-list subfolders">{folderItem}</div>
         ) : null}
-        <div className="PaperList">{paperItem}</div>
+        <div className="item-list papers">{paperItem}</div>
         {this.props.folderID !== null ? (
           <div
             className="CreateNewBookmark"

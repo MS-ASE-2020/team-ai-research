@@ -13,10 +13,7 @@
     flex: 1 0 auto;
     border: 2px solid $theme-color;
     position: relative;
-
-    > div {
-      @include absolute;
-    }
+    padding: 2em;
   }
 
   .address-bar {

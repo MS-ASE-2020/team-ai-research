@@ -1,0 +1,21 @@
+.InfoZone {
+  h2 {
+    font-weight: normal;
+    font-size: 2em;
+    margin: 0 0 1em;
+  }
+
+  .InfoTable {
+    th, td {
+      padding: 0.2em;
+    }
+
+    th[scope=row] {
+      text-align: right;
+
+      + td {
+        margin-left: 0.5em;
+      }
+    }
+  }
+}

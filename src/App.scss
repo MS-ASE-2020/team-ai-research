@@ -24,6 +24,7 @@ body,
   right: 0;
   bottom: 0;
   font-family: sans-serif;
+  background-color: mix($theme-color, white, 3%);
 }
 
 .App {
@@ -34,6 +35,7 @@ body,
   @import "main/Reader";
   @import "main/Bookmarks";
   @import "main/Folder";
+  @import "main/InfoZone";
 
   .main {
     position: relative;

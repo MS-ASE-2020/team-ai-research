@@ -19,24 +19,17 @@
     }
   }
 
-  .SubfolderList {
+  .item-list {
     flex: 1 0 auto;
 
-    .Subfolder {
+    .item {
       @include clickable;
       @include clickable-reactive;
       @include item-pad;
     }
-  }
 
-  .PaperList {
-    border-top: 1px solid $theme-color;
-    flex: 1 0 auto;
-
-    .Paper {
-      @include clickable;
-      @include clickable-reactive;
-      @include item-pad;
+    + .item-list {
+      border-top: 1px solid $theme-color;
     }
   }
 }
