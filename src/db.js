@@ -103,7 +103,7 @@ function connectDatabase(directory = "./") {
     /*
     * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
     */
-    db.prepare(`INSERT OR REPLACE INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
+    db.prepare(`INSERT OR IGNORE INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
   } catch(error) {
     console.error(error);
     throw error;
