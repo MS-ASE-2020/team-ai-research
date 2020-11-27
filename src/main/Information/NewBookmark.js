@@ -14,7 +14,7 @@ export default class NewBookmark extends Component {
 
   handleChanges(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const name = target.name;
 
     this.setState({
@@ -33,7 +33,7 @@ export default class NewBookmark extends Component {
   createNewBookmark() {
     try {
       if (this.state.name === "") {
-        alert("Please input the name!");
+        alert("Please input folder name!");
       } else {
         window.api.database.saveFolder(window.db, {
           ID: null,

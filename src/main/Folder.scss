@@ -3,7 +3,7 @@
   flex-direction: column;
   border-bottom: 2px solid $theme-color;
 
-  .AllArticles,
+  .AllPapers,
   .CreateNewBookmark {
     @include clickable;
     @include clickable-proactive;

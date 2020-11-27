@@ -45,10 +45,10 @@ export default class Folder extends Component {
       <div className="Folder">
         {this.props.folderID === 1 ? (
           <div
-            className="AllArticles"
-            onClick={() => this.props.forward("All Articles", null)}
+            className="AllPapers"
+            onClick={() => this.props.forward("All papers", null)}
           >
-            All Articles
+            All papers
           </div>
         ) : null}
         {this.props.folderID !== null ? (

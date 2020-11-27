@@ -6,12 +6,11 @@ export default class FolderInformation extends Component {
     super(props);
     this.state = {
       modify: false,
-      folder: this.getFolder(props.chooseFolder),
+      folder: this.getFolderProperty(props.chooseFolder),
     };
-    this.handleChanges = this.handleChanges.bind(this);
   }
 
-  getFolder(folderID) {
+  getFolderProperty(folderID) {
     return window.api.database.getFolderProperty(window.db, folderID);
   }
 
@@ -25,7 +24,7 @@ export default class FolderInformation extends Component {
       case "cancel":
         this.setState({
           modify: false,
-          folder: this.getFolder(this.props.chooseFolder),
+          folder: this.getFolderProperty(this.props.chooseFolder),
         });
         break;
       case "save":
@@ -66,7 +65,7 @@ export default class FolderInformation extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
     this.setState({
-      folder: this.getFolder(nextProps.chooseFolder),
+      folder: this.getFolderProperty(nextProps.chooseFolder),
       modify: false
     });
   }
@@ -95,7 +94,7 @@ export default class FolderInformation extends Component {
             type="text"
             value={this.state.folder.name}
             name="name"
-            onChange={this.handleChanges}
+            onChange={this.handleChanges.bind(this)}
             disabled={!this.state.modify}
           />
         </div>
@@ -106,7 +105,7 @@ export default class FolderInformation extends Component {
             type="text"
             name="description"
             value={this.state.folder.description}
-            onChange={this.handleChanges}
+            onChange={this.handleChanges.bind(this)}
             disabled={!this.state.modify}
           />
         </div>
