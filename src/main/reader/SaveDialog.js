@@ -11,9 +11,12 @@ export default class SaveDialog extends Component {
       year: "",
       conference: "",
       library: "",
+      keywordslist: [],
+      librarylist: []
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleKeywords = this.handleKeywords.bind(this);
   }
 
   handleInputChange(event) {
@@ -30,7 +33,124 @@ export default class SaveDialog extends Component {
     });
   }
 
+  handleKeywords(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const index = event.target.getAttribute("data-index");
+
+    let copy = this.state.keywordslist.slice();
+    copy[[index]] = value;
+
+    let copy2 = copy.slice();
+    copy2.push("");
+
+    this.setState({
+      keywordslist: copy,
+      keywords: copy2.join(";")
+    });
+  }
+
+  removeKeyword(k) {
+    let newKeywords = this.state.keywordslist.slice();
+    newKeywords.splice(k, 1);
+    let keywordsArray = newKeywords.slice();
+    keywordsArray.push("");
+    this.setState({
+      keywordslist: newKeywords,
+      keywords: keywordsArray.join(";")
+    });
+  }
+
+  addKeywords() {
+    let newKeywords = this.state.keywordslist.slice();
+    newKeywords.splice(newKeywords.length, 0, "");
+    let keywordsArray = newKeywords.slice();
+    keywordsArray.push("");
+    this.setState({
+      keywordslist: newKeywords,
+      keywords: keywordsArray.join(";")
+    });
+  }
+
+  handleLibrary(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const index = event.target.getAttribute("data-index");
+
+    let copy = this.state.librarylist.slice();
+    copy[[index]] = value;
+
+    this.setState({
+      librarylist: copy,
+    });
+  }
+
+  removeLibrary(k) {
+    let newLibrary = this.state.librarylist.slice();
+    newLibrary.splice(k, 1);
+    this.setState({
+      librarylist: newLibrary
+    });
+  }
+
   render() {
+    let keywordItem = [];
+    for (let k = 0; k < this.state.keywordslist.length; k++) {
+      keywordItem.push(
+        <input
+          id="PaperKeywords"
+          type="text"
+          data-index={k}
+          value={this.state.keywordslist[k]}
+          onChange={this.handleKeywords} 
+          placeholder="New Keyword" 
+          required="required" />
+      );
+      keywordItem.push((
+        <input
+          id="PaperKeywordsRemove"
+          type="button"
+          value="×"
+          onClick={() => this.removeKeyword(k)} />
+      ));
+    }
+    keywordItem.push((
+      <input
+        id="PaperKeywordsAdd"
+        type="button"
+        value="+"
+        onClick={() => this.addKeywords()} />
+    ));
+    let libraryItem = [];
+    libraryItem.push((
+      <input
+        id="PaperLibrary"
+        type="button"
+        value="/All Articles/" />
+    ));
+    for (let k = 0; k < this.state.librarylist.length; k++) {
+      libraryItem.push(
+        <input
+          id="PaperLibrary"
+          type="button"
+          data-index={k}
+          value={this.state.librarylist[k]}
+          onChange={this.handleLibrary} />
+      );
+      libraryItem.push((
+        <input
+          id="PaperKeywordsRemove"
+          type="button"
+          value="×"
+          onClick={() => this.removeLibrary(k)} />
+      ));
+    }
+    libraryItem.push(
+      <input
+        id="PaperLibrary"
+        type="button"
+        value="+" />
+    );
     return (
       <div className="save-wrapper">
         <div className="save-dialog">
@@ -54,12 +174,7 @@ export default class SaveDialog extends Component {
           </div>
           <div className="row">
             <div className="save-label">Keywords</div>
-            <input
-              className="save-input"
-              name="keywords"
-              value={this.state.keywords}
-              onChange={this.handleInputChange}
-            />
+            {keywordItem}
           </div>
           <div className="row">
             <div className="save-label">Year</div>
@@ -82,27 +197,26 @@ export default class SaveDialog extends Component {
           </div>
           <div className="row">
             <div className="save-label">Library</div>
-            <input
-              className="save-input"
-              name="library"
-              value={this.state.library}
-              onChange={this.handleInputChange}
-            />
+            {libraryItem}
           </div>
           <div className="row actions mx-auto">
             <button
               className="btn"
-              onClick={() =>
+              onClick={() => {
+                this.setState({
+                  keywords: window.api.database.stringifyKeyword(this.state.keywordslist)
+                });
                 this.props.save(
                   this.props.info.ID,
                   this.state.name,
                   this.state.title,
-                  this.state.keywords,
+                  window.api.database.stringifyKeyword(this.state.keywordslist),
                   this.state.year,
                   this.state.conference,
                   this.state.library,
                   this.props.info.annotations
-                )
+                );
+              }
               }
             >
               Save
