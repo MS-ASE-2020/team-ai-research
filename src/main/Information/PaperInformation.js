@@ -7,11 +7,9 @@ export default class PaperInformation extends Component {
     this.state = {
       modify: false,
       paper: this.getPaper(props.choosePaper),
-      //keywords: this.getPaper(props.choosePaper).keywords === "" ? 
-      //  [] : this.getPaper(props.choosePaper).keywords.split(",")
+      keywords: this.getPaper(props.choosePaper).keywords.split(","),
     };
     this.handleChanges = this.handleChanges.bind(this);
-    this.handleKeywords = this.handleKeywords.bind(this);
   }
 
   getPaper(paperID) {
@@ -89,59 +87,56 @@ export default class PaperInformation extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const index = target.getAttribute("data-index");
 
-    let copy = window.api.database.parseKeyword(this.state.paper.keywords);
+    let copy = this.state.keywords.slice();
     copy[[index]] = value;
-    
-    let paperCopy = {...this.state.paper};
-    paperCopy.keywords = window.api.database.stringifyKeyword(copy);
+
     this.setState({
-      paper: paperCopy
+      keywords: copy,
     });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    this.setState({ 
-      paper: this.getPaper(nextProps.choosePaper),
-      modify: false 
-    });
+    if (nextProps.choosePaper !== this.props.choosePaper) {
+      this.setState({ paper: this.getPaper(nextProps.choosePaper) });
+    }
   }
 
   removeKeyword(k) {
-    let newKeywords = window.api.database.parseKeyword(this.state.paper.keywords);
+    let newKeywords = this.state.keywords.slice();
     newKeywords.splice(k, 1);
-    let paperCopy = {...this.state.paper};
-    paperCopy.keywords = window.api.database.stringifyKeyword(newKeywords);
     this.setState({
-      paper: paperCopy
+      keywords: newKeywords,
     });
   }
 
   addKeywords() {
-    let newKeywords = window.api.database.parseKeyword(this.state.paper.keywords);
-    newKeywords.splice(newKeywords.length, 0, "New Keyword");
-    let paperCopy = {...this.state.paper};
-    paperCopy.keywords = window.api.database.stringifyKeyword(newKeywords);
+    let newKeywords = this.state.keywords.slice();
+    newKeywords.splice(newKeywords.length, 0, "New Keywords");
     this.setState({
-      paper: paperCopy
+      keywords: newKeywords,
     });
   }
 
   render() {
     let keywordItem = [];
-    let keywords = window.api.database.parseKeyword(this.state.paper.keywords);
-    for (let k = 0; k < keywords.length; k++) {
-      keywordItem.push(( this.state.modify ? 
-        <input
-          id="PaperKeywords" 
-          type="text" 
-          data-index={k}
-          value={keywords[k]} 
-          onChange={this.handleKeywords} 
-          placeholder="New Keyword" 
-          required="required" /> :         
-        keywords[k] + (k === keywords.length-1 ? ". " : "; ")
-      ));
+    for (let k = 0; k < this.state.keywords.length; k++) {
+      keywordItem.push(
+        this.state.modify ? (
+          <input
+            id="PaperKeywords"
+            type="text"
+            name="keywords"
+            key={k}
+            data-index={k}
+            value={this.state.keywords[k]}
+            onChange={this.handleKeywords.bind(this)}
+          />
+        ) : (
+          this.state.keywords[k] +
+            (k === this.state.keywords.length - 1 ? "" : ", ")
+        )
+      );
       if (this.state.modify) {
         keywordItem.push(
           <input

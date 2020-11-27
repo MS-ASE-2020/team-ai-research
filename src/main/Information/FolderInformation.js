@@ -65,10 +65,9 @@ export default class FolderInformation extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    this.setState({
-      folder: this.getFolder(nextProps.chooseFolder),
-      modify: false
-    });
+    if (nextProps.chooseFolder !== this.props.chooseFolder) {
+      this.setState({ folder: this.getFolder(nextProps.chooseFolder) });
+    }
   }
 
   handleChanges(event) {
