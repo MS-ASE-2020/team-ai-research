@@ -3,13 +3,28 @@ const DB_FILE = "papera.db";
 const process = require('process');
 const path = require('path');
 
+/**
+ * 
+ * @param {String} item 
+ * @returns {Array<String>}
+ */
+function parseString(item) {
+  return JSON.parse(item);
+}
+
+/**
+ * 
+ * @param {Array<String>} keywords
+ * @returns {String}
+ */
+function stringifyArray(item) {
+  return JSON.stringify(item);
+}
+
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
-  
   try {
-    var db = new Database(db_file, {verbose: console.log, fileMustExist: true});
-  } catch (error) {
-    db = new Database(db_file, {verbose: console.log});
+    var db = new Database(db_file, {verbose: console.log});
     /*
     * `paper` entity table
     * - `ID`: using the "rowid" technic of SQlite3
@@ -18,7 +33,7 @@ function connectDatabase(directory = "./") {
     * - `QandA`: Question&Answer notes of this paper
     * - `annotations`
     */
-    db.prepare(`CREATE TABLE paper(
+    db.prepare(`CREATE TABLE IF NOT EXISTS paper(
                   ID INTEGER PRIMARY KEY,
                   name TEXT UNIQUE NOT NULL,
                   title TEXT NOT NULL,
@@ -29,12 +44,13 @@ function connectDatabase(directory = "./") {
                   QandA,
                   annotations
                 );`).run();
+    db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_paper_name ON paper (name);`).run();
     /*
     * `folder` entity table
     * - `ID`: using the "rowid" technic of SQlite3
     * - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
     */
-    db.prepare(`CREATE TABLE folder(
+    db.prepare(`CREATE TABLE IF NOT EXISTS folder(
                   ID INTEGER PRIMARY KEY,
                   name TEXT NOT NULL,
                   description TEXT,
@@ -47,7 +63,7 @@ function connectDatabase(directory = "./") {
     /*
     * `paperInFolder` relation table
     */
-    db.prepare(`CREATE TABLE paperInFolder(
+    db.prepare(`CREATE TABLE IF NOT EXISTS paperInFolder(
                   paperID INTEGER,
                   folderID INTEGER,
                   FOREIGN KEY (paperID) REFERENCES paper (ID)
@@ -56,14 +72,42 @@ function connectDatabase(directory = "./") {
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   PRIMARY KEY (paperID, folderID)
                 );`).run();
+    /**
+     * Virturl table based on SQlite3 FTS5, for database full-text search.
+     * Triggers should be created, or operations should be done inside JS, in order to handle:
+     * - AFTER INSERT ON paper:
+     *   - insert paper's properties into paperAndFolderForSearch, leaving folder properties NULL.
+     * - AFTER INSERT ON paperInFolder:
+     *   - delete every row in paperAndFolderForSearch where pID matches NEW.paperID but fID is null
+     *   - insert paper and folder's properties into paperAndFolderForSearch
+     * - AFTER UPDATE ON paper:
+     *   - update every row in paperAndFolderForSearch to NEW where OLD.ID matches pID
+     * - AFTER UPDATE ON folder:
+     *   - update every row in paperAndFolderForSearch to NEW where OLD.ID matches fID
+     * - AFTER UPDATE ON paperInFolder:
+     *   - SHOULD BE HANDLED BUT NOT POSSIBLE TO HAPPEN CURRENTLY
+     * - AFTER DELETE ON paper
+     *   - delete every row in paperAndFolderForSearch where OLD.ID matches pID
+     * - AFTER DELETE ON paperInFolder
+     *   - if (SELECT count(*) FROM paperAndFolderForSearch WHERE OLD.paperID = pID AND OLD.folderID != fID) >= 1
+     *       DELETE FROM paperAndFolderForSearch WHERE OLD.paperID = pID AND OLD.folderID = fID
+     *     else
+     *       UPDATE paperAndFolderForSearch SET properties.of.folder=NULL WHERE OLD.paperID = pID
+     */
+    db.prepare(`CREATE VIRTUAL TABLE IF NOT EXISTS paperAndFolderForSearch
+                USING fts5(
+                  pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations,
+                  fID UNINDEXED, fName, fDescription, fCreatetime, fFatherID UNINDEXED
+                );`).run();
+
     /*
     * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
     */
-    db.prepare(`INSERT INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
-
-    db.prepare(`CREATE UNIQUE INDEX idx_paper_name ON paper (name);`).run();
+    db.prepare(`INSERT OR REPLACE INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
+  } catch(error) {
+    console.error(error);
+    throw error;
   }
-
   process.on('exit', () => db.close());
   return db;
 }
@@ -240,12 +284,16 @@ function getFolderProperty(db, folderID) {
 
 function deletePaper(db, paperID) {
   let sqlStmt = db.prepare(`DELETE FROM paper WHERE ID = ?;`).bind(paperID);
-  sqlStmt.run();
+  db.transaction(() => {
+    sqlStmt.run();
+  })();
 }
 
 function deleteFolder(db, folderID) {
   let sqlStmt = db.prepare(`DELETE FROM folder WHERE ID = ?;`).bind(folderID);
-  sqlStmt.run();
+  db.transaction(() => {
+    sqlStmt.run();
+  })();
 }
 
 /**
@@ -271,6 +319,8 @@ function listFolderOfPaper(db, paperID) {
  * @throws error object thrown by SQlite3
  */
 function saveFolderOfPaper(db, paperID, folderIDs) {
+  if (!folderIDs || folderIDs.length < 1)
+    return;
   let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
   let sqlStmtInsert = db.prepare(sql);
   let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
@@ -294,5 +344,7 @@ module.exports = {
   deletePaper: deletePaper,
   deleteFolder: deleteFolder,
   listFolderOfPaper: listFolderOfPaper,
-  saveFolderOfPaper: saveFolderOfPaper
+  saveFolderOfPaper: saveFolderOfPaper,
+  parseString: parseString,
+  stringifyArray: stringifyArray,
 };

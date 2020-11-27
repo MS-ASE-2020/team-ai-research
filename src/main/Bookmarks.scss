@@ -1,8 +1,49 @@
 .Bookmarks {
+  @include absolute;
+  display: flex;
+
+  .left-pane {
+    width: 16em;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .right-pane {
+    flex: 1 0 auto;
+    border: 2px solid $theme-color;
+    position: relative;
+    padding: 2em;
+  }
+
   .address-bar {
     display: flex;
+    font-size: 1.25em;
+    height: 1.5em;
+    line-height: 1.2em;
+
+    > * {
+      height: 100%;
+      margin-top: 0;
+      border-color: $theme-color;
+      border-radius: 0;
+    }
 
     .btn {
+      border: 1px solid $theme-color;
+      @include clickable-proactive;
     }
+
+    input[type="text"] {
+      @include full-size;
+      font-size: inherit;
+      flex: 1 0 auto;
+      border: 1px solid $theme-color;
+      padding: 0 4px;
+    }
+  }
+
+  .Folder {
+    @include full-size;
   }
 }

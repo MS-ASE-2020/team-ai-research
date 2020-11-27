@@ -19,3 +19,57 @@
   bottom: 0;
   left: 0;
 }
+
+@mixin full-size {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin clickable-highlight {
+  color: $theme-color-foreground;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: $theme-color-highlight;
+    color: $theme-color-highlight-foreground;
+  }
+
+  &.active {
+    background-color: $theme-color-active;
+    color: $theme-color-active-foreground;
+  }
+}
+
+@mixin clickable-proactive {
+  background-color: $theme-color-lighter;
+
+  &:hover {
+    background-color: $theme-color-light;
+  }
+
+  &.active {
+    background-color: $theme-color-active;
+    color: $theme-color-active-foreground;
+  }
+}
+
+@mixin clickable-reactive {
+  &:hover {
+    background-color: $theme-color-lighter;
+  }
+
+  &.active {
+    background-color: $theme-color-light;
+  }
+}
+
+@mixin item-nopad {
+  width: 100%;
+  border-bottom: 1px solid $theme-color;
+  overflow-wrap: break-word;
+}
+
+@mixin item-pad {
+  @include item-nopad;
+  padding: 0.5em;
+}

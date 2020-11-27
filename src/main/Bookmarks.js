@@ -15,6 +15,23 @@ export default class Bookmarks extends Component {
     };
   }
 
+  /**
+   * As currently `Bookmarks` has no `props`, this function is commented.
+   */
+  /*
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+    this.setState({
+      filePath: [],
+      folderID: 1,
+      newBookmark: false,
+      chooseFolder: 0,
+      choosePaper: 0,
+      search: false,
+    });
+  }
+  */
+
   cleanInfoZone() {
     this.setState({
       newBookmark: false,
@@ -66,6 +83,9 @@ export default class Bookmarks extends Component {
         filePath: [],
         folderID: 1,
       });
+      this.cleanInfoZone();
+    } else if (this.state.folderID === 1) {
+      alert("This is the ROOT!");
     } else {
       let folder = window.api.database.getFolderProperty(
         window.db,
@@ -115,12 +135,14 @@ export default class Bookmarks extends Component {
             >
               <i className="fas fa-arrow-alt-up" />
             </div>
-            <input
-              id="filePath"
-              type="text"
-              value={"/" + this.state.filePath.join("")}
-              disabled
-            />
+            <div>
+              <input
+                id="filePath"
+                type="text"
+                value={"/" + this.state.filePath.join("")}
+                disabled
+              />
+            </div>
             <div className="btn" onClick={this.setSearch.bind(this)}>
               <i className="fas fa-search" />
             </div>
@@ -135,18 +157,20 @@ export default class Bookmarks extends Component {
             setChoosePaper={this.setChoosePaper.bind(this)}
           />
         </div>
-        <InfoZone
-          folderID={this.state.folderID}
-          cleanInfoZone={this.cleanInfoZone.bind(this)}
-          forward={this.forward.bind(this)}
-          updateLatest={this.updateLatest.bind(this)}
-          newBookmark={this.state.newBookmark}
-          chooseFolder={this.state.chooseFolder}
-          choosePaper={this.state.choosePaper}
-          search={this.state.search}
-          setChooseFolder={this.setChooseFolder.bind(this)}
-          setChoosePaper={this.setChoosePaper.bind(this)}
-        />
+        <div className="right-pane">
+          <InfoZone
+            folderID={this.state.folderID}
+            cleanInfoZone={this.cleanInfoZone.bind(this)}
+            forward={this.forward.bind(this)}
+            updateLatest={this.updateLatest.bind(this)}
+            newBookmark={this.state.newBookmark}
+            chooseFolder={this.state.chooseFolder}
+            choosePaper={this.state.choosePaper}
+            search={this.state.search}
+            setChooseFolder={this.setChooseFolder.bind(this)}
+            setChoosePaper={this.setChoosePaper.bind(this)}
+          />
+        </div>
       </div>
     );
   }
