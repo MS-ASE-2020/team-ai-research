@@ -16,6 +16,7 @@
     ]
   },
   "main": "src/electron.js",
+  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "build": "npm run pdf && react-scripts build && node utils/cp_batch.js src/electron.js src/preload.js src/db.js src/filesys.js build/",
