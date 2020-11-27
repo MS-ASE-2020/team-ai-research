@@ -31,7 +31,7 @@ export default class SaveDialog extends Component {
   handleKeywordChange(event) {
     const target = event.target;
     const value = target.value;
-    const index = target.getAttribute("data-index");
+    const index = target.parentNode.getAttribute("data-index");
 
     let copy = this.state.keywordList.slice();
     copy[index] = value;
@@ -71,13 +71,12 @@ export default class SaveDialog extends Component {
 
   render() {
     let keywordItem = this.state.keywordList.map((keyword, index) =>
-      <span key={index}>
+      <span key={index} data-index={index}>
         <input
           id="PaperKeywords"
           type="text"
           name="keywords"
           value={keyword}
-          data-index={index}
           onChange={this.handleKeywordChange.bind(this)} 
           placeholder="New Keyword" 
           required />
@@ -94,7 +93,6 @@ export default class SaveDialog extends Component {
           id="PaperKeywordAdd"
           type="button"
           value="+"
-          data-index="+"
           onClick={() => this.addKeyword()}
         />
       </span>
@@ -108,7 +106,6 @@ export default class SaveDialog extends Component {
           type="text"
           name="library"
           value={library}
-          data-index={index}
           disabled
         />
         <input
@@ -126,7 +123,6 @@ export default class SaveDialog extends Component {
           type="text"
           name="library"
           value="/All papers/"
-          data-index="/All papers/"
           disabled
         />
       </span>
@@ -137,7 +133,6 @@ export default class SaveDialog extends Component {
           id="PaperLibrary"
           type="button"
           value="+"
-          data-index="+"
           onClick={() => this.addLibrary()}
         />
       </span>
