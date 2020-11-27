@@ -6,14 +6,16 @@ export default class PaperInformation extends Component {
     super(props);
     this.state = {
       modify: false,
-      paper: this.getPaper(props.choosePaper),
-      keywords: this.getPaper(props.choosePaper).keywords.split(","),
+      paper: this.getPaperProperty(props.choosePaper),
+      libraries: this.getLibraryOfPaper(props.choosePaper), // array of {ID: Number, name: String}
     };
-    this.handleChanges = this.handleChanges.bind(this);
   }
 
-  getPaper(paperID) {
+  getPaperProperty(paperID) {
     return window.api.database.getPaperProperty(window.db, paperID);
+  }
+  getLibraryOfPaper(paperID) {
+    return window.api.database.listFolderOfPaper(window.db, paperID);
   }
 
   operation(act) {
@@ -29,8 +31,8 @@ export default class PaperInformation extends Component {
       case "cancel":
         this.setState({
           modify: false,
-          paper: this.getPaper(this.props.choosePaper),
-          keywords: this.getPaper(this.props.choosePaper).keywords.split(","),
+          paper: this.getPaperProperty(this.props.choosePaper),
+          librarys: this.getLibraryOfPaper(this.props.choosePaper),
         });
         break;
       case "save":
@@ -39,17 +41,22 @@ export default class PaperInformation extends Component {
             ID: this.props.choosePaper,
             name: this.state.paper.name,
             title: this.state.paper.title,
-            keywords: this.state.keywords.join(","),
+            keywords: this.state.paper.keywords,
             year: this.state.paper.year,
             conference: this.state.paper.conference,
             QandA: this.state.paper.QandA,
             annotations: this.state.paper.annotations,
           });
+          window.api.database.saveFolderOfPaper(
+            window.db,
+            this.props.choosePaper,
+            this.state.libraries.map(x => x.ID)
+          );
           alert("Successfully edit the information of paper!");
           this.props.setChoosePaper(this.props.choosePaper);
           this.setState({
-            modify: !this.state.modify,
-            paper: this.getPaper(this.props.choosePaper),
+            modify: false,
+            paper: this.getPaperProperty(this.props.choosePaper),
           });
         } catch (error) {
           console.error(error);
@@ -57,9 +64,9 @@ export default class PaperInformation extends Component {
         }
         break;
       case "delete":
-        if (window.confirm("Are you surely want to delete this bookmark?")) {
+        if (window.confirm("Are you sure you want to delete this paper?")) {
           window.api.database.deletePaper(window.db, this.props.choosePaper);
-          alert("Successfully delete the paper!");
+          alert("Successfully deleted the paper!");
           this.props.cleanInfoZone();
         }
         break;
@@ -71,7 +78,7 @@ export default class PaperInformation extends Component {
 
   handleChanges(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const name = target.name;
 
     let copy = { ...this.state.paper };
@@ -82,82 +89,159 @@ export default class PaperInformation extends Component {
     });
   }
 
-  handleKeywords(event) {
+  handleKeywordChange(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const index = target.getAttribute("data-index");
 
-    let copy = this.state.keywords.slice();
+    let copy = window.api.database.parseString(
+      this.state.paper.keywords
+    );
     copy[[index]] = value;
-
+    
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = window.api.database.stringifyArray(copy);
     this.setState({
-      keywords: copy,
+      paper: paperCopy,
     });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
-    if (nextProps.choosePaper !== this.props.choosePaper) {
-      this.setState({ paper: this.getPaper(nextProps.choosePaper) });
-    }
+    this.setState({
+      paper: this.getPaperProperty(nextProps.choosePaper),
+      modify: false,
+      librarys: window.api.database.listFolderOfPaper(window.db, nextProps.choosePaper),
+    });
   }
 
   removeKeyword(k) {
-    let newKeywords = this.state.keywords.slice();
+    let newKeywords = window.api.database.parseString(this.state.paper.keywords);
     newKeywords.splice(k, 1);
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = window.api.database.stringifyArray(newKeywords);
     this.setState({
-      keywords: newKeywords,
+      paper: paperCopy
     });
   }
 
-  addKeywords() {
-    let newKeywords = this.state.keywords.slice();
-    newKeywords.splice(newKeywords.length, 0, "New Keywords");
+  addKeyword() {
+    let newKeywords = window.api.database.parseString(this.state.paper.keywords);
+    newKeywords.splice(newKeywords.length, 0, "");
+    let paperCopy = {...this.state.paper};
+    paperCopy.keywords = window.api.database.stringifyArray(newKeywords);
     this.setState({
-      keywords: newKeywords,
+      paper: paperCopy
     });
+  }
+
+  removeLibrary(k) {
+    let newLibrary = this.state.libraries.slice();
+    newLibrary.splice(k, 1);
+    this.setState({
+      libraries: newLibrary
+    });
+  }
+
+  addLibrary() {
+
   }
 
   render() {
-    let keywordItem = [];
-    for (let k = 0; k < this.state.keywords.length; k++) {
-      keywordItem.push(
-        this.state.modify ? (
-          <input
-            id="PaperKeywords"
-            type="text"
-            name="keywords"
-            key={k}
-            data-index={k}
-            value={this.state.keywords[k]}
-            onChange={this.handleKeywords.bind(this)}
-          />
-        ) : (
-          this.state.keywords[k] +
-            (k === this.state.keywords.length - 1 ? "" : ", ")
-        )
-      );
-      if (this.state.modify) {
-        keywordItem.push(
-          <input
-            id="PaperKeywordsRemove"
-            type="button"
-            value="×"
-            onClick={() => this.removeKeyword(k)}
-          />
-        );
-      }
-    }
+    let keywordList = window.api.database.parseString(this.state.paper.keywords);
+    let keywordItem = keywordList.map((keyword, index) => this.state.modify ? (
+      <span key={index}>
+        <input
+          id="PaperKeyword"
+          type="text"
+          name="keyword"
+          value={keyword}
+          data-index={index}
+          onChange={this.handleKeywordChange.bind(this)}
+          placeholder="New Keyword"
+          required
+        />
+        <input
+          id="PaperKeywordRemove"
+          type="button"
+          value="×"
+          onClick={() => this.removeKeyword(index)}
+        />
+      </span>
+    ) : (
+      <span key={index}>
+        <input
+          id="PaperKeyword"
+          type="text"
+          name="keyword"
+          value={keyword}
+          data-index={index}
+          disabled
+        />
+      </span>
+    ));
     if (this.state.modify) {
       keywordItem.push(
-        <input
-          id="PaperKeywordsAdd"
-          type="button"
-          value="+"
-          onClick={() => this.addKeywords()}
-        />
+        <span key="+">
+          <input
+            id="PaperKeywordAdd"
+            type="button"
+            value="+"
+            data-index="+"
+            onClick={() => this.addKeyword()}
+          />
+        </span>
       );
     }
+
+    let libraryList = this.state.libraries.map(x => x.name);
+    let libraryItem = libraryList.map((library, index) =>
+      <span key={index}>
+        <input
+          id="PaperLibrary"
+          type="text"
+          name="library"
+          value={library}
+          data-index={index}
+          disabled
+        />
+        {
+          this.state.modify ? 
+            <input
+              id="PaperLibraryRemove"
+              type="button"
+              value="×"
+              onClick={() => this.removeLibrary(index)}
+            /> : false
+        }
+      </span>
+    );
+    libraryItem.unshift(
+      <span key="/All papers/">
+        <input
+          id="PaperLibrary"
+          type="text"
+          name="library"
+          value="/All papers/"
+          data-index="/All papers/"
+          disabled
+        />
+      </span>
+    );
+    if (this.state.modify) {
+      libraryItem.push(
+        <span key="+">
+          <input
+            id="PaperLibrary"
+            type="button"
+            value="+" 
+            data-index="+"
+            onClick={() => this.addLibrary()}
+          />
+        </span>
+      );
+    }
+
     return (
       <div className="InfoZone">
         <h2>Paper Information</h2>
@@ -172,7 +256,7 @@ export default class PaperInformation extends Component {
                     type="text"
                     value={this.state.paper.name}
                     name="name"
-                    onChange={this.handleChanges}
+                    onChange={this.handleChanges.bind(this)}
                   />
                 ) : (
                   this.state.paper.name
@@ -188,7 +272,7 @@ export default class PaperInformation extends Component {
                     type="text"
                     name="title"
                     value={this.state.paper.title}
-                    onChange={this.handleChanges}
+                    onChange={this.handleChanges.bind(this)}
                   />
                 ) : (
                   this.state.paper.title
@@ -208,7 +292,7 @@ export default class PaperInformation extends Component {
                     type="text"
                     name="year"
                     value={this.state.paper.year}
-                    onChange={this.handleChanges}
+                    onChange={this.handleChanges.bind(this)}
                     disabled={!this.state.modify}
                   />
                 ) : (
@@ -225,7 +309,7 @@ export default class PaperInformation extends Component {
                     type="text"
                     name="conference"
                     value={this.state.paper.conference}
-                    onChange={this.handleChanges}
+                    onChange={this.handleChanges.bind(this)}
                     disabled={!this.state.modify}
                   />
                 ) : (
@@ -234,19 +318,35 @@ export default class PaperInformation extends Component {
               </td>
             </tr>
             <tr>
+              <th scope="row">Libraries</th>
+              <td>{libraryItem}</td>
+            </tr>
+            <tr>
               <th scope="row">Last Edited</th>
               <td>{this.state.paper.lastedit}</td>
             </tr>
           </tbody>
         </table>
-        <div className="Operations">
-          <div className="InformationEdit">
+        <div className="Operations">{!this.state.modify ? 
+          <div className="InformationEditFalse">
             <input
               type="button"
               value="Open"
               onClick={() => this.operation("open")}
-              disabled={this.state.modify}
             />
+            <input
+              type="button"
+              value="Edit"
+              onClick={() => this.operation("edit")}
+            />
+            <input
+              type="button"
+              value="Delete"
+              onClick={() => this.operation("delete")}
+            />
+          </div>
+          :
+          <div className="InformationEditTrue">
             <input
               type="button"
               value="Save"
@@ -258,6 +358,7 @@ export default class PaperInformation extends Component {
               onClick={() => this.operation("cancel")}
             />
           </div>
+        }
         </div>
       </div>
     );

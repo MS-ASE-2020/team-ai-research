@@ -15,6 +15,23 @@ export default class Bookmarks extends Component {
     };
   }
 
+  /**
+   * As currently `Bookmarks` has no `props`, this function is commented.
+   */
+  /*
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+    this.setState({
+      filePath: [],
+      folderID: 1,
+      newBookmark: false,
+      chooseFolder: 0,
+      choosePaper: 0,
+      search: false,
+    });
+  }
+  */
+
   cleanInfoZone() {
     this.setState({
       newBookmark: false,
@@ -66,6 +83,9 @@ export default class Bookmarks extends Component {
         filePath: [],
         folderID: 1,
       });
+      this.cleanInfoZone();
+    } else if (this.state.folderID === 1) {
+      alert("This is the ROOT!");
     } else {
       let folder = window.api.database.getFolderProperty(
         window.db,

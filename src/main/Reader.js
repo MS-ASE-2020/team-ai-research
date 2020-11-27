@@ -49,12 +49,13 @@ export default class Reader extends Component {
     }
   }
 
-  save(ID, name, title, keywords, year, conference, QandA, annotations) {
+  save(ID, name, title, keywords, year, conference, QandA, annotations, folders=null) {
     let newID = null;
     let callback = null;
     if (!ID) {
       callback = (paperID) => {
         window.api.filesystem.save(this.props.data.openFile, paperID);
+        window.api.database.saveFolderOfPaper(window.db, paperID, folders);
       };
     }
     

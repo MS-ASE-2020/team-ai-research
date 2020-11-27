@@ -3,6 +3,24 @@ const DB_FILE = "papera.db";
 const process = require('process');
 const path = require('path');
 
+/**
+ * 
+ * @param {String} item 
+ * @returns {Array<String>}
+ */
+function parseString(item) {
+  return JSON.parse(item);
+}
+
+/**
+ * 
+ * @param {Array<String>} keywords
+ * @returns {String}
+ */
+function stringifyArray(item) {
+  return JSON.stringify(item);
+}
+
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
   try {
@@ -301,6 +319,8 @@ function listFolderOfPaper(db, paperID) {
  * @throws error object thrown by SQlite3
  */
 function saveFolderOfPaper(db, paperID, folderIDs) {
+  if (!folderIDs || folderIDs.length < 1)
+    return;
   let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
   let sqlStmtInsert = db.prepare(sql);
   let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
@@ -324,5 +344,7 @@ module.exports = {
   deletePaper: deletePaper,
   deleteFolder: deleteFolder,
   listFolderOfPaper: listFolderOfPaper,
-  saveFolderOfPaper: saveFolderOfPaper
+  saveFolderOfPaper: saveFolderOfPaper,
+  parseString: parseString,
+  stringifyArray: stringifyArray,
 };
