@@ -37,6 +37,7 @@ export default class Reader extends Component {
     } else {
       let properties = window.api.database.getPaperProperty(window.db, info.ID);
       properties.annotations = JSON.stringify(info.annotations);
+      properties.QandA = JSON.stringify(info.QandA);
       console.log(properties);
       window.api.database.savePaper(window.db, properties);
     }
@@ -66,7 +67,7 @@ export default class Reader extends Component {
       keywords: keywords,
       year: year,
       conference: conference,
-      QandA: QandA,
+      QandA: JSON.stringify(QandA),
       annotations: JSON.stringify(annotations)
     }, callback);
 

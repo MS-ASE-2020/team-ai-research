@@ -24,7 +24,7 @@ class AnnotatorSidebar extends React.Component {
         </div>
         <div>
           {this.state.tab === 0 && <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>}
-          {this.state.tab === 1 && <AnnotatorQA UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorQA>}
+          {this.state.tab === 1 && <AnnotatorQA UI={this.props.UI} QA={this.props.QA} updateQA={this.props.updateQA}></AnnotatorQA>}
         </div>
       </div>
     );
@@ -34,7 +34,9 @@ class AnnotatorSidebar extends React.Component {
 AnnotatorSidebar.propTypes = {
   UI: PropTypes.object,
   PDFJSAnnotate: PropTypes.object,
-  RENDER_OPTIONS: PropTypes.object
+  RENDER_OPTIONS: PropTypes.object,
+  QA: PropTypes.array,
+  updateQA: PropTypes.func.isRequired
 };
 
 export default AnnotatorSidebar;

@@ -85,15 +85,7 @@ class AnnotatorQA extends React.Component {
     super(props);
 
     this.state = {
-      qalist: [{
-        'question': 'Q1?',
-        'answer': 'A1!',
-        'refs': []
-      }, {
-        'question': 'Q2?',
-        'answer': 'A2!',
-        'refs': []
-      }],
+      qalist: [],
       newQuestion: '',
       currentAnnotation: null,
       loaded: false
@@ -130,12 +122,14 @@ class AnnotatorQA extends React.Component {
   }
 
   load() {
-    if (this.props.UI != null && this.props.PDFJSAnnotate != null && this.state.loaded === false) {
+    if (this.props.UI != null && this.state.loaded === false) {
       // executed one-time
       this.props.UI.addEventListener('annotation:click', this.handleAnnotationClick);
       this.props.UI.addEventListener('annotation:blur', this.handleAnnotationBlur);
       this.setState({ loaded: true });
     }
+    if (this.state.qalist !== this.props.QA)
+      this.setState({ qalist: this.props.QA });
   }
 
   componentDidMount() {
@@ -162,6 +156,8 @@ class AnnotatorQA extends React.Component {
     };
     this.setState({
       qalist: newlist
+    }, () => {
+      this.props.updateQA(this.state.qalist);
     });
   }
 
@@ -215,7 +211,8 @@ class AnnotatorQA extends React.Component {
 AnnotatorQA.propTypes = {
   paperID: PropTypes.number,
   UI: PropTypes.object,
-  PDFJSAnnotate: PropTypes.object
+  QA: PropTypes.array,
+  updateQA: PropTypes.func.isRequired
 };
 
 export default AnnotatorQA;

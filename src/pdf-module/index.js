@@ -22,7 +22,8 @@ class Annotator extends React.Component {
     this.file = null;
     this.paperID = null;
 
-    this.state = {};
+    this.qa = null;
+    this.state = {};  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
   }
 
   load(props) {
@@ -31,6 +32,8 @@ class Annotator extends React.Component {
     this.paperID = this.props.paperID;
     if (this.paperID) {
       let annotation = window.api.database.getAnnotation(window.db, this.paperID);
+      this.qa = JSON.parse(window.api.database.getQandA(window.db, this.paperID));
+      console.log(this.qa);
       localStorage.setItem(`${documentId}/annotations`, annotation);
     }
     PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
@@ -151,7 +154,7 @@ class Annotator extends React.Component {
         this.props.openSaveDialog({
           annotations: annotations,
           ID: this.paperID,
-          QandA: null
+          QandA: this.qa
         }, postCloseDialog, !newfile);
       });
   }
@@ -176,7 +179,11 @@ class Annotator extends React.Component {
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
-          PDFJSAnnotate={PDFJSAnnotate}></AnnotatorSidebar>
+          PDFJSAnnotate={PDFJSAnnotate}
+          QA={this.qa}
+          updateQA={(qa) => {
+            this.qa = qa;
+          }}></AnnotatorSidebar>
       </div>
     );
   }
