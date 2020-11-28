@@ -9,6 +9,7 @@ class QAItem extends React.Component {
     this.state = {
       question: this.props.question,
       answer: this.props.answer,
+      refs: this.props.refs || [],
       editable: false
     };
 
@@ -31,7 +32,8 @@ class QAItem extends React.Component {
         <div className="qa-item">
           <h5>{this.state.question}</h5>
           <p>{this.state.answer}</p>
-          <button onClick={() => this.setState({editable: true})}>Edit</button>
+          <p>{this.state.refs}</p>
+          <button onClick={() => this.setState({ editable: true })}>Edit</button>
         </div>
       );
     } else {
@@ -39,9 +41,17 @@ class QAItem extends React.Component {
         <div className="qa-item">
           <input value={this.state.question} name='question' onChange={this.handleInputChange}></input>
           <input value={this.state.answer} name='answer' onChange={this.handleInputChange}></input>
+          <p>{this.state.refs}</p>
           <button onClick={() => {
-            this.props.updateProps(this.state.question, this.state.answer);
-            this.setState({editable: false});
+            if (this.props.currentAnnotation != null) {
+              let newRefs = this.state.refs.slice();
+              newRefs.push(this.props.currentAnnotation);
+              this.setState({ refs: newRefs });
+            }
+          }}>Add ref</button>
+          <button onClick={() => {
+            this.props.updateProps(this.state.question, this.state.answer, this.state.refs);
+            this.setState({ editable: false });
           }}>Done</button>
         </div>
       );
@@ -52,6 +62,8 @@ class QAItem extends React.Component {
 QAItem.propTypes = {
   question: PropTypes.string.isRequired,
   answer: PropTypes.string,
+  refs: PropTypes.array,
+  currentAnnotation: PropTypes.any,
   updateProps: PropTypes.func.isRequired
 };
 
@@ -63,15 +75,21 @@ class AnnotatorQA extends React.Component {
     this.state = {
       qalist: [{
         'question': 'Q1?',
-        'answer': 'A1!'
+        'answer': 'A1!',
+        'refs': []
       }, {
         'question': 'Q2?',
-        'answer': 'A2!'
+        'answer': 'A2!',
+        'refs': []
       }],
-      newQuestion: ''
+      newQuestion: '',
+      currentAnnotation: null,
+      loaded: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAnnotationClick = this.handleAnnotationClick.bind(this);
+    this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
   }
 
   handleInputChange(event) {
@@ -84,15 +102,59 @@ class AnnotatorQA extends React.Component {
     });
   }
 
-  updateProps(i, question, answer) {
+  handleAnnotationClick(target) {
+    // let documentId = target.parentNode.getAttribute('data-pdf-annotate-document');
+    let annotationId = target.getAttribute('data-pdf-annotate-id');
+
+    this.setState({
+      currentAnnotation: annotationId
+    });
+  }
+
+  handleAnnotationBlur() {
+    this.setState({
+      currentAnnotation: null
+    });
+  }
+
+  load() {
+    if (this.props.UI != null && this.props.PDFJSAnnotate != null && this.state.loaded === false) {
+      // executed one-time
+      this.props.UI.addEventListener('annotation:click', this.handleAnnotationClick);
+      this.props.UI.addEventListener('annotation:blur', this.handleAnnotationBlur);
+      this.setState({ loaded: true });
+    }
+  }
+
+  componentDidMount() {
+    this.load();
+  }
+
+  componentDidUpdate() {
+    this.load();
+  }
+
+  componentWillUnmount() {
+    if (this.props.UI != null) {
+      this.props.UI.removeEventListener('annotation:click', this.handleAnnotationClick);
+      this.props.UI.removeEventListener('annotation:blur', this.handleAnnotationBlur);
+    }
+  }
+
+  updateProps(i, question, answer, refs) {
     let newlist = this.state.qalist.slice();
     newlist[i] = {
       'question': question,
-      'answer': answer
+      'answer': answer,
+      'refs': refs
     };
     this.setState({
       qalist: newlist
     });
+  }
+
+  updateCurrentAnnotation() {
+
   }
 
   render() {
@@ -101,7 +163,9 @@ class AnnotatorQA extends React.Component {
       qaItemList.push(
         <QAItem key={i}
           question={this.state.qalist[i]['question']} answer={this.state.qalist[i]['answer']}
-          updateProps={(q, a) => this.updateProps(i, q, a)}></QAItem>
+          refs={this.state.qalist[i]['refs']}
+          currentAnnotation={this.state.currentAnnotation}
+          updateProps={(q, a, r) => this.updateProps(i, q, a, r)}></QAItem>
       );
     }
     return (
@@ -130,7 +194,9 @@ class AnnotatorQA extends React.Component {
 }
 
 AnnotatorQA.propTypes = {
-  paperID: PropTypes.number
+  paperID: PropTypes.number,
+  UI: PropTypes.object,
+  PDFJSAnnotate: PropTypes.object
 };
 
 export default AnnotatorQA;
