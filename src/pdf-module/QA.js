@@ -27,12 +27,23 @@ class QAItem extends React.Component {
   }
 
   render() {
+    let refs = [];
+    for (let i = 0; i < this.state.refs.length; i++) {
+      refs.push((<button key={i}
+        onClick={(event) => {
+          this.props.handleRefClick(event.target.name);
+        }}
+        name={this.state.refs[i]}>
+        {this.state.refs[i]}
+      </button>)
+      );
+    }
     if (!this.state.editable) {
       return (
         <div className="qa-item">
           <h5>{this.state.question}</h5>
           <p>{this.state.answer}</p>
-          <p>{this.state.refs}</p>
+          {refs}
           <button onClick={() => this.setState({ editable: true })}>Edit</button>
         </div>
       );
@@ -41,7 +52,7 @@ class QAItem extends React.Component {
         <div className="qa-item">
           <input value={this.state.question} name='question' onChange={this.handleInputChange}></input>
           <input value={this.state.answer} name='answer' onChange={this.handleInputChange}></input>
-          <p>{this.state.refs}</p>
+          {refs}
           <button onClick={() => {
             if (this.props.currentAnnotation != null) {
               let newRefs = this.state.refs.slice();
@@ -63,8 +74,9 @@ QAItem.propTypes = {
   question: PropTypes.string.isRequired,
   answer: PropTypes.string,
   refs: PropTypes.array,
-  currentAnnotation: PropTypes.any,
-  updateProps: PropTypes.func.isRequired
+  currentAnnotation: PropTypes.string,
+  updateProps: PropTypes.func.isRequired,
+  handleRefClick: PropTypes.func.isRequired
 };
 
 
@@ -153,10 +165,6 @@ class AnnotatorQA extends React.Component {
     });
   }
 
-  updateCurrentAnnotation() {
-
-  }
-
   render() {
     let qaItemList = [];
     for (let i = 0; i < this.state.qalist.length; i++) {
@@ -165,7 +173,18 @@ class AnnotatorQA extends React.Component {
           question={this.state.qalist[i]['question']} answer={this.state.qalist[i]['answer']}
           refs={this.state.qalist[i]['refs']}
           currentAnnotation={this.state.currentAnnotation}
-          updateProps={(q, a, r) => this.updateProps(i, q, a, r)}></QAItem>
+          updateProps={(q, a, r) => this.updateProps(i, q, a, r)}
+          handleRefClick={(name) => {
+            if (this.props.UI) {
+              let element = document.querySelector(`[data-pdf-annotate-uuid="${name}"]`);
+              console.log(element);
+              if (element) {
+                this.props.UI.destroyEditOverlay();
+                element.scrollIntoView();
+                this.props.UI.createEditOverlay(element);
+              }
+            }
+          }}></QAItem>
       );
     }
     return (
