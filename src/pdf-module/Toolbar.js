@@ -38,7 +38,7 @@ class AnnotatorToolBar extends React.Component {
     const displayToolbar = this.state.loaded && this.props.RENDER_OPTIONS.pdfDocument;
 
     return (
-      <div className="toolbar" style={{ display: displayToolbar ? null : 'none' }}>
+      <div className="toolbar no-annotation" style={{ display: displayToolbar ? null : 'none' }}>
         <button className="cursor" type="button" title="Cursor" data-tooltype="cursor">➚</button>
         <button className="eraser" type="button" title="Eraser" data-tooltype="eraser">⌫</button>
 
