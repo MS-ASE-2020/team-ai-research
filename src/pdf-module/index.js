@@ -22,7 +22,7 @@ class Annotator extends React.Component {
     this.file = null;
     this.paperID = null;
 
-    this.qa = null;
+    this.qa = [];
     this.state = {};  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
   }
 

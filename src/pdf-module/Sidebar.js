@@ -16,7 +16,10 @@ class AnnotatorSidebar extends React.Component {
     const displaySidebar = this.props.RENDER_OPTIONS.pdfDocument;
 
     return (
-      <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}>
+      <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}
+        className="no-annotation">
+        {/* Class "no-annotation" is a special class in modified pdf-annotate.js.
+            When clicked on them, pdf-annotate.js won't blur/click annotations on pdf documents. */}
         <div className="sidebar-tab">
           <button onClick={() => this.setState({ tab: 0 })}>Comments</button>
           <button onClick={() => this.setState({ tab: 1 })}>Q &amp; A</button>

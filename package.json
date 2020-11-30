@@ -42,7 +42,7 @@
     "eslint": "^6.6.0",
     "foreman": "^3.0.1",
     "node-sass": "^4.14.1",
-    "pdf-annotate.js": "taoky/pdf-annotate.js#b0bb7c9434b76571de23fad349f1a9779ded8e14",
+    "pdf-annotate.js": "taoky/pdf-annotate.js#34ca16503feab9bf5d75f8a612269fe86f6e35b3",
     "pdfjs-dist": "^2.5.207",
     "react-scripts": "^3.4.4",
     "webpack-node-externals": "^2.5.2"
