@@ -92,7 +92,7 @@ export default class PaperInformation extends Component {
   handleKeywordChange(event) {
     const target = event.target;
     const value = target.value;
-    const index = target.getAttribute("data-index");
+    const index = target.parentNode.getAttribute("data-index");
 
     let copy = window.api.database.parseString(
       this.state.paper.keywords
@@ -150,13 +150,12 @@ export default class PaperInformation extends Component {
   render() {
     let keywordList = window.api.database.parseString(this.state.paper.keywords);
     let keywordItem = keywordList.map((keyword, index) => this.state.modify ? (
-      <span key={index}>
+      <span key={index} data-index={index}>
         <input
           id="PaperKeyword"
           type="text"
           name="keyword"
           value={keyword}
-          data-index={index}
           onChange={this.handleKeywordChange.bind(this)}
           placeholder="New Keyword"
           required
@@ -175,7 +174,6 @@ export default class PaperInformation extends Component {
           type="text"
           name="keyword"
           value={keyword}
-          data-index={index}
           disabled
         />
       </span>
@@ -187,7 +185,6 @@ export default class PaperInformation extends Component {
             id="PaperKeywordAdd"
             type="button"
             value="+"
-            data-index="+"
             onClick={() => this.addKeyword()}
           />
         </span>
@@ -202,7 +199,6 @@ export default class PaperInformation extends Component {
           type="text"
           name="library"
           value={library}
-          data-index={index}
           disabled
         />
         {
@@ -223,7 +219,6 @@ export default class PaperInformation extends Component {
           type="text"
           name="library"
           value="/All papers/"
-          data-index="/All papers/"
           disabled
         />
       </span>
@@ -234,8 +229,7 @@ export default class PaperInformation extends Component {
           <input
             id="PaperLibrary"
             type="button"
-            value="+" 
-            data-index="+"
+            value="+"
             onClick={() => this.addLibrary()}
           />
         </span>
