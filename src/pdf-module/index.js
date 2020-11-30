@@ -32,8 +32,7 @@ class Annotator extends React.Component {
     this.paperID = this.props.paperID;
     if (this.paperID) {
       let annotation = window.api.database.getAnnotation(window.db, this.paperID);
-      this.qa = JSON.parse(window.api.database.getQandA(window.db, this.paperID));
-      console.log(this.qa);
+      this.qa = JSON.parse(window.api.database.getQandA(window.db, this.paperID)) || [];
       localStorage.setItem(`${documentId}/annotations`, annotation);
     }
     PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());

@@ -22,9 +22,11 @@ class AnnotatorSidebar extends React.Component {
           <button onClick={() => this.setState({ tab: 1 })}>Q &amp; A</button>
           <button>Translate</button> {/* placeholder */}
         </div>
-        <div>
-          {this.state.tab === 0 && <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>}
-          {this.state.tab === 1 && <AnnotatorQA UI={this.props.UI} QA={this.props.QA} updateQA={this.props.updateQA}></AnnotatorQA>}
+        <div style={{ display: this.state.tab === 0 ? null : 'none' }}>
+          <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
+        </div>
+        <div style={{ display: this.state.tab === 1 ? null : 'none' }}>
+          <AnnotatorQA UI={this.props.UI} QA={this.props.QA} updateQA={this.props.updateQA}></AnnotatorQA>
         </div>
       </div>
     );

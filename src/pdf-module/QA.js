@@ -128,8 +128,6 @@ class AnnotatorQA extends React.Component {
       this.props.UI.addEventListener('annotation:blur', this.handleAnnotationBlur);
       this.setState({ loaded: true });
     }
-    if (this.state.qalist !== this.props.QA)
-      this.setState({ qalist: this.props.QA });
   }
 
   componentDidMount() {
@@ -144,6 +142,13 @@ class AnnotatorQA extends React.Component {
     if (this.props.UI != null) {
       this.props.UI.removeEventListener('annotation:click', this.handleAnnotationClick);
       this.props.UI.removeEventListener('annotation:blur', this.handleAnnotationBlur);
+    }
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
+    if (nextProps.QA !== this.props.QA) {
+      this.setState({ qalist: nextProps.QA });
     }
   }
 
@@ -211,7 +216,7 @@ class AnnotatorQA extends React.Component {
 AnnotatorQA.propTypes = {
   paperID: PropTypes.number,
   UI: PropTypes.object,
-  QA: PropTypes.array,
+  QA: PropTypes.array.isRequired,
   updateQA: PropTypes.func.isRequired
 };
 
