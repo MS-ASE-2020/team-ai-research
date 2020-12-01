@@ -14,7 +14,7 @@ function parseString(item) {
 
 /**
  * 
- * @param {Array<String>} keywords
+ * @param { Array< String > } item
  * @returns {String}
  */
 function stringifyArray(item) {
