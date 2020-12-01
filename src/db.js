@@ -221,9 +221,9 @@ function listPaper(db, folderID, recursive=false) {
     let sql = `SELECT ID, name FROM paper
                WHERE ID IN (
                  SELECT paperID from paperInFolder
-                 WHERE folderID IN `
-              + stringify(folderIDs)
-              + ");"
+                 WHERE folderID IN (`
+              + folderIDs.map(x => String(x)).join(',')
+              + "));";
     sqlStmt = db.prepare(sql);
   } else {
     sqlStmt = db.prepare(`SELECT ID, name FROM paper;`);
@@ -242,7 +242,7 @@ function listPaper(db, folderID, recursive=false) {
 function listFolder(db, folderID, recursive=false) {
   var result = [];
   if (folderID) {
-    let fatherIDs = [folderID, ]
+    let fatherIDs = [folderID, ];
     do {
       let str = "(" + fatherIDs.map(x => String(x)).join(',') + ")";
       let childFolders = db.prepare(`SELECT ID, name FROM folder WHERE fatherID IN` + str + `;`).all();
@@ -301,7 +301,7 @@ function getFolderProperty(db, folderID) {
 function getFolderPath(db, folderID) {
   let path = "";
   while (folderID) {
-    folder = db.prepare(`SELECT name, fatherID FROM folder WHERE folderID = ?;`).get(folderID);
+    let folder = db.prepare(`SELECT name, fatherID FROM folder WHERE folderID = ?;`).get(folderID);
     path = folder.name + "/" + path;
     folderID = folder.fatherID;
   }
