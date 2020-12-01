@@ -291,6 +291,25 @@ function getFolderProperty(db, folderID) {
   return result;
 }
 
+/**
+ * Get the full path of the folder with given folderID.
+ * Return null when folderID is `null` or 0 or `undefined`.
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @returns {String} Full path of the folder
+ */
+function getFolderPath(db, folderID) {
+  let path = "";
+  while (folderID) {
+    folder = db.prepare(`SELECT name, fatherID FROM folder WHERE folderID = ?;`).get(folderID);
+    path = folder.name + "/" + path;
+    folderID = folder.fatherID;
+  }
+  if (path === "")
+    path = null;
+  return path;
+}
+
 function deletePaper(db, paperID) {
   let sqlStmt = db.prepare(`DELETE FROM paper WHERE ID = ?;`).bind(paperID);
   db.transaction(() => {
@@ -356,4 +375,5 @@ module.exports = {
   saveFolderOfPaper: saveFolderOfPaper,
   parseString: parseString,
   stringifyArray: stringifyArray,
+  getFolderPath: getFolderPath,
 };
