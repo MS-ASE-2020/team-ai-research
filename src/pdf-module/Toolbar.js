@@ -40,6 +40,7 @@ class AnnotatorToolBar extends React.Component {
     return (
       <div className="toolbar" style={{ display: displayToolbar ? null : 'none' }}>
         <button className="cursor" type="button" title="Cursor" data-tooltype="cursor">➚</button>
+        <button className="select-text" type="button" title="Select Text" data-tooltype="select">I</button>
         <button className="eraser" type="button" title="Eraser" data-tooltype="eraser">⌫</button>
 
         <div className="spacer"></div>
@@ -285,6 +286,9 @@ function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
         case 'strikeout':
           UI.disableRect();
           break;
+        case 'select':
+          UI.enableUI();
+          break;
         default:
           console.warn("Unexpected default case when disabling funcs in setActiveToolbarItem().");
       }
@@ -318,6 +322,9 @@ function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
       case 'highlight':
       case 'strikeout':
         UI.enableRect(type);
+        break;
+      case 'select':
+        UI.disableUI();
         break;
       default:
         console.warn("Unexpected default case when enabling funcs in setActiveToolbarItem().");
