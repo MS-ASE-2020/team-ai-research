@@ -211,14 +211,20 @@ function saveFolder(db, properties) {
  * @param { Number } folderID 
  * @returns { Array< { ID:Number, name:String } > }
  */
-function listPaper(db, folderID) {
+function listPaper(db, folderID, recursive=false) {
   let sqlStmt;
   if (folderID) {
-    sqlStmt = db.prepare(`SELECT ID, name FROM paper
-                          WHERE ID IN (
-                            SELECT paperID from paperInFolder
-                            WHERE folderID = ?
-                          );`).bind(folderID);
+    let folderIDs = [folderID,];
+    if (recursive) {
+      folderIDs = folderIDs.concat( listFolder(db, folderID, recursive).map(x => x.ID) );
+    }
+    let sql = `SELECT ID, name FROM paper
+               WHERE ID IN (
+                 SELECT paperID from paperInFolder
+                 WHERE folderID IN `
+              + stringify(folderIDs)
+              + ");"
+    sqlStmt = db.prepare(sql);
   } else {
     sqlStmt = db.prepare(`SELECT ID, name FROM paper;`);
   }
@@ -233,13 +239,16 @@ function listPaper(db, folderID) {
  * @param {Number} folderID 
  * @returns { Array< { ID:Number, name:String } > }
  */
-function listFolder(db, folderID) {
-  let sqlStmt = db.prepare(`SELECT ID, name FROM folder
-                            WHERE fatherID = ?;`);
+function listFolder(db, folderID, recursive=false) {
+  var result = [];
   if (folderID) {
-    var result = sqlStmt.all(folderID);
-  } else {
-    result = Array();
+    let fatherIDs = [folderID, ]
+    do {
+      let str = "(" + fatherIDs.map(x => String(x)).join(',') + ")";
+      let childFolders = db.prepare(`SELECT ID, name FROM folder WHERE fatherID IN` + str + `;`).all();
+      fatherIDs = childFolders.map(x => x.ID);
+      result = result.concat(childFolders);
+    } while (recursive && fatherIDs.length > 0);
   }
   return result;
 }
