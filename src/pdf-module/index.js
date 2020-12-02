@@ -10,6 +10,36 @@ import * as pdfjsViewer from 'pdfjs-dist/web/pdf_viewer';
 import 'pdfjs-dist/web/pdf_viewer.css';
 import workerURL from "../pdf.worker.min.data";
 
+import useContextMenu from 'contextmenu';
+import 'contextmenu/ContextMenu.css';
+
+const menuConfig = {
+  'Alert Selected Text': () => alert(getSelection()),
+  'Copy': () => document.execCommand("copy"),
+  'Translate': {
+    'Microsoft Bing': () => alert("Placeholder for Microsoft Bing!"),
+    'Google': () => alert("Placeholder for Google!")
+  },
+  'Search': {
+    'Web': () => alert("Placeholder for Web!"),
+    'Wikipedia': () => alert("Placeholder for Wikipedia!"), 
+    'Articles': () => alert("Placeholder for Articles!")
+  },
+};
+
+function getSelection() {
+  let text = "";
+  if (window.getSelection) {
+    text = window.getSelection().toString();
+  }
+  return text;
+}
+
+function PaperZone(props) {
+  const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
+  // eslint-disable-next-line react/prop-types
+  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
+}
 
 class Annotator extends React.Component {
   constructor(props) {
@@ -194,6 +224,13 @@ class Annotator extends React.Component {
   }
 
   render() {
+    let Zone = (
+      <div id="content-wrapper"
+        onScroll={this.contentWrapperScroll.bind(this)}
+        ref={el => this.wrapper = el}>
+        <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
+      </div>
+    ); 
     return (
       <div id="pdfwrapper" ref={el => this.el = el}>
         <AnnotatorToolBar
@@ -205,11 +242,7 @@ class Annotator extends React.Component {
           render={this.PDFRender}
           filename={this.file}
           saveFunc={this.save.bind(this)}></AnnotatorToolBar>
-        <div id="content-wrapper"
-          onScroll={this.contentWrapperScroll.bind(this)}
-          ref={el => this.wrapper = el}>
-          <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
-        </div>
+        <PaperZone Zone={Zone} FileNull={this.file === null}/>
         <AnnotatorComment
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
