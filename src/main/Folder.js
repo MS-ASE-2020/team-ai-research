@@ -54,7 +54,9 @@ export default class Folder extends Component {
         {this.props.folderID !== null ? (
           <div className="item-list subfolders">{folderItem}</div>
         ) : null}
-        <div className="item-list papers">{paperItem}</div>
+        {this.props.folderOnly ? null : (
+          <div className="item-list papers">{paperItem}</div>
+        )}
         {this.props.folderID !== null ? (
           <div
             className="CreateNewBookmark"
@@ -71,6 +73,7 @@ export default class Folder extends Component {
 
 Folder.propTypes = {
   folderID: PropTypes.number,
+  taokyStrong: PropTypes.number,
   forward: PropTypes.func.isRequired,
   setNewBookmark: PropTypes.func.isRequired,
   setChooseFolder: PropTypes.func.isRequired,

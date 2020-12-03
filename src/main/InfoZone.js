@@ -10,7 +10,7 @@ export default class InfoZone extends Component {
       return (
         <NewBookmark
           folderID={this.props.folderID}
-          cleanInfoZone={this.props.cleanInfoZone}
+          clearInfoZone={this.props.clearInfoZone}
         />
       );
     } else if (this.props.chooseFolder !== 0) {
@@ -20,7 +20,8 @@ export default class InfoZone extends Component {
           updateLatest={this.props.updateLatest}
           forward={this.props.forward}
           setChooseFolder={this.props.setChooseFolder}
-          cleanInfoZone={this.props.cleanInfoZone}
+          clearInfoZone={this.props.clearInfoZone}
+          openFolderCallback={this.props.selectFolderCallback}
         />
       );
     } else if (this.props.choosePaper !== 0) {
@@ -28,7 +29,7 @@ export default class InfoZone extends Component {
         <PaperInformation
           choosePaper={this.props.choosePaper}
           setChoosePaper={this.props.setChoosePaper}
-          cleanInfoZone={this.props.cleanInfoZone}
+          clearInfoZone={this.props.clearInfoZone}
         />
       );
     } else if (this.props.search === true) {
@@ -45,7 +46,7 @@ InfoZone.propTypes = {
   chooseFolder: PropTypes.number.isRequired,
   choosePaper: PropTypes.number.isRequired,
   search: PropTypes.bool.isRequired,
-  cleanInfoZone: PropTypes.func.isRequired,
+  clearInfoZone: PropTypes.func.isRequired,
   updateLatest: PropTypes.func.isRequired,
   forward: PropTypes.func.isRequired,
   setChooseFolder: PropTypes.func.isRequired,

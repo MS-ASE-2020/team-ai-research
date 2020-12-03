@@ -67,7 +67,7 @@ export default class PaperInformation extends Component {
         if (window.confirm("Are you sure you want to delete this paper?")) {
           window.api.database.deletePaper(window.db, this.props.choosePaper);
           alert("Successfully deleted the paper!");
-          this.props.cleanInfoZone();
+          this.props.clearInfoZone();
         }
         break;
       default:
@@ -98,7 +98,7 @@ export default class PaperInformation extends Component {
       this.state.paper.keywords
     );
     copy[[index]] = value;
-    
+
     let paperCopy = {...this.state.paper};
     paperCopy.keywords = window.api.database.stringifyArray(copy);
     this.setState({
@@ -149,35 +149,37 @@ export default class PaperInformation extends Component {
 
   render() {
     let keywordList = window.api.database.parseString(this.state.paper.keywords);
-    let keywordItem = keywordList.map((keyword, index) => this.state.modify ? (
-      <span key={index} data-index={index}>
-        <input
-          id="PaperKeyword"
-          type="text"
-          name="keyword"
-          value={keyword}
-          onChange={this.handleKeywordChange.bind(this)}
-          placeholder="New Keyword"
-          required
-        />
-        <input
-          id="PaperKeywordRemove"
-          type="button"
-          value="×"
-          onClick={() => this.removeKeyword(index)}
-        />
-      </span>
-    ) : (
-      <span key={index}>
-        <input
-          id="PaperKeyword"
-          type="text"
-          name="keyword"
-          value={keyword}
-          disabled
-        />
-      </span>
-    ));
+    let keywordItem = keywordList.map((keyword, index) =>
+      this.state.modify ? (
+        <span key={index} data-index={index}>
+          <input
+            id="PaperKeyword"
+            type="text"
+            name="keyword"
+            value={keyword}
+            onChange={this.handleKeywordChange.bind(this)}
+            placeholder="New Keyword"
+            required
+          />
+          <input
+            id="PaperKeywordRemove"
+            type="button"
+            value="×"
+            onClick={() => this.removeKeyword(index)}
+          />
+        </span>
+      ) : (
+        <span key={index} data-index={index}>
+          <input
+            id="PaperKeyword"
+            type="text"
+            name="keyword"
+            value={keyword}
+            disabled
+          />
+        </span>
+      )
+    );
     if (this.state.modify) {
       keywordItem.push(
         <span key="+">
@@ -202,7 +204,7 @@ export default class PaperInformation extends Component {
           disabled
         />
         {
-          this.state.modify ? 
+          this.state.modify ?
             <input
               id="PaperLibraryRemove"
               type="button"
@@ -321,7 +323,7 @@ export default class PaperInformation extends Component {
             </tr>
           </tbody>
         </table>
-        <div className="Operations">{!this.state.modify ? 
+        <div className="Operations">{!this.state.modify ?
           <div className="InformationEditFalse">
             <input
               type="button"
@@ -362,5 +364,5 @@ export default class PaperInformation extends Component {
 PaperInformation.propTypes = {
   choosePaper: PropTypes.number.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
-  cleanInfoZone: PropTypes.func.isRequired,
+  clearInfoZone: PropTypes.func.isRequired,
 };

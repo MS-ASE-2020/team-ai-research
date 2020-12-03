@@ -14,7 +14,7 @@ function parseString(item) {
 
 /**
  * 
- * @param {Array<String>} keywords
+ * @param { Array< String > } item
  * @returns {String}
  */
 function stringifyArray(item) {
@@ -211,14 +211,20 @@ function saveFolder(db, properties) {
  * @param { Number } folderID 
  * @returns { Array< { ID:Number, name:String } > }
  */
-function listPaper(db, folderID) {
+function listPaper(db, folderID, recursive=false) {
   let sqlStmt;
   if (folderID) {
-    sqlStmt = db.prepare(`SELECT ID, name FROM paper
-                          WHERE ID IN (
-                            SELECT paperID from paperInFolder
-                            WHERE folderID = ?
-                          );`).bind(folderID);
+    let folderIDs = [folderID,];
+    if (recursive) {
+      folderIDs = folderIDs.concat( listFolder(db, folderID, recursive).map(x => x.ID) );
+    }
+    let sql = `SELECT ID, name FROM paper
+               WHERE ID IN (
+                 SELECT paperID from paperInFolder
+                 WHERE folderID IN (`
+              + folderIDs.map(x => String(x)).join(',')
+              + "));";
+    sqlStmt = db.prepare(sql);
   } else {
     sqlStmt = db.prepare(`SELECT ID, name FROM paper;`);
   }
@@ -233,13 +239,16 @@ function listPaper(db, folderID) {
  * @param {Number} folderID 
  * @returns { Array< { ID:Number, name:String } > }
  */
-function listFolder(db, folderID) {
-  let sqlStmt = db.prepare(`SELECT ID, name FROM folder
-                            WHERE fatherID = ?;`);
+function listFolder(db, folderID, recursive=false) {
+  var result = [];
   if (folderID) {
-    var result = sqlStmt.all(folderID);
-  } else {
-    result = Array();
+    let fatherIDs = [folderID, ];
+    do {
+      let str = "(" + fatherIDs.map(x => String(x)).join(',') + ")";
+      let childFolders = db.prepare(`SELECT ID, name FROM folder WHERE fatherID IN` + str + `;`).all();
+      fatherIDs = childFolders.map(x => x.ID);
+      result = result.concat(childFolders);
+    } while (recursive && fatherIDs.length > 0);
   }
   return result;
 }
@@ -280,6 +289,25 @@ function getFolderProperty(db, folderID) {
                             FROM folder WHERE ID = ?;`);
   var result = sqlStmt.get(folderID);
   return result;
+}
+
+/**
+ * Get the full path of the folder with given folderID.
+ * Return null when folderID is `null` or 0 or `undefined`.
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @returns {String} Full path of the folder
+ */
+function getFolderPath(db, folderID) {
+  let path = "";
+  while (folderID) {
+    let folder = db.prepare(`SELECT name, fatherID FROM folder WHERE folderID = ?;`).get(folderID);
+    path = folder.name + "/" + path;
+    folderID = folder.fatherID;
+  }
+  if (path === "")
+    path = null;
+  return path;
 }
 
 function deletePaper(db, paperID) {
@@ -347,4 +375,5 @@ module.exports = {
   saveFolderOfPaper: saveFolderOfPaper,
   parseString: parseString,
   stringifyArray: stringifyArray,
+  getFolderPath: getFolderPath,
 };

@@ -53,7 +53,7 @@ export default class FolderInformation extends Component {
         if (window.confirm("Are you surely want to delete this bookmark?")) {
           window.api.database.deleteFolder(window.db, this.props.chooseFolder);
           alert("Successfully delete the bookmark!");
-          this.props.cleanInfoZone();
+          this.props.clearInfoZone();
         }
         break;
       default:
@@ -113,8 +113,17 @@ export default class FolderInformation extends Component {
           Create time: {this.state.folder.createtime}
         </div>
         <div className="Operations">
+          {this.props.openFolderCallback ? (
+            <input
+              type="button"
+              value="Open"
+              onClick={() =>
+                this.props.openFolderCallback(this.props.chooseFolder, this.state.folder.name)
+              }
+            />
+          ) : null}
           {!this.state.modify ? (
-            <div className="InformationEditFalse">
+            <span className="InformationEditFalse">
               <input
                 type="button"
                 value="Edit"
@@ -125,9 +134,9 @@ export default class FolderInformation extends Component {
                 value="Delete"
                 onClick={() => this.operation("delete")}
               />
-            </div>
+            </span>
           ) : (
-            <div className="InformationEditTrue">
+            <span className="InformationEditTrue">
               <input
                 type="button"
                 value="Save"
@@ -138,7 +147,7 @@ export default class FolderInformation extends Component {
                 value="Cancel"
                 onClick={() => this.operation("cancel")}
               />
-            </div>
+            </span>
           )}
         </div>
       </div>
@@ -149,5 +158,5 @@ export default class FolderInformation extends Component {
 FolderInformation.propTypes = {
   chooseFolder: PropTypes.number.isRequired,
   setChooseFolder: PropTypes.func.isRequired,
-  cleanInfoZone: PropTypes.func.isRequired,
+  clearInfoZone: PropTypes.func.isRequired,
 };
