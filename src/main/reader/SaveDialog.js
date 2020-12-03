@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import Bookmarks from "../Bookmarks";
+import SelectFolderDialog from "./SelectFolderDialog";
+
 export default class SaveDialog extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +14,7 @@ export default class SaveDialog extends Component {
       year: "",
       conference: "",
       libraries: [], // Array of {ID: Number, name: String}
+      libraryDialog: false, // whether the dialog is shown
     };
   }
 
@@ -35,7 +39,7 @@ export default class SaveDialog extends Component {
 
     let copy = this.state.keywordList.slice();
     copy[index] = value;
-    
+
     this.setState({
       keywordList: copy,
     });
@@ -45,7 +49,7 @@ export default class SaveDialog extends Component {
     let newKeywords = this.state.keywordList.slice();
     newKeywords.splice(k, 1);
     this.setState({
-      keywordList: newKeywords
+      keywordList: newKeywords,
     });
   }
 
@@ -53,7 +57,7 @@ export default class SaveDialog extends Component {
     let newKeywords = this.state.keywordList.slice();
     newKeywords.splice(newKeywords.length, 0, "");
     this.setState({
-      keywordList: newKeywords
+      keywordList: newKeywords,
     });
   }
 
@@ -61,45 +65,61 @@ export default class SaveDialog extends Component {
     let newLibrary = this.state.libraries.slice();
     newLibrary.splice(k, 1);
     this.setState({
-      libraries: newLibrary
+      libraries: newLibrary,
     });
   }
 
-  addLibrary() {
+  showAddLibraryDialog() {
+    this.setState({
+      libraryDialog: true,
+    });
+  }
 
+  /*
+   * Calls with id === null if dialog closed without opening anything
+   */
+  addLibrary(id, name) {
+    let newLibrary = this.state.libraries.slice();
+    newLibrary.push({ ID: id, name: name });
+    this.setState({
+      libraries: newLibrary,
+      libraryDialog: false,
+    });
   }
 
   render() {
-    let keywordItem = this.state.keywordList.map((keyword, index) =>
+    let keywordItem = this.state.keywordList.map((keyword, index) => (
       <span key={index} data-index={index}>
         <input
           id="PaperKeywords"
           type="text"
           name="keywords"
           value={keyword}
-          onChange={this.handleKeywordChange.bind(this)} 
-          placeholder="New Keyword" 
-          required />
+          onChange={this.handleKeywordChange.bind(this)}
+          placeholder="New Keyword"
+          required
+        />
         <input
           id="PaperKeywordsRemove"
           type="button"
           value="×"
-          onClick={() => this.removeKeyword(index)} />
+          onClick={() => this.removeKeyword(index)}
+        />
       </span>
-    );
+    ));
     keywordItem.push(
       <span key="+">
         <input
           id="PaperKeywordAdd"
           type="button"
           value="+"
-          onClick={() => this.addKeyword()}
+          onClick={() => this.showAddLibraryDialog()}
         />
       </span>
     );
 
-    let libraryList = this.state.libraries.map(x => x.name);
-    let libraryItem = libraryList.map((library, index) =>
+    let libraryList = this.state.libraries.map((x) => x.name);
+    let libraryItem = libraryList.map((library, index) => (
       <span key={index}>
         <input
           id="PaperLibrary"
@@ -115,7 +135,7 @@ export default class SaveDialog extends Component {
           onClick={() => this.removeLibrary(index)}
         />
       </span>
-    );
+    ));
     libraryItem.unshift(
       <span key="/All papers/">
         <input
@@ -133,14 +153,18 @@ export default class SaveDialog extends Component {
           id="PaperLibrary"
           type="button"
           value="+"
-          onClick={() => this.addLibrary()}
+          onClick={() => this.showAddLibraryDialog()}
         />
       </span>
     );
-    
+
     return (
       <div className="save-wrapper">
-        <div className="save-dialog">
+        <div
+          className={
+            "save-dialog" + (this.state.libraryDialog ? " d-none" : "")
+          }
+        >
           <div className="row">
             <div className="save-label">Name</div>
             <input
@@ -199,7 +223,7 @@ export default class SaveDialog extends Component {
                   this.state.conference,
                   this.props.info.QandA,
                   this.props.info.annotations,
-                  this.state.libraries.map(x => x.ID)
+                  this.state.libraries.map((x) => x.ID)
                 )
               }
             >
@@ -210,6 +234,11 @@ export default class SaveDialog extends Component {
             </button>
           </div>
         </div>
+
+        <SelectFolderDialog
+          extraClasses={this.state.libraryDialog ? "" : " d-none"}
+          selectFolderCallback={this.addLibrary.bind(this)}
+        />
       </div>
     );
   }

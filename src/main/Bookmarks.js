@@ -32,7 +32,7 @@ export default class Bookmarks extends Component {
   }
   */
 
-  cleanInfoZone() {
+  clearInfoZone() {
     this.setState({
       newBookmark: false,
       chooseFolder: 0,
@@ -42,37 +42,29 @@ export default class Bookmarks extends Component {
   }
 
   setNewBookmark() {
+    this.clearInfoZone();
     this.setState({
       newBookmark: true,
-      chooseFolder: 0,
-      choosePaper: 0,
-      search: false,
     });
   }
 
   setChooseFolder(folderID) {
+    this.clearInfoZone();
     this.setState({
-      newBookmark: false,
       chooseFolder: folderID,
-      choosePaper: 0,
-      search: false,
     });
   }
 
   setChoosePaper(paperID) {
+    this.clearInfoZone();
     this.setState({
-      newBookmark: false,
-      chooseFolder: 0,
       choosePaper: paperID,
-      search: false,
     });
   }
 
   setSearch() {
+    this.clearInfoZone();
     this.setState({
-      newBookmark: false,
-      chooseFolder: 0,
-      choosePaper: 0,
       search: true,
     });
   }
@@ -83,7 +75,7 @@ export default class Bookmarks extends Component {
         filePath: [],
         folderID: 1,
       });
-      this.cleanInfoZone();
+      this.clearInfoZone();
     } else if (this.state.folderID === 1) {
       alert("This is the ROOT!");
     } else {
@@ -98,7 +90,7 @@ export default class Bookmarks extends Component {
         folderID: folder.fatherID,
       });
     }
-    this.cleanInfoZone();
+    this.clearInfoZone();
   }
 
   forward(newPath, newFolderID) {
@@ -108,7 +100,7 @@ export default class Bookmarks extends Component {
       filePath: newFilePath,
       folderID: newFolderID,
     });
-    this.cleanInfoZone();
+    this.clearInfoZone();
   }
 
   updateLatest(name) {
@@ -148,6 +140,8 @@ export default class Bookmarks extends Component {
             </div>
           </div>
           <Folder
+            folderOnly={this.props.folderOnly}
+            selectFolderCallback={this.props.selectFolderCallback}
             folderID={this.state.folderID}
             chooseFolder={this.state.chooseFolder}
             choosePaper={this.state.choosePaper}
@@ -159,8 +153,10 @@ export default class Bookmarks extends Component {
         </div>
         <div className="right-pane">
           <InfoZone
+            folderOnly={this.props.folderOnly}
+            selectFolderCallback={this.props.selectFolderCallback}
             folderID={this.state.folderID}
-            cleanInfoZone={this.cleanInfoZone.bind(this)}
+            clearInfoZone={this.clearInfoZone.bind(this)}
             forward={this.forward.bind(this)}
             updateLatest={this.updateLatest.bind(this)}
             newBookmark={this.state.newBookmark}

@@ -27,7 +27,7 @@ export default class NewBookmark extends Component {
       name: "",
       description: "",
     });
-    this.props.cleanInfoZone();
+    this.props.clearInfoZone();
   }
 
   createNewBookmark() {
@@ -93,6 +93,6 @@ export default class NewBookmark extends Component {
 
 NewBookmark.propTypes = {
   folderID: PropTypes.number.isRequired,
-  cleanInfoZone: PropTypes.func.isRequired,
+  clearInfoZone: PropTypes.func.isRequired,
 };
 

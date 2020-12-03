@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import PDFReader from "./reader/PDFReader";
 import SaveDialog from "./reader/SaveDialog";
@@ -9,9 +9,10 @@ export default class Reader extends Component {
     super(props);
     this.state = {
       openFile: undefined,
-      isShowSaveDialog: false,
+      showSaveDialog: false,
+      showSelectFolderDialog: false,
       paperSaveInfo: null,
-      postCloseDialog: null
+      postCloseDialog: null,
     };
   }
 
@@ -23,16 +24,16 @@ export default class Reader extends Component {
   }
 
   switchSaveDialog(info = null, postCloseDialog = null, quickSave = false) {
-    if (quickSave && this.state.isShowSaveDialog) {
+    if (quickSave && this.state.showSaveDialog) {
       console.warn("quickSave is true when showing save dialog.");
     }
     if (!quickSave) {
-      if (this.state.isShowSaveDialog) {
+      if (this.state.showSaveDialog) {
         // going to close dialog
         this.state.postCloseDialog && this.state.postCloseDialog();
       }
       this.setState({
-        isShowSaveDialog: !this.state.isShowSaveDialog
+        showSaveDialog: !this.state.showSaveDialog,
       });
     } else {
       let properties = window.api.database.getPaperProperty(window.db, info.ID);
@@ -44,12 +45,22 @@ export default class Reader extends Component {
       console.log(info);
       this.setState({
         paperSaveInfo: info,
-        postCloseDialog: postCloseDialog
+        postCloseDialog: postCloseDialog,
       });
     }
   }
 
-  save(ID, name, title, keywords, year, conference, QandA, annotations, folders=null) {
+  save(
+    ID,
+    name,
+    title,
+    keywords,
+    year,
+    conference,
+    QandA,
+    annotations,
+    folders = null
+  ) {
     let newID = null;
     let callback = null;
     if (!ID) {
@@ -58,20 +69,24 @@ export default class Reader extends Component {
         window.api.database.saveFolderOfPaper(window.db, paperID, folders);
       };
     }
-    
-    newID = window.api.database.savePaper(window.db, {
-      ID: ID,
-      name: name,
-      title: title,
-      keywords: keywords,
-      year: year,
-      conference: conference,
-      QandA: QandA,
-      annotations: JSON.stringify(annotations)
-    }, callback);
+
+    newID = window.api.database.savePaper(
+      window.db,
+      {
+        ID: ID,
+        name: name,
+        title: title,
+        keywords: keywords,
+        year: year,
+        conference: conference,
+        QandA: QandA,
+        annotations: JSON.stringify(annotations),
+      },
+      callback
+    );
 
     if (ID) {
-      newID = null;  // we don't need this value.
+      newID = null; // we don't need this value.
     }
 
     this.switchSaveDialog();
@@ -83,17 +98,32 @@ export default class Reader extends Component {
 
   render() {
     const file = this.props.data.openFile;
-    let saveDialogElement = null;
-    if (this.state.isShowSaveDialog) {
+    let saveDialogElement = null,
+      selectFolderDialogElement = null;
+    if (this.state.showSaveDialog) {
       saveDialogElement = (
-        <SaveDialog save={this.save.bind(this)} close={this.switchSaveDialog.bind(this)} info={this.state.paperSaveInfo} />
+        <SaveDialog
+          save={this.save.bind(this)}
+          close={this.switchSaveDialog.bind(this)}
+          info={this.state.paperSaveInfo}
+        />
+      );
+    }
+    if (this.state.showSelectFolderDialog) {
+      selectFolderDialogElement = (
+        <div>Placeholder</div>
       );
     }
     return (
       <div id="Reader" className="Reader">
-        <PDFReader key={file} file={file} paperID={this.getPaperID(file)}
-          openSaveDialog={this.switchSaveDialog.bind(this)}></PDFReader>
+        <PDFReader
+          key={file}
+          file={file}
+          paperID={this.getPaperID(file)}
+          openSaveDialog={this.switchSaveDialog.bind(this)}
+        />
         {saveDialogElement}
+        {selectFolderDialogElement}
       </div>
     );
   }
@@ -101,5 +131,5 @@ export default class Reader extends Component {
 
 Reader.propTypes = {
   data: PropTypes.object.isRequired,
-  actions: PropTypes.object.isRequired
+  actions: PropTypes.object.isRequired,
 };
