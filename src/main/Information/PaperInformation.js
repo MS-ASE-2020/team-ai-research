@@ -193,7 +193,7 @@ export default class PaperInformation extends Component {
       );
     }
 
-    let libraryList = this.state.libraries.map(x => x.name);
+    let libraryList = this.state.libraries.map(x => window.api.database.getFolderPath(window.db, x.ID));
     let libraryItem = libraryList.map((library, index) =>
       <span key={index}>
         <input

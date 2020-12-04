@@ -13,7 +13,7 @@ export default class SaveDialog extends Component {
       keywordList: [], // Array of String
       year: "",
       conference: "",
-      libraries: [], // Array of {ID: Number, name: String}
+      libraries: [], // Array of {ID: Number, name: String}, but name is FULL PATH
       libraryDialog: false, // whether the dialog is shown
     };
   }

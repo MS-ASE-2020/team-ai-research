@@ -118,7 +118,7 @@ export default class FolderInformation extends Component {
               type="button"
               value="Open"
               onClick={() =>
-                this.props.openFolderCallback(this.props.chooseFolder, this.state.folder.name)
+                this.props.openFolderCallback(this.props.chooseFolder, window.api.database.getFolderPath(window.db, this.props.chooseFolder))
               }
             />
           ) : null}
