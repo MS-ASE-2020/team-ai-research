@@ -49,6 +49,7 @@ export default class PaperInformation extends Component {
             conference: this.state.paper.conference,
             QandA: this.state.paper.QandA,
             annotations: this.state.paper.annotations,
+            content: this.state.paper.content
           });
           window.api.database.saveFolderOfPaper(
             window.db,
@@ -158,7 +159,7 @@ export default class PaperInformation extends Component {
   }
 
   addLibrary(id, path) {
-    if (!id || !path) {
+    if (!id || !path || this.state.libraries.find(x => x.ID === id)) {
       this.setState({
         libraryDialog: false,
       });
