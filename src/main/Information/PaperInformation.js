@@ -378,7 +378,7 @@ export default class PaperInformation extends Component {
           )}
         </div>
 
-        <div className="select-folder-outer-wrap absolute">
+        <div className={"select-folder-outer-wrap absolute" + this.state.libraryDialog ? "" : " d-none"}>
           <SelectFolderDialog
             extraClasses={this.state.libraryDialog ? "" : " d-none"}
             selectFolderCallback={this.addLibrary.bind(this)}

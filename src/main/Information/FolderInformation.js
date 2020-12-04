@@ -66,7 +66,7 @@ export default class FolderInformation extends Component {
     // TODO: https://reactjs.org/docs/react-component.html#unsafe_componentwillreceiveprops
     this.setState({
       folder: this.getFolderProperty(nextProps.chooseFolder),
-      modify: false
+      modify: false,
     });
   }
 
@@ -118,7 +118,13 @@ export default class FolderInformation extends Component {
               type="button"
               value="Open"
               onClick={() =>
-                this.props.openFolderCallback(this.props.chooseFolder, window.api.database.getFolderPath(window.db, this.props.chooseFolder))
+                this.props.openFolderCallback(
+                  this.props.chooseFolder,
+                  window.api.database.getFolderPath(
+                    window.db,
+                    this.props.chooseFolder
+                  )
+                )
               }
             />
           ) : null}
@@ -129,11 +135,13 @@ export default class FolderInformation extends Component {
                 value="Edit"
                 onClick={() => this.operation("edit")}
               />
-              <input
-                type="button"
-                value="Delete"
-                onClick={() => this.operation("delete")}
-              />
+              {this.props.openFolderCallback ? null : (
+                <input
+                  type="button"
+                  value="Delete"
+                  onClick={() => this.operation("delete")}
+                />
+              )}
             </span>
           ) : (
             <span className="InformationEditTrue">
