@@ -176,5 +176,7 @@ export default class Bookmarks extends Component {
 }
 
 Bookmarks.propTypes = {
-  actions: PropTypes.object
+  actions: PropTypes.object,
+  selectFolderCallback: PropTypes.func,
+  folderOnly: PropTypes.bool
 };

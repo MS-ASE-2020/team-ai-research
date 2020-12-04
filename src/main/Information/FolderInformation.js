@@ -167,4 +167,5 @@ FolderInformation.propTypes = {
   chooseFolder: PropTypes.number.isRequired,
   setChooseFolder: PropTypes.func.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
+  openFolderCallback: PropTypes.func
 };

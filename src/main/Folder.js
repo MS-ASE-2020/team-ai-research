@@ -73,7 +73,7 @@ export default class Folder extends Component {
 
 Folder.propTypes = {
   folderID: PropTypes.number,
-  taokyStrong: PropTypes.number,
+  folderOnly: PropTypes.bool,
   forward: PropTypes.func.isRequired,
   setNewBookmark: PropTypes.func.isRequired,
   setChooseFolder: PropTypes.func.isRequired,
