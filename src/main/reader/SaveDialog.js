@@ -113,7 +113,7 @@ export default class SaveDialog extends Component {
           id="PaperKeywordAdd"
           type="button"
           value="+"
-          onClick={() => this.showAddLibraryDialog()}
+          onClick={() => this.addKeyword()}
         />
       </span>
     );
