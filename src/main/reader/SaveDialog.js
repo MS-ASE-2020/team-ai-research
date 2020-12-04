@@ -12,7 +12,7 @@ export default class SaveDialog extends Component {
       keywordList: [], // Array of String
       year: "",
       conference: "",
-      libraries: [], // Array of {ID: Number, name: String}, but name is FULL PATH
+      libraries: [], // Array of {ID: Number, path: String}, but path is FULL PATH
       libraryDialog: false, // whether the dialog is shown
     };
   }
@@ -77,15 +77,15 @@ export default class SaveDialog extends Component {
   /*
    * Calls with id === null if dialog closed without opening anything
    */
-  addLibrary(id, name) {
-    if (!id || !name) {
+  addLibrary(id, path) {
+    if (!id || !path) {
       this.setState({
         libraryDialog: false,
       });
       return;
     }
     let newLibrary = this.state.libraries.slice();
-    newLibrary.push({ ID: id, name: name });
+    newLibrary.push({ ID: id, path: path });
     this.setState({
       libraries: newLibrary,
       libraryDialog: false,
@@ -123,7 +123,7 @@ export default class SaveDialog extends Component {
       </span>
     );
 
-    let libraryList = this.state.libraries.map((x) => x.name);
+    let libraryList = this.state.libraries.map((x) => x.path);
     let libraryItem = libraryList.map((library, index) => (
       <span key={index}>
         <input

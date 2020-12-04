@@ -328,15 +328,14 @@ function deleteFolder(db, folderID) {
  * List folders in which a specific paper with `paperID` exists.
  * @param {BetterSqlite3.Database} db 
  * @param {Number} paperID 
- * @returns { Array< { ID:Number, name:String } > }
+ * @returns { Array< { ID:Number, path:String } > }
  */
 function listFolderOfPaper(db, paperID) {
-  let sqlStmt = db.prepare(`SELECT ID, name FROM folder
-                            WHERE ID IN (
-                              SELECT folderID FROM paperInFolder
-                              WHERE paperID = ?
-                            );`);
-  return sqlStmt.all(paperID);
+  let sqlStmt = db.prepare(`SELECT folderID FROM paperInFolder
+                            WHERE paperID = ?;`);
+  return sqlStmt.all(paperID).map(x => {
+    return {ID: x.folderID, path: getFolderPath(db, x.folderID)};
+  });
 }
 
 /**

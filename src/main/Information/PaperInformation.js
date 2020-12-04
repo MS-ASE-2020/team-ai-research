@@ -152,15 +152,15 @@ export default class PaperInformation extends Component {
     });
   }
 
-  addLibrary(id, name) {
-    if (!id || !name) {
+  addLibrary(id, path) {
+    if (!id || !path) {
       this.setState({
         libraryDialog: false,
       });
       return;
     }
     let newLibrary = this.state.libraries.slice();
-    newLibrary.push({ ID: id, name: name });
+    newLibrary.push({ ID: id, path: path });
     this.setState({
       libraries: newLibrary,
       libraryDialog: false,
@@ -207,7 +207,7 @@ export default class PaperInformation extends Component {
             id="PaperKeywordAdd"
             type="button"
             value="+"
-            onClick={() => this.addKeyword()}
+            onClick={() => this.showSelectFolderDialog()}
           />
         </span>
       );
@@ -252,7 +252,7 @@ export default class PaperInformation extends Component {
             id="PaperLibrary"
             type="button"
             value="+"
-            onClick={() => this.addLibrary()}
+            onClick={() => this.showSelectFolderDialog()}
           />
         </span>
       );
