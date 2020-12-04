@@ -301,7 +301,7 @@ function getFolderProperty(db, folderID) {
 function getFolderPath(db, folderID) {
   let path = "";
   while (folderID) {
-    let folder = db.prepare(`SELECT name, fatherID FROM folder WHERE folderID = ?;`).get(folderID);
+    let folder = db.prepare(`SELECT name, fatherID FROM folder WHERE ID = ?;`).get(folderID);
     path = folder.name + "/" + path;
     folderID = folder.fatherID;
   }
