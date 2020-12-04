@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import SelectFolderDialog from "../reader/SelectFolderDialog";
+
 export default class PaperInformation extends Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,7 @@ export default class PaperInformation extends Component {
       modify: false,
       paper: this.getPaperProperty(props.choosePaper),
       libraries: this.getLibraryOfPaper(props.choosePaper), // array of {ID: Number, name: String}
+      libraryDialog: false,
     };
   }
 
@@ -143,8 +146,25 @@ export default class PaperInformation extends Component {
     });
   }
 
-  addLibrary() {
+  showSelectFolderDialog() {
+    this.setState({
+      libraryDialog: true,
+    });
+  }
 
+  addLibrary(id, name) {
+    if (!id || !name) {
+      this.setState({
+        libraryDialog: false,
+      });
+      return;
+    }
+    let newLibrary = this.state.libraries.slice();
+    newLibrary.push({ ID: id, name: name });
+    this.setState({
+      libraries: newLibrary,
+      libraryDialog: false,
+    });
   }
 
   render() {
@@ -210,7 +230,7 @@ export default class PaperInformation extends Component {
               type="button"
               value="×"
               onClick={() => this.removeLibrary(index)}
-            /> : false
+            /> : null
         }
       </span>
     );
@@ -323,38 +343,46 @@ export default class PaperInformation extends Component {
             </tr>
           </tbody>
         </table>
-        <div className="Operations">{!this.state.modify ?
-          <div className="InformationEditFalse">
-            <input
-              type="button"
-              value="Open"
-              onClick={() => this.operation("open")}
-            />
-            <input
-              type="button"
-              value="Edit"
-              onClick={() => this.operation("edit")}
-            />
-            <input
-              type="button"
-              value="Delete"
-              onClick={() => this.operation("delete")}
-            />
-          </div>
-          :
-          <div className="InformationEditTrue">
-            <input
-              type="button"
-              value="Save"
-              onClick={() => this.operation("save")}
-            />
-            <input
-              type="button"
-              value="Cancel"
-              onClick={() => this.operation("cancel")}
-            />
-          </div>
-        }
+        <div className="Operations">
+          {!this.state.modify ? (
+            <div className="InformationEditFalse">
+              <input
+                type="button"
+                value="Open"
+                onClick={() => this.operation("open")}
+              />
+              <input
+                type="button"
+                value="Edit"
+                onClick={() => this.operation("edit")}
+              />
+              <input
+                type="button"
+                value="Delete"
+                onClick={() => this.operation("delete")}
+              />
+            </div>
+          ) : (
+            <div className="InformationEditTrue">
+              <input
+                type="button"
+                value="Save"
+                onClick={() => this.operation("save")}
+              />
+              <input
+                type="button"
+                value="Cancel"
+                onClick={() => this.operation("cancel")}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="select-folder-outer-wrap absolute">
+          <SelectFolderDialog
+            extraClasses={this.state.libraryDialog ? "" : " d-none"}
+            selectFolderCallback={this.addLibrary.bind(this)}
+          />
         </div>
       </div>
     );

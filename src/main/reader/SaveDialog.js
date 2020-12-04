@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import Bookmarks from "../Bookmarks";
 import SelectFolderDialog from "./SelectFolderDialog";
 
 export default class SaveDialog extends Component {
@@ -79,6 +78,12 @@ export default class SaveDialog extends Component {
    * Calls with id === null if dialog closed without opening anything
    */
   addLibrary(id, name) {
+    if (!id || !name) {
+      this.setState({
+        libraryDialog: false,
+      });
+      return;
+    }
     let newLibrary = this.state.libraries.slice();
     newLibrary.push({ ID: id, name: name });
     this.setState({

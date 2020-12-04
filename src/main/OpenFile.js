@@ -73,7 +73,7 @@ class OpenFileZone extends Component {
             />
           </div>
         </div>
-        <button onClick={() => this.props.openFile(this.state.filePath)}>
+        <button className="btn" onClick={() => this.props.openFile(this.state.filePath)}>
           Open
         </button>
       </div>
