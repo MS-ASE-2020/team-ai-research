@@ -214,7 +214,7 @@ export default class PaperInformation extends Component {
             id="PaperKeywordAdd"
             type="button"
             value="+"
-            onClick={() => this.showSelectFolderDialog()}
+            onClick={() => this.addKeyword()}
           />
         </span>
       );
