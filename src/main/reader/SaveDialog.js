@@ -228,6 +228,7 @@ export default class SaveDialog extends Component {
                   this.state.conference,
                   this.props.info.QandA,
                   this.props.info.annotations,
+                  this.props.info.content,
                   this.state.libraries.map((x) => x.ID)
                 )
               }

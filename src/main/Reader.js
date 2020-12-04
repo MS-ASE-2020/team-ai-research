@@ -60,7 +60,8 @@ export default class Reader extends Component {
     conference,
     QandA,
     annotations,
-    folders = null
+    content,
+    folders
   ) {
     let newID = null;
     let callback = null;
@@ -82,6 +83,7 @@ export default class Reader extends Component {
         conference: conference,
         QandA: JSON.stringify(QandA),
         annotations: JSON.stringify(annotations),
+        content: content
       },
       callback
     );
