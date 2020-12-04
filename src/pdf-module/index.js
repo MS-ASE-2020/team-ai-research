@@ -183,7 +183,8 @@ class Annotator extends React.Component {
         this.props.openSaveDialog({
           annotations: annotations,
           ID: this.paperID,
-          QandA: this.qa
+          QandA: this.qa,
+          content: ''  // TODO
         }, postCloseDialog, !newfile);
       });
   }
