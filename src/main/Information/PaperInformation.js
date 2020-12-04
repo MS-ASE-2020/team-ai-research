@@ -24,7 +24,7 @@ export default class PaperInformation extends Component {
   operation(act) {
     switch (act) {
       case "open":
-        alert("Placeholder!");
+        this.props.openFile("paper://" + this.props.choosePaper);
         break;
       case "edit":
         this.setState({
@@ -404,4 +404,5 @@ PaperInformation.propTypes = {
   choosePaper: PropTypes.number.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
+  openFile: PropTypes.func.isRequired
 };

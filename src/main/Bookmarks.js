@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Folder from "./Folder";
 import InfoZone from "./InfoZone";
+import PropTypes from 'prop-types';
+
 
 export default class Bookmarks extends Component {
   constructor(props) {
@@ -165,9 +167,14 @@ export default class Bookmarks extends Component {
             search={this.state.search}
             setChooseFolder={this.setChooseFolder.bind(this)}
             setChoosePaper={this.setChoosePaper.bind(this)}
+            actions={this.props.actions}
           />
         </div>
       </div>
     );
   }
 }
+
+Bookmarks.propTypes = {
+  actions: PropTypes.object
+};
