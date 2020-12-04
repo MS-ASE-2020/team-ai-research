@@ -180,16 +180,15 @@ export default class PaperInformation extends Component {
     let keywordItem = keywordList.map((keyword, index) =>
       this.state.modify ? (
         <span className="input-wrapper" key={index} data-index={index}>
-          <span
+          <input
             id="PaperKeyword"
+            type="text"
             name="keyword"
+            value={keyword}
             onChange={this.handleKeywordChange.bind(this)}
             placeholder="New Keyword"
-            contentEditable
             required
-          >
-            {keyword}
-          </span>
+          />
           <span
             className="btn-remove"
             onClick={() => this.removeKeyword(index)}
