@@ -53,7 +53,7 @@ export default class PaperInformation extends Component {
           window.api.database.saveFolderOfPaper(
             window.db,
             this.props.choosePaper,
-            this.state.libraries.map(x => x.ID)
+            this.state.libraries.map((x) => x.ID)
           );
           alert("Successfully edit the information of paper!");
           this.props.setChoosePaper(this.props.choosePaper);
@@ -97,12 +97,10 @@ export default class PaperInformation extends Component {
     const value = target.value;
     const index = target.parentNode.getAttribute("data-index");
 
-    let copy = window.api.database.parseString(
-      this.state.paper.keywords
-    );
+    let copy = window.api.database.parseString(this.state.paper.keywords);
     copy[[index]] = value;
 
-    let paperCopy = {...this.state.paper};
+    let paperCopy = { ...this.state.paper };
     paperCopy.keywords = window.api.database.stringifyArray(copy);
     this.setState({
       paper: paperCopy,
@@ -114,27 +112,34 @@ export default class PaperInformation extends Component {
     this.setState({
       paper: this.getPaperProperty(nextProps.choosePaper),
       modify: false,
-      libraries: window.api.database.listFolderOfPaper(window.db, nextProps.choosePaper),
+      libraries: window.api.database.listFolderOfPaper(
+        window.db,
+        nextProps.choosePaper
+      ),
     });
   }
 
   removeKeyword(k) {
-    let newKeywords = window.api.database.parseString(this.state.paper.keywords);
+    let newKeywords = window.api.database.parseString(
+      this.state.paper.keywords
+    );
     newKeywords.splice(k, 1);
-    let paperCopy = {...this.state.paper};
+    let paperCopy = { ...this.state.paper };
     paperCopy.keywords = window.api.database.stringifyArray(newKeywords);
     this.setState({
-      paper: paperCopy
+      paper: paperCopy,
     });
   }
 
   addKeyword() {
-    let newKeywords = window.api.database.parseString(this.state.paper.keywords);
+    let newKeywords = window.api.database.parseString(
+      this.state.paper.keywords
+    );
     newKeywords.splice(newKeywords.length, 0, "");
-    let paperCopy = {...this.state.paper};
+    let paperCopy = { ...this.state.paper };
     paperCopy.keywords = window.api.database.stringifyArray(newKeywords);
     this.setState({
-      paper: paperCopy
+      paper: paperCopy,
     });
   }
 
@@ -142,7 +147,7 @@ export default class PaperInformation extends Component {
     let newLibrary = this.state.libraries.slice();
     newLibrary.splice(k, 1);
     this.setState({
-      libraries: newLibrary
+      libraries: newLibrary,
     });
   }
 
@@ -168,23 +173,24 @@ export default class PaperInformation extends Component {
   }
 
   render() {
-    let keywordList = window.api.database.parseString(this.state.paper.keywords);
+    let keywordList = window.api.database.parseString(
+      this.state.paper.keywords
+    );
     let keywordItem = keywordList.map((keyword, index) =>
       this.state.modify ? (
-        <span key={index} data-index={index}>
-          <input
+        <span className="input-wrapper" key={index} data-index={index}>
+          <span
             id="PaperKeyword"
-            type="text"
             name="keyword"
-            value={keyword}
             onChange={this.handleKeywordChange.bind(this)}
             placeholder="New Keyword"
+            contentEditable
             required
-          />
-          <input
-            id="PaperKeywordRemove"
-            type="button"
-            value="×"
+          >
+            {keyword}
+          </span>
+          <span
+            className="btn-remove"
             onClick={() => this.removeKeyword(index)}
           />
         </span>
@@ -202,7 +208,7 @@ export default class PaperInformation extends Component {
     );
     if (this.state.modify) {
       keywordItem.push(
-        <span key="+">
+        <span className="input-wrapper" key="+">
           <input
             id="PaperKeywordAdd"
             type="button"
@@ -213,9 +219,11 @@ export default class PaperInformation extends Component {
       );
     }
 
-    let libraryList = this.state.libraries.map(x => window.api.database.getFolderPath(window.db, x.ID));
-    let libraryItem = libraryList.map((library, index) =>
-      <span key={index}>
+    let libraryList = this.state.libraries.map((x) =>
+      window.api.database.getFolderPath(window.db, x.ID)
+    );
+    let libraryItem = libraryList.map((library, index) => (
+      <span className="input-wrapper" key={index}>
         <input
           id="PaperLibrary"
           type="text"
@@ -223,19 +231,16 @@ export default class PaperInformation extends Component {
           value={library}
           disabled
         />
-        {
-          this.state.modify ?
-            <input
-              id="PaperLibraryRemove"
-              type="button"
-              value="×"
-              onClick={() => this.removeLibrary(index)}
-            /> : null
-        }
+        {this.state.modify ? (
+          <span
+            className="btn-remove"
+            onClick={() => this.removeLibrary(index)}
+          />
+        ) : null}
       </span>
-    );
+    ));
     libraryItem.unshift(
-      <span key="/All papers/">
+      <span className="input-wrapper" key="/All papers/">
         <input
           id="PaperLibrary"
           type="text"
@@ -247,7 +252,7 @@ export default class PaperInformation extends Component {
     );
     if (this.state.modify) {
       libraryItem.push(
-        <span key="+">
+        <span className="input-wrapper" key="+">
           <input
             id="PaperLibrary"
             type="button"
@@ -378,7 +383,13 @@ export default class PaperInformation extends Component {
           )}
         </div>
 
-        <div className={"select-folder-outer-wrap absolute" + this.state.libraryDialog ? "" : " d-none"}>
+        <div
+          className={
+            "select-folder-outer-wrap absolute" + this.state.libraryDialog
+              ? ""
+              : " d-none"
+          }
+        >
           <SelectFolderDialog
             extraClasses={this.state.libraryDialog ? "" : " d-none"}
             selectFolderCallback={this.addLibrary.bind(this)}
