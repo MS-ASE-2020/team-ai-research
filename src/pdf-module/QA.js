@@ -29,13 +29,19 @@ class QAItem extends React.Component {
   render() {
     let refs = [];
     for (let i = 0; i < this.state.refs.length; i++) {
-      refs.push((<button key={i}
-        onClick={(event) => {
-          this.props.handleRefClick(event.target.name);
-        }}
-        name={this.state.refs[i]}>
-        {this.state.refs[i]}
-      </button>)
+      refs.push((<div key={i}>
+        <button
+          onClick={(event) => {
+            this.props.handleRefClick(event.target.name);
+          }}
+          name={this.state.refs[i]}>
+          {this.state.refs[i]}
+        </button>
+        {this.state.editable && <button onClick={() => {
+          let newRefs = this.state.refs.slice();
+          newRefs.splice(i, 1);
+          this.setState({ refs: newRefs });
+        }}>Remove this</button>}</div>)
       );
     }
     if (!this.state.editable) {
@@ -56,8 +62,10 @@ class QAItem extends React.Component {
           <button onClick={() => {
             if (this.props.currentAnnotation != null) {
               let newRefs = this.state.refs.slice();
-              newRefs.push(this.props.currentAnnotation);
-              this.setState({ refs: newRefs });
+              if (!newRefs.includes(this.props.currentAnnotation)) {
+                newRefs.push(this.props.currentAnnotation);
+                this.setState({ refs: newRefs });
+              }
             }
           }}>Add ref</button>
           <button onClick={() => {
