@@ -32,7 +32,7 @@ export default class PaperInformation extends Component {
         this.setState({
           modify: false,
           paper: this.getPaperProperty(this.props.choosePaper),
-          librarys: this.getLibraryOfPaper(this.props.choosePaper),
+          libraries: this.getLibraryOfPaper(this.props.choosePaper),
         });
         break;
       case "save":
@@ -111,7 +111,7 @@ export default class PaperInformation extends Component {
     this.setState({
       paper: this.getPaperProperty(nextProps.choosePaper),
       modify: false,
-      librarys: window.api.database.listFolderOfPaper(window.db, nextProps.choosePaper),
+      libraries: window.api.database.listFolderOfPaper(window.db, nextProps.choosePaper),
     });
   }
 
