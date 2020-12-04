@@ -108,6 +108,11 @@ class AnnotatorToolBar extends React.Component {
         }}>×</button>
 
         <div className="spacer"></div>
+        <button className="search" title="Search" data-tooltype="Search" onClick={() => {
+          let findInPage = window.api.getFindInPage(document.querySelector("#content-wrapper"));
+          findInPage.openFindWindow();
+        }}><span role="img" aria-label="search">🔍</span></button>
+        <div className="spacer"></div>
 
         <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>
           <span role="img" aria-label="save">💾</span>

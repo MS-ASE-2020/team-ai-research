@@ -3,7 +3,8 @@
 //   ipcRenderer
 // } = require("electron");
 
-const { app, dialog } = require("electron").remote;
+const { app, dialog, getCurrentWebContents } = require("electron").remote;
+const { FindInPage } = require("electron-find");
 
 const db = require("./db");
 const filesystem = require("./filesys");
@@ -17,6 +18,9 @@ window.api = {
   database: db,
   filesystem: filesystem,
   userDataDir: app.getPath('userData'),
+  getFindInPage: (element) => new FindInPage(getCurrentWebContents(), {
+    parentElement: element
+  })
 };
 
 // overwrite alert and confirm, as they stuck in electron
