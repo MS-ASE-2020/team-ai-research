@@ -27,6 +27,25 @@
   }
 }
 
+.btn-remove {
+  display: inline-block;
+  font-size: 0.8em;
+  font-family: monospace;
+  color: white;
+  background-color: $theme-color-dark;
+  cursor: pointer;
+  padding: 0 0.25em;
+  border-radius: 50%;
+
+  &:before {
+    content: "×";
+  }
+
+  &:hover {
+    background-color: $theme-color-darker;
+  }
+}
+
 .clickable {
   @include clickable;
 }
@@ -69,8 +88,51 @@
   }
 }
 
-input + label {
-  margin-left: 0.5em;
+input {
+  border: 1px solid black;
+  border-radius: 4px;
+  outline: none;
+
+  + input, + label {
+    margin-left: 0.5em;
+  }
+}
+
+.input-wrapper {
+  display: inline-block;
+  min-width: 2em;
+  height: 100%;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+
+  input,
+  .input,
+  [contentEditable] {
+    display: inline-block;
+    width: 100%;
+    font-size: 0.833333em;
+    padding: 0.1em 1.2em 0.1em 0.2em;
+    border: 1px solid black;
+    border-radius: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $theme-color;
+    }
+  }
+
+  .btn-remove {
+    font-size: 0.6em;
+    position: absolute;
+    top: 50%;
+    right: 0.3em;
+    transform: translateY(-50%);
+  }
+
+  + .input-wrapper {
+    margin-left: 0.3em;
+  }
 }
 
 .mx-auto {

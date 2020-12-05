@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 import Bookmarks from "../Bookmarks";
 
@@ -20,3 +21,8 @@ export default class SelectFolderDialog extends Component {
     );
   }
 }
+
+SelectFolderDialog.propTypes = {
+  selectFolderCallback: PropTypes.func,
+  extraClasses: PropTypes.string
+};

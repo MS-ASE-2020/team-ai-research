@@ -51,6 +51,7 @@ class QAItem extends React.Component {
           <p>{this.state.answer}</p>
           {refs}
           <button onClick={() => this.setState({ editable: true })}>Edit</button>
+          <button onClick={() => this.props.updateProps(null, null, null, true)}>Delete</button>
         </div>
       );
     } else {
@@ -160,13 +161,17 @@ class AnnotatorQA extends React.Component {
     }
   }
 
-  updateProps(i, question, answer, refs) {
+  updateProps(i, question, answer, refs, remove = false) {
     let newlist = this.state.qalist.slice();
-    newlist[i] = {
-      'question': question,
-      'answer': answer,
-      'refs': refs
-    };
+    if (!remove) {
+      newlist[i] = {
+        'question': question,
+        'answer': answer,
+        'refs': refs
+      };
+    } else {
+      newlist.splice(i, 1);
+    } 
     this.setState({
       qalist: newlist
     }, () => {
@@ -182,7 +187,7 @@ class AnnotatorQA extends React.Component {
           question={this.state.qalist[i]['question']} answer={this.state.qalist[i]['answer']}
           refs={this.state.qalist[i]['refs']}
           currentAnnotation={this.state.currentAnnotation}
-          updateProps={(q, a, r) => this.updateProps(i, q, a, r)}
+          updateProps={(q, a, r, remove = false) => this.updateProps(i, q, a, r, remove)}
           handleRefClick={(name) => {
             if (this.props.UI) {
               let element = document.querySelector(`[data-pdf-annotate-uuid="${name}"]`);

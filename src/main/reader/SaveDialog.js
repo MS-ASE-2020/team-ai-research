@@ -78,7 +78,7 @@ export default class SaveDialog extends Component {
    * Calls with id === null if dialog closed without opening anything
    */
   addLibrary(id, path) {
-    if (!id || !path) {
+    if (!id || !path || this.state.libraries.find(x => x.ID === id)) {
       this.setState({
         libraryDialog: false,
       });
@@ -228,6 +228,7 @@ export default class SaveDialog extends Component {
                   this.state.conference,
                   this.props.info.QandA,
                   this.props.info.annotations,
+                  this.props.info.content,
                   this.state.libraries.map((x) => x.ID)
                 )
               }

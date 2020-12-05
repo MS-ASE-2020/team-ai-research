@@ -42,7 +42,8 @@ function connectDatabase(directory = "./") {
                   conference TEXT,
                   lastedit TEXT,
                   QandA,
-                  annotations
+                  annotations,
+                  content TEXT
                 );`).run();
     db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_paper_name ON paper (name);`).run();
     /*
@@ -96,8 +97,8 @@ function connectDatabase(directory = "./") {
      */
     db.prepare(`CREATE VIRTUAL TABLE IF NOT EXISTS paperAndFolderForSearch
                 USING fts5(
-                  pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations,
-                  fID UNINDEXED, fName, fDescription, fCreatetime, fFatherID UNINDEXED
+                  pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations, pContent,
+                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED
                 );`).run();
 
     /*
@@ -122,7 +123,7 @@ function closeDatabase(db) {
  * Set `properties.ID` to `null`/`undefined`/`false` for paper creation.
  * Property `lastedit` will be automatically set by SQlite3.
  * @param { BetterSqlite3.Database } db 
- * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, QandA, annotations}} properties 
+ * @param {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, QandA, annotations, content}} properties 
  * @param { function } [afterwardsFunction]
  * @returns ID of created/updated paper.
  * @throws error object thrown by SQlite, and should be handled by upper caller.
@@ -143,11 +144,12 @@ function savePaper(db, properties, afterwardsFunction = null) {
                               conference = @conference,
                               lastedit = datetime('now','localtime'),
                               QandA = @QandA,
-                              annotations = @annotations
+                              annotations = @annotations,
+                              content = @content
                           WHERE ID = @ID;`);
   } else {
-    sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations)
-                      VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations);`);
+    sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations, content)
+                      VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content);`);
   }
 
   db.transaction(() => {
@@ -269,10 +271,10 @@ function getQandA(db, paperID) {
  * 
  * @param {BetterSqlite3.Database} db 
  * @param {Number} paperID 
- * @returns {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String, QandA, annotations}}
+ * @returns {{ID: Number, name: String, title: String, keywords: String, year: Number, conference: String, lastedit: String, QandA, annotations, content}}
  */
 function getPaperProperty(db, paperID) {
-  let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit, QandA, annotations
+  let sqlStmt = db.prepare(`SELECT ID, name, title, keywords, year, conference, lastedit, QandA, annotations, content
                             FROM paper WHERE ID = ?;`);
   var result = sqlStmt.get(paperID);
   return result;

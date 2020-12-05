@@ -27,6 +27,7 @@ export default class InfoZone extends Component {
     } else if (this.props.choosePaper !== 0) {
       return (
         <PaperInformation
+          openFile={this.props.actions.openFile}
           choosePaper={this.props.choosePaper}
           setChoosePaper={this.props.setChoosePaper}
           clearInfoZone={this.props.clearInfoZone}
@@ -51,4 +52,6 @@ InfoZone.propTypes = {
   forward: PropTypes.func.isRequired,
   setChooseFolder: PropTypes.func.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
+  actions: PropTypes.object,
+  selectFolderCallback: PropTypes.func
 };

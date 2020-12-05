@@ -51,6 +51,7 @@
     "better-sqlite3": "^7.1.1",
     "bootstrap": "^5.0.0-alpha2",
     "contextmenu": "^1.0.2",
+    "electron-find": "^1.0.6",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
