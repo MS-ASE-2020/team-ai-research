@@ -51,9 +51,11 @@ class Annotator extends React.Component {
     this.renderedPages = [];
     this.file = null;
     this.paperID = null;
-
     this.qa = [];
-    this.state = {};  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
+    this.state = {
+      tab: 0,
+      text: ""
+    };  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
   }
 
   load(props) {
@@ -188,6 +190,12 @@ class Annotator extends React.Component {
       });
   }
 
+  switchTab(newTab) {
+    this.setState({
+      tab: newTab
+    });
+  }
+
   render() {
     let Zone = (
       <div id="content-wrapper"
@@ -207,15 +215,21 @@ class Annotator extends React.Component {
           render={this.PDFRender}
           filename={this.file}
           saveFunc={this.save.bind(this)}></AnnotatorToolBar>
-        <PaperZone Zone={Zone} FileNull={this.file === null}/>
+        <PaperZone 
+          Zone={Zone} 
+          FileNull={this.file === null}
+        />
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
           PDFJSAnnotate={PDFJSAnnotate}
           QA={this.qa}
+          TAB={this.state.tab}
+          text={this.state.text}
+          switchTab={this.switchTab.bind(this)}
           updateQA={(qa) => {
             this.qa = qa;
-          }}></AnnotatorSidebar>
+          }} />
       </div>
     );
   }

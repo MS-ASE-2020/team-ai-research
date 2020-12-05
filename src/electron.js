@@ -1,5 +1,6 @@
 const electron = require('electron');
 const { protocol } = require('electron');
+const { truncateSync } = require('fs');
 // const { ipcMain } = require('electron');
 
 protocol.registerSchemesAsPrivileged([
@@ -36,6 +37,7 @@ function createWindow() {
       contextIsolation: false,
       preload: path.join(__dirname, "/preload.js"),
       webSecurity: false,
+      webviewTag: true,
       nodeIntegration: true,
       enableRemoteModule: true
     },
