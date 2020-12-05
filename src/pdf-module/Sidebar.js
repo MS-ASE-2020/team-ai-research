@@ -1,35 +1,36 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnnotatorComment from './Comment';
 import AnnotatorQA from './QA';
-
+import AnnotatorTranslate from './Translate';
 
 class AnnotatorSidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tab: 0
-    };
-  }
-
   render() {
     const displaySidebar = this.props.RENDER_OPTIONS.pdfDocument;
-
     return (
       <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}
         className="no-annotation">
         {/* Class "no-annotation" is a special class in modified pdf-annotate.js.
             When clicked on them, pdf-annotate.js won't blur/click annotations on pdf documents. */}
         <div className="sidebar-tab">
-          <button onClick={() => this.setState({ tab: 0 })}>Comments</button>
-          <button onClick={() => this.setState({ tab: 1 })}>Q &amp; A</button>
-          <button>Translate</button> {/* placeholder */}
+          <button onClick={this.props.SwitchComments}>Comments</button>
+          <button onClick={this.props.SwitchQA}>Q &amp; A</button>
+          <button onClick={this.props.SwitchTranslation}>Translate</button>
         </div>
-        <div style={{ display: this.state.tab === 0 ? null : 'none' }}>
+        <div style={{ display: this.props.TAB === 0 ? null : 'none' }}>
           <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
         </div>
-        <div style={{ display: this.state.tab === 1 ? null : 'none' }}>
+        <div style={{ display: this.props.TAB === 1 ? null : 'none' }}>
           <AnnotatorQA UI={this.props.UI} QA={this.props.QA} updateQA={this.props.updateQA}></AnnotatorQA>
+        </div>
+        <div style={{ display: this.props.TAB === 2 ? null : 'none' }}>
+          <AnnotatorTranslate 
+            UI={this.props.UI} 
+            Text={this.props.Text}
+            TranslationMode={this.props.TranslationMode}
+            SwitchTranslationMode={this.props.SwitchTranslationMode}>
+          </AnnotatorTranslate>
         </div>
       </div>
     );

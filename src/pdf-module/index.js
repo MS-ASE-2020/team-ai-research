@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,20 +14,6 @@ import workerURL from "../pdf.worker.min.data";
 import useContextMenu from 'contextmenu';
 import 'contextmenu/ContextMenu.css';
 
-const menuConfig = {
-  'Alert Selected Text': () => alert(getSelection()),
-  'Copy': () => document.execCommand("copy"),
-  'Translate': {
-    'Microsoft Bing': () => alert("Placeholder for Microsoft Bing!"),
-    'Google': () => alert("Placeholder for Google!")
-  },
-  'Search': {
-    'Web': () => alert("Placeholder for Web!"),
-    'Wikipedia': () => alert("Placeholder for Wikipedia!"), 
-    'Articles': () => alert("Placeholder for Articles!")
-  },
-};
-
 function getSelection() {
   let text = "";
   if (window.getSelection) {
@@ -37,7 +24,22 @@ function getSelection() {
 
 function PaperZone(props) {
   const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
-  // eslint-disable-next-line react/prop-types
+  const menuConfig = {
+    'Alert Selected Text': () => alert(getSelection()),
+    'Copy': () => document.execCommand("copy"),
+    'Translate': {
+      'Microsoft Bing': () => alert("Placeholder for Microsoft Bing!"),
+      'Google': () => {
+        props.SwitchTranslationMode("google");
+        props.SwitchTranslation(getSelection());
+      }
+    },
+    'Search': {
+      'Web': () => alert("Placeholder for Web!"),
+      'Wikipedia': () => alert("Placeholder for Wikipedia!"), 
+      'Articles': () => alert("Placeholder for Articles!")
+    },
+  };
   return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
 }
 
@@ -53,7 +55,11 @@ class Annotator extends React.Component {
     this.paperID = null;
 
     this.qa = [];
-    this.state = {};  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
+    this.state = {
+      tab: 0,
+      text: "",
+      translationMode: "google"
+    };
   }
 
   load(props) {
@@ -189,6 +195,31 @@ class Annotator extends React.Component {
       });
   }
 
+  SwitchComments() {
+    this.setState({
+      tab: 0
+    });
+  }
+
+  SwitchQA() {
+    this.setState({
+      tab: 1
+    });
+  }
+
+  SwitchTranslation(newText="") {
+    this.setState({
+      tab: 2,
+      text: newText
+    });
+  }
+
+  SwitchTranslationMode(mode="bing") {
+    this.setState({
+      translationMode: mode
+    });
+  }
+
   render() {
     let Zone = (
       <div id="content-wrapper"
@@ -208,11 +239,23 @@ class Annotator extends React.Component {
           render={this.PDFRender}
           filename={this.file}
           saveFunc={this.save.bind(this)}></AnnotatorToolBar>
-        <PaperZone Zone={Zone} FileNull={this.file === null}/>
+        <PaperZone 
+          Zone={Zone} 
+          FileNull={this.file === null}
+          SwitchTranslation={this.SwitchTranslation.bind(this)}
+          SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
+        />
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
           PDFJSAnnotate={PDFJSAnnotate}
+          TAB={this.state.tab}
+          SwitchComments={this.SwitchComments.bind(this)}
+          SwitchQA={this.SwitchQA.bind(this)}
+          SwitchTranslation={this.SwitchTranslation.bind(this)}
+          TranslationMode={this.state.translationMode}
+          SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
+          Text={this.state.text}
           QA={this.qa}
           updateQA={(qa) => {
             this.qa = qa;

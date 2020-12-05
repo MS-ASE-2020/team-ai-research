@@ -37,7 +37,8 @@ function createWindow() {
       preload: path.join(__dirname, "/preload.js"),
       webSecurity: false,
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webviewTag: true
     },
   });
   mainWindow.setMenuBarVisibility(false);
