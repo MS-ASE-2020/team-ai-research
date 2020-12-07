@@ -25,19 +25,41 @@ function getSelection() {
 function PaperZone(props) {
   const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
   const menuConfig = {
-    'Alert Selected Text': () => alert(getSelection()),
+    // 'Alert Selected Text': () => alert(getSelection()),
     'Copy': () => document.execCommand("copy"),
     'Translate': {
-      'Microsoft Bing': () => alert("Placeholder for Microsoft Bing!"),
+      'Microsoft Bing': () => {
+        props.SwitchTab(2);
+        props.SwitchTranslationMode("bing");
+        props.SwitchText(getSelection());
+      },
       'Google': () => {
+        props.SwitchTab(2);
         props.SwitchTranslationMode("google");
-        props.SwitchTranslation(getSelection());
+        props.SwitchText(getSelection());
       }
     },
     'Search': {
-      'Web': () => alert("Placeholder for Web!"),
-      'Wikipedia': () => alert("Placeholder for Wikipedia!"), 
-      'Articles': () => alert("Placeholder for Articles!")
+      'Bing Web': () => {
+        props.SwitchTab(3);
+        props.SwitchSearchMode("bing");
+        props.SwitchText(getSelection());
+      },
+      'Google Web': () => {
+        props.SwitchTab(3);
+        props.SwitchSearchMode("google");
+        props.SwitchText(getSelection());
+      },
+      'Google Scholar': () => {
+        props.SwitchTab(3);
+        props.SwitchSearchMode("scholar");
+        props.SwitchText(getSelection());
+      },
+      'Wikipedia': () => {
+        props.SwitchTab(3);
+        props.SwitchSearchMode("wikipedia");
+        props.SwitchText(getSelection());
+      }, 
     },
   };
   return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
@@ -58,7 +80,8 @@ class Annotator extends React.Component {
     this.state = {
       tab: 0,
       text: "",
-      translationMode: "google"
+      translationMode: "bing",
+      searchMode: "bing"
     };
   }
 
@@ -195,28 +218,32 @@ class Annotator extends React.Component {
       });
   }
 
-  SwitchComments() {
+  SwitchTab(newTab) {
+    if (newTab !== this.state.tab) {
+      this.setState({
+        text: ""
+      });
+    }
     this.setState({
-      tab: 0
+      tab: newTab 
     });
   }
 
-  SwitchQA() {
+  SwitchTranslationMode(mode) {
     this.setState({
-      tab: 1
+      translationMode: mode
     });
   }
 
-  SwitchTranslation(newText="") {
+  SwitchText(newText) {
     this.setState({
-      tab: 2,
       text: newText
     });
   }
 
-  SwitchTranslationMode(mode="bing") {
+  SwitchSearchMode(mode) {
     this.setState({
-      translationMode: mode
+      searchMode: mode
     });
   }
 
@@ -242,19 +269,21 @@ class Annotator extends React.Component {
         <PaperZone 
           Zone={Zone} 
           FileNull={this.file === null}
-          SwitchTranslation={this.SwitchTranslation.bind(this)}
+          SwitchTab={this.SwitchTab.bind(this)}
+          SwitchText={this.SwitchText.bind(this)}
           SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
+          SwitchSearchMode={this.SwitchSearchMode.bind(this)}
         />
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
           PDFJSAnnotate={PDFJSAnnotate}
           TAB={this.state.tab}
-          SwitchComments={this.SwitchComments.bind(this)}
-          SwitchQA={this.SwitchQA.bind(this)}
-          SwitchTranslation={this.SwitchTranslation.bind(this)}
+          SwitchTab={this.SwitchTab.bind(this)}
           TranslationMode={this.state.translationMode}
           SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
+          SearchMode={this.state.searchMode}
+          SwitchSearchMode={this.SwitchSearchMode.bind(this)}
           Text={this.state.text}
           QA={this.qa}
           updateQA={(qa) => {
