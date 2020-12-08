@@ -39,7 +39,8 @@ function createWindow() {
       webSecurity: false,
       webviewTag: true,
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      webviewTag: true
     },
   });
   mainWindow.setMenuBarVisibility(false);

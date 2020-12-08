@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -15,20 +16,6 @@ import workerURL from "../pdf.worker.min.data";
 import useContextMenu from 'contextmenu';
 import 'contextmenu/ContextMenu.css';
 
-const menuConfig = {
-  'Alert Selected Text': () => alert(getSelection()),
-  'Copy': () => document.execCommand("copy"),
-  'Translate': {
-    'Microsoft Bing': () => alert("Placeholder for Microsoft Bing!"),
-    'Google': () => alert("Placeholder for Google!")
-  },
-  'Search': {
-    'Web': () => alert("Placeholder for Web!"),
-    'Wikipedia': () => alert("Placeholder for Wikipedia!"), 
-    'Articles': () => alert("Placeholder for Articles!")
-  },
-};
-
 function getSelection() {
   let text = "";
   if (window.getSelection) {
@@ -39,9 +26,55 @@ function getSelection() {
 
 function PaperZone(props) {
   const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
-  // eslint-disable-next-line react/prop-types
-  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
+  const menuConfig = {
+    // 'Alert Selected Text': () => alert(getSelection()),
+    'Copy': () => document.execCommand("copy"),
+    'Translate': {
+      'Microsoft Bing': () => {
+        props.switchTab(2);
+        props.switchTranslationMode("bing");
+        props.switchText(getSelection());
+      },
+      'Google': () => {
+        props.switchTab(2);
+        props.switchTranslationMode("google");
+        props.switchText(getSelection());
+      }
+    },
+    'Search': {
+      'Bing Web': () => {
+        props.switchTab(3);
+        props.switchSearchMode("bing");
+        props.switchText(getSelection());
+      },
+      'Google Web': () => {
+        props.switchTab(3);
+        props.switchSearchMode("google");
+        props.switchText(getSelection());
+      },
+      'Google Scholar': () => {
+        props.switchTab(3);
+        props.switchSearchMode("scholar");
+        props.switchText(getSelection());
+      },
+      'Wikipedia': () => {
+        props.switchTab(3);
+        props.switchSearchMode("wikipedia");
+        props.switchText(getSelection());
+      },
+    },
+  };
+  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.fileNull ? null : contextMenu}</div>);
 }
+
+PaperZone.propTypes = {
+  switchTab: PropTypes.func,
+  switchSearchMode: PropTypes.func,
+  switchTranslationMode: PropTypes.func,
+  switchText: PropTypes.func,
+  Zone: PropTypes.object,
+  fileNull: PropTypes.bool,
+};
 
 class Annotator extends React.Component {
   constructor(props) {
@@ -56,8 +89,10 @@ class Annotator extends React.Component {
     this.qa = [];
     this.state = {
       tab: 0,
-      text: ""
-    };  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
+      text: "",
+      translationMode: "bing",
+      searchMode: "bing"
+    };
   }
 
   load(props) {
@@ -198,9 +233,47 @@ class Annotator extends React.Component {
       });
   }
 
+  enableSidebar() {
+    this.sidebar.style.display = null;
+    this.wrapper.classList.remove("fullwidth");
+  }
+
+  switchSidebar() {
+    if (this.sidebar.style.display === 'none') {
+      this.enableSidebar();
+    } else {
+      this.sidebar.style.display = 'none';
+      this.wrapper.classList.add("fullwidth");
+    }
+  }
+
   switchTab(newTab) {
+    this.enableSidebar();
+    if (newTab !== this.state.tab) {
+      this.setState({
+        text: ""
+      });
+    }
     this.setState({
       tab: newTab
+    });
+  }
+
+  switchTranslationMode(mode) {
+    this.setState({
+      translationMode: mode
+    });
+  }
+
+  switchText(newText) {
+    this.setState({
+      text: newText
+    });
+  }
+
+  switchSearchMode(mode) {
+    this.setState({
+      searchMode: mode
     });
   }
 
@@ -211,7 +284,7 @@ class Annotator extends React.Component {
         ref={el => this.wrapper = el}>
         <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
       </div>
-    ); 
+    );
     return (
       <div id="pdfwrapper" ref={el => this.el = el}>
         <AnnotatorToolBar
@@ -222,22 +295,35 @@ class Annotator extends React.Component {
           visiblePageNum={this.visiblePageNum}
           render={this.PDFRender}
           filename={this.file}
-          saveFunc={this.save.bind(this)}></AnnotatorToolBar>
-        <PaperZone 
-          Zone={Zone} 
-          FileNull={this.file === null}
+          saveFunc={this.save.bind(this)}
+          switchSidebar={this.switchSidebar.bind(this)}></AnnotatorToolBar>
+        <PaperZone
+          Zone={Zone}
+          fileNull={this.file === null}
+          switchTab={this.switchTab.bind(this)}
+          switchText={this.switchText.bind(this)}
+          switchTranslationMode={this.switchTranslationMode.bind(this)}
+          switchSearchMode={this.switchSearchMode.bind(this)}
         />
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
           PDFJSAnnotate={PDFJSAnnotate}
+          tab={this.state.tab}
+          switchTab={this.switchTab.bind(this)}
+          translationMode={this.state.translationMode}
+          switchTranslationMode={this.switchTranslationMode.bind(this)}
+          searchMode={this.state.searchMode}
+          switchSearchMode={this.switchSearchMode.bind(this)}
+          text={this.state.text}
           QA={this.qa}
           TAB={this.state.tab}
           text={this.state.text}
           switchTab={this.switchTab.bind(this)}
           updateQA={(qa) => {
             this.qa = qa;
-          }} />
+          }}
+          inputRef={el => this.sidebar = el}></AnnotatorSidebar>
       </div>
     );
   }

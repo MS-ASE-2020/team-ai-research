@@ -37,6 +37,8 @@ body,
   @import "main/Folder";
   @import "main/InfoZone";
 
+  @import "pdf-module/Sidebar";
+
   .main {
     position: relative;
     flex: 1 0 auto;
