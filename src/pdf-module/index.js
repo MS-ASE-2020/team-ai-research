@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -64,6 +63,15 @@ function PaperZone(props) {
   };
   return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
 }
+
+PaperZone.propTypes = {
+  SwitchTab: PropTypes.func,
+  SwitchSearchMode: PropTypes.func,
+  SwitchTranslationMode: PropTypes.func,
+  SwitchText: PropTypes.func,
+  Zone: PropTypes.object,
+  FileNull: PropTypes.bool
+};
 
 class Annotator extends React.Component {
   constructor(props) {

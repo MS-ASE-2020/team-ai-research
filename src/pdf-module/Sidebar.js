@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
 import AnnotatorComment from './Comment';
@@ -52,7 +51,14 @@ AnnotatorSidebar.propTypes = {
   PDFJSAnnotate: PropTypes.object,
   RENDER_OPTIONS: PropTypes.object,
   QA: PropTypes.array,
-  updateQA: PropTypes.func.isRequired
+  updateQA: PropTypes.func.isRequired,
+  SwitchTab: PropTypes.func,
+  TAB: PropTypes.number.isRequired,
+  Text: PropTypes.string,
+  TranslationMode: PropTypes.string,
+  SwitchTranslationMode: PropTypes.func,
+  SearchMode: PropTypes.string,
+  SwitchSearchMode: PropTypes.func
 };
 
 export default AnnotatorSidebar;
