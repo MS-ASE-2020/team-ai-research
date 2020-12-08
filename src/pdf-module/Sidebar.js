@@ -93,3 +93,4 @@ AnnotatorSidebar.propTypes = {
   inputRef: PropTypes.func,
 };
 
+export default AnnotatorSidebar;
