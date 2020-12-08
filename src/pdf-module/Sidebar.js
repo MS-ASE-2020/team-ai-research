@@ -14,31 +14,31 @@ class AnnotatorSidebar extends React.Component {
         {/* Class "no-annotation" is a special class in modified pdf-annotate.js.
             When clicked on them, pdf-annotate.js won't blur/click annotations on pdf documents. */}
         <div className="sidebar-tab">
-          <button onClick={() => this.props.SwitchTab(0)}>Comments</button>
-          <button onClick={() => this.props.SwitchTab(1)}>Q &amp; A</button>
-          <button onClick={() => this.props.SwitchTab(2)}>Translate</button>
-          <button onClick={() => this.props.SwitchTab(3)}>Search</button>
+          <button onClick={() => this.props.switchTab(0)}>Comments</button>
+          <button onClick={() => this.props.switchTab(1)}>Q &amp; A</button>
+          <button onClick={() => this.props.switchTab(2)}>Translate</button>
+          <button onClick={() => this.props.switchTab(3)}>Search</button>
         </div>
-        <div style={{ display: this.props.TAB === 0 ? null : 'none' }}>
+        <div style={{ display: this.props.tab === 0 ? null : 'none' }}>
           <AnnotatorComment UI={this.props.UI} PDFJSAnnotate={this.props.PDFJSAnnotate}></AnnotatorComment>
         </div>
-        <div style={{ display: this.props.TAB === 1 ? null : 'none' }}>
+        <div style={{ display: this.props.tab === 1 ? null : 'none' }}>
           <AnnotatorQA UI={this.props.UI} QA={this.props.QA} updateQA={this.props.updateQA}></AnnotatorQA>
         </div>
-        <div style={{ display: this.props.TAB === 2 ? null : 'none' }}>
+        <div style={{ display: this.props.tab === 2 ? null : 'none' }}>
           <AnnotatorTranslate 
             UI={this.props.UI} 
-            Text={this.props.Text}
-            TranslationMode={this.props.TranslationMode}
-            SwitchTranslationMode={this.props.SwitchTranslationMode}>
+            text={this.props.text}
+            translationMode={this.props.translationMode}
+            switchTranslationMode={this.props.switchTranslationMode}>
           </AnnotatorTranslate>
         </div>
-        <div style={{ display: this.props.TAB === 3 ? null : 'none' }}>
+        <div style={{ display: this.props.tab === 3 ? null : 'none' }}>
           <AnnotatorSearch
             UI={this.props.UI} 
-            Text={this.props.Text}
-            SearchMode={this.props.SearchMode}
-            SwitchSearchMode={this.props.SwitchSearchMode}>
+            text={this.props.text}
+            searchMode={this.props.searchMode}
+            switchSearchMode={this.props.switchSearchMode}>
           </AnnotatorSearch>
         </div>
       </div>
@@ -52,13 +52,13 @@ AnnotatorSidebar.propTypes = {
   RENDER_OPTIONS: PropTypes.object,
   QA: PropTypes.array,
   updateQA: PropTypes.func.isRequired,
-  SwitchTab: PropTypes.func,
-  TAB: PropTypes.number.isRequired,
-  Text: PropTypes.string,
-  TranslationMode: PropTypes.string,
-  SwitchTranslationMode: PropTypes.func,
-  SearchMode: PropTypes.string,
-  SwitchSearchMode: PropTypes.func
+  switchTab: PropTypes.func,
+  tab: PropTypes.number.isRequired,
+  text: PropTypes.string,
+  translationMode: PropTypes.string,
+  switchTranslationMode: PropTypes.func,
+  searchMode: PropTypes.string,
+  switchSearchMode: PropTypes.func
 };
 
 export default AnnotatorSidebar;

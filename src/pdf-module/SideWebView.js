@@ -12,8 +12,8 @@ export default class AnnotatorSideWebView extends React.Component {
             type="radio"
             name={this.props.choices[i].ref}
             value={this.props.choices[i].name}
-            onChange={() => this.props.SwitchMode(this.props.choices[i].ref)}
-            checked={this.props.mode === this.props.choices[i].ref} />
+            onChange={() => this.props.switchMode(this.props.choices[i].ref)}
+            checked={this.props.modeRef === this.props.choices[i].ref} />
           <label htmlFor={this.props.choices[i].ref}>{this.props.choices[i].name}</label>
         </div>
       ));
@@ -33,8 +33,8 @@ export default class AnnotatorSideWebView extends React.Component {
 }
 
 AnnotatorSideWebView.propTypes = {
-  SwitchMode: PropTypes.func,
-  mode: PropTypes.string,
+  switchMode: PropTypes.func,
+  modeRef: PropTypes.string,
   getURL: PropTypes.func.isRequired,
   choices: PropTypes.array.isRequired
 };

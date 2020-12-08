@@ -117,6 +117,11 @@ class AnnotatorToolBar extends React.Component {
         <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>
           <span role="img" aria-label="save">💾</span>
         </button>
+
+        <div className="spacer"></div>
+        <button className="sidebar" title="Show/hide sidebar" onClick={() => this.props.switchSidebar()}>
+          <span role="img" aria-label="sidebar">🧾</span>
+        </button>
       </div>
     );
   }
@@ -128,7 +133,8 @@ AnnotatorToolBar.propTypes = {
   render: PropTypes.func,
   PDFJSAnnotate: PropTypes.object,
   NUM_PAGES: PropTypes.number,
-  saveFunc: PropTypes.func
+  saveFunc: PropTypes.func,
+  switchSidebar: PropTypes.func
 };
 
 function textAnnotationInit(UI, RENDER_OPTIONS) {

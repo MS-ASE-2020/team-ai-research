@@ -28,49 +28,49 @@ function PaperZone(props) {
     'Copy': () => document.execCommand("copy"),
     'Translate': {
       'Microsoft Bing': () => {
-        props.SwitchTab(2);
-        props.SwitchTranslationMode("bing");
-        props.SwitchText(getSelection());
+        props.switchTab(2);
+        props.switchTranslationMode("bing");
+        props.switchText(getSelection());
       },
       'Google': () => {
-        props.SwitchTab(2);
-        props.SwitchTranslationMode("google");
-        props.SwitchText(getSelection());
+        props.switchTab(2);
+        props.switchTranslationMode("google");
+        props.switchText(getSelection());
       }
     },
     'Search': {
       'Bing Web': () => {
-        props.SwitchTab(3);
-        props.SwitchSearchMode("bing");
-        props.SwitchText(getSelection());
+        props.switchTab(3);
+        props.switchSearchMode("bing");
+        props.switchText(getSelection());
       },
       'Google Web': () => {
-        props.SwitchTab(3);
-        props.SwitchSearchMode("google");
-        props.SwitchText(getSelection());
+        props.switchTab(3);
+        props.switchSearchMode("google");
+        props.switchText(getSelection());
       },
       'Google Scholar': () => {
-        props.SwitchTab(3);
-        props.SwitchSearchMode("scholar");
-        props.SwitchText(getSelection());
+        props.switchTab(3);
+        props.switchSearchMode("scholar");
+        props.switchText(getSelection());
       },
       'Wikipedia': () => {
-        props.SwitchTab(3);
-        props.SwitchSearchMode("wikipedia");
-        props.SwitchText(getSelection());
+        props.switchTab(3);
+        props.switchSearchMode("wikipedia");
+        props.switchText(getSelection());
       }, 
     },
   };
-  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.FileNull ? null : contextMenu}</div>);
+  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.fileNull ? null : contextMenu}</div>);
 }
 
 PaperZone.propTypes = {
-  SwitchTab: PropTypes.func,
-  SwitchSearchMode: PropTypes.func,
-  SwitchTranslationMode: PropTypes.func,
-  SwitchText: PropTypes.func,
+  switchTab: PropTypes.func,
+  switchSearchMode: PropTypes.func,
+  switchTranslationMode: PropTypes.func,
+  switchText: PropTypes.func,
   Zone: PropTypes.object,
-  FileNull: PropTypes.bool
+  fileNull: PropTypes.bool
 };
 
 class Annotator extends React.Component {
@@ -226,7 +226,11 @@ class Annotator extends React.Component {
       });
   }
 
-  SwitchTab(newTab) {
+  switchSidebar() {
+    console.log(this.sidebar);
+  }
+
+  switchTab(newTab) {
     if (newTab !== this.state.tab) {
       this.setState({
         text: ""
@@ -237,19 +241,19 @@ class Annotator extends React.Component {
     });
   }
 
-  SwitchTranslationMode(mode) {
+  switchTranslationMode(mode) {
     this.setState({
       translationMode: mode
     });
   }
 
-  SwitchText(newText) {
+  switchText(newText) {
     this.setState({
       text: newText
     });
   }
 
-  SwitchSearchMode(mode) {
+  switchSearchMode(mode) {
     this.setState({
       searchMode: mode
     });
@@ -273,30 +277,32 @@ class Annotator extends React.Component {
           visiblePageNum={this.visiblePageNum}
           render={this.PDFRender}
           filename={this.file}
-          saveFunc={this.save.bind(this)}></AnnotatorToolBar>
+          saveFunc={this.save.bind(this)}
+          switchSidebar={this.switchSidebar.bind(this)}></AnnotatorToolBar>
         <PaperZone 
           Zone={Zone} 
-          FileNull={this.file === null}
-          SwitchTab={this.SwitchTab.bind(this)}
-          SwitchText={this.SwitchText.bind(this)}
-          SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
-          SwitchSearchMode={this.SwitchSearchMode.bind(this)}
+          fileNull={this.file === null}
+          switchTab={this.switchTab.bind(this)}
+          switchText={this.switchText.bind(this)}
+          switchTranslationMode={this.switchTranslationMode.bind(this)}
+          switchSearchMode={this.switchSearchMode.bind(this)}
         />
         <AnnotatorSidebar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
           PDFJSAnnotate={PDFJSAnnotate}
-          TAB={this.state.tab}
-          SwitchTab={this.SwitchTab.bind(this)}
-          TranslationMode={this.state.translationMode}
-          SwitchTranslationMode={this.SwitchTranslationMode.bind(this)}
-          SearchMode={this.state.searchMode}
-          SwitchSearchMode={this.SwitchSearchMode.bind(this)}
-          Text={this.state.text}
+          tab={this.state.tab}
+          switchTab={this.switchTab.bind(this)}
+          translationMode={this.state.translationMode}
+          switchTranslationMode={this.switchTranslationMode.bind(this)}
+          searchMode={this.state.searchMode}
+          switchSearchMode={this.switchSearchMode.bind(this)}
+          text={this.state.text}
           QA={this.qa}
           updateQA={(qa) => {
             this.qa = qa;
-          }}></AnnotatorSidebar>
+          }}
+          ref={el => this.sidebar = el}></AnnotatorSidebar>
       </div>
     );
   }
