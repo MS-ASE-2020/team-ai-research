@@ -93,6 +93,8 @@ export default class SaveDialog extends Component {
   }
 
   render() {
+    // (almost) CSS-only auto-width input box
+    // Source: https://stackoverflow.com/a/41389961/5958455
     let keywordItem = this.state.keywordList.map((keyword, index) => (
       <span className="tag-container" key={index} data-index={index}>
         <span className="tag-text">{keyword ? keyword : " "}</span>
