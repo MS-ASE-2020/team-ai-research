@@ -20,7 +20,9 @@ export default class AnnotatorSideWebView extends React.Component {
     }
     return (
       <div className="WebviewContainer">
-        {choices}
+        <form>
+          {choices}
+        </form>
         <webview
           style={{ display: "inline-flex", width: "100%", height: "575px" }}
           src={this.props.getURL()}
