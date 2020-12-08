@@ -1,0 +1,45 @@
+#sidebar-wrapper {
+  @import "SideWebView";
+
+  display: flex;
+  flex-direction: column;
+
+  .sidebar-tab {
+    display: flex;
+
+    .tab-item {
+      @include clickable;
+      text-align: center;
+      padding: 0.5em;
+      flex: 1 0 auto;
+      $border-radius: 8px;
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+      border-bottom: 1px solid $theme-color;
+      transition: background-color 0.3s ease-in-out;
+
+      &:hover {
+        background-color: $theme-color-lighter;
+      }
+
+      &.active {
+        background: linear-gradient($theme-color-light, #eaeaea);
+        border: 1px solid $theme-color;
+        border-bottom: none;
+      }
+    }
+  }
+
+  .sidebar-content {
+    flex: 1 0 auto;
+    position: relative;
+
+    .content-item {
+      @include absolute;
+
+      > div {
+        @include absolute;
+      }
+    }
+  }
+}

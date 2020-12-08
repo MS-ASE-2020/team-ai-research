@@ -1,0 +1,8 @@
+.webview-container {
+  display: flex;
+  flex-direction: column;
+
+  > webview {
+    flex: 1 0 auto;
+  }
+}

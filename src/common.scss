@@ -35,7 +35,7 @@
   background-color: $theme-color-dark;
   cursor: pointer;
   padding: 0 0.25em;
-  border-radius: 50%;
+  border-radius: 99999px;
 
   &:before {
     content: "×";

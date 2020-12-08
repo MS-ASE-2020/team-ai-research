@@ -19,7 +19,7 @@ export default class AnnotatorSideWebView extends React.Component {
       ));
     }
     return (
-      <div className="WebviewContainer">
+      <div className={"webview-container" + (this.props.className ? " " + this.props.className : "")}>
         <form>
           {choices}
         </form>
