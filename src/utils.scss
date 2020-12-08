@@ -58,7 +58,8 @@
     background-color: $theme-color-lighter;
   }
 
-  &:active, &.active {
+  &:active,
+  &.active {
     background-color: $theme-color-light;
   }
 }
@@ -72,4 +73,8 @@
 @mixin item-pad {
   @include item-nopad;
   padding: 0.5em;
+}
+
+@mixin rounded {
+  border-radius: 999999px;
 }

@@ -4,6 +4,10 @@
   @include absolute;
 }
 
+button {
+  outline: none;
+}
+
 .btn {
   font-family: inherit;
   font-size: 0.8em;
