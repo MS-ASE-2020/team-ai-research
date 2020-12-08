@@ -1,24 +1,29 @@
 .Folder {
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid $theme-color;
 
-  .AllPapers,
+  .all-papers,
   .item-button {
     @include clickable;
-    @include clickable-proactive;
     @include item-pad;
     text-align: center;
   }
 
+  .all-papers {
+    @include clickable-reactive;
+  }
+
   .buttons-bar {
     border-top: 1px solid $theme-color;
+    border-bottom: none;
     display: flex;
     flex-direction: row;
 
     .item-button {
+      @include clickable-proactive;
       width: auto;
       flex: 1 0 auto;
+      border-bottom: none;
 
       > span {
         margin-left: 0.3em;

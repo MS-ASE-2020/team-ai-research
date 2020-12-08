@@ -58,7 +58,7 @@
     background-color: $theme-color-lighter;
   }
 
-  &.active {
+  &:active, &.active {
     background-color: $theme-color-light;
   }
 }
