@@ -29,6 +29,10 @@
     overflow: auto;
 }
 
+.fullwidth {
+    right: 0px !important;
+}
+
 #sidebar-wrapper {
     position: absolute;
     top: 35px;

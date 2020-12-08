@@ -10,7 +10,7 @@ class AnnotatorSidebar extends React.Component {
     const displaySidebar = this.props.RENDER_OPTIONS.pdfDocument;
     return (
       <div id="sidebar-wrapper" style={{ display: displaySidebar ? null : 'none' }}
-        className="no-annotation">
+        className="no-annotation" ref={this.props.inputRef}>
         {/* Class "no-annotation" is a special class in modified pdf-annotate.js.
             When clicked on them, pdf-annotate.js won't blur/click annotations on pdf documents. */}
         <div className="sidebar-tab">
@@ -58,7 +58,8 @@ AnnotatorSidebar.propTypes = {
   translationMode: PropTypes.string,
   switchTranslationMode: PropTypes.func,
   searchMode: PropTypes.string,
-  switchSearchMode: PropTypes.func
+  switchSearchMode: PropTypes.func,
+  inputRef: PropTypes.object
 };
 
 export default AnnotatorSidebar;

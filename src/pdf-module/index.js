@@ -70,7 +70,7 @@ PaperZone.propTypes = {
   switchTranslationMode: PropTypes.func,
   switchText: PropTypes.func,
   Zone: PropTypes.object,
-  fileNull: PropTypes.bool
+  fileNull: PropTypes.bool,
 };
 
 class Annotator extends React.Component {
@@ -226,11 +226,22 @@ class Annotator extends React.Component {
       });
   }
 
+  enableSidebar() {
+    this.sidebar.style.display = null;
+    this.wrapper.classList.remove("fullwidth");
+  }
+
   switchSidebar() {
-    console.log(this.sidebar);
+    if (this.sidebar.style.display === 'none') {
+      this.enableSidebar();
+    } else {
+      this.sidebar.style.display = 'none';
+      this.wrapper.classList.add("fullwidth");
+    }
   }
 
   switchTab(newTab) {
+    this.enableSidebar();
     if (newTab !== this.state.tab) {
       this.setState({
         text: ""
@@ -302,7 +313,7 @@ class Annotator extends React.Component {
           updateQA={(qa) => {
             this.qa = qa;
           }}
-          ref={el => this.sidebar = el}></AnnotatorSidebar>
+          inputRef={el => this.sidebar = el}></AnnotatorSidebar>
       </div>
     );
   }
