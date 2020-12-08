@@ -5,6 +5,8 @@ import PDFJSAnnotate from 'pdf-annotate.js';
 import "./wrapper.css";
 import AnnotatorToolBar from './Toolbar';
 import AnnotatorSidebar from './Sidebar';
+import PDFExtractor from './PDFextract';
+
 import * as pdfjsLib from 'pdfjs-dist';
 import * as pdfjsViewer from 'pdfjs-dist/web/pdf_viewer';
 import 'pdfjs-dist/web/pdf_viewer.css';
@@ -53,6 +55,7 @@ class Annotator extends React.Component {
     this.paperID = null;
 
     this.qa = [];
+    this.extractor = null;
     this.state = {};  // let React managing DOM with pdf-annotation.js sounds not like a good idea...
   }
 
@@ -142,6 +145,11 @@ class Annotator extends React.Component {
             this.PAGE_HEIGHT = viewport.height;
             this.rendered = true;
             this.setState({});
+          });
+
+          this.extractor = new PDFExtractor(pdf, pdf.numPages);
+          this.extractor.extractText().then(() => {
+            console.log(this.extractor.pageContents);
           });
         }
       });
