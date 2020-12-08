@@ -57,15 +57,25 @@ export default class Folder extends Component {
         {this.props.folderOnly ? null : (
           <div className="item-list papers">{paperItem}</div>
         )}
-        {this.props.folderID !== null ? (
-          <div
-            className="CreateNewBookmark"
-            onClick={this.props.setNewBookmark}
-          >
-            <i className="fas fa-folder-plus" />
-            <span>Create new folder</span>
-          </div>
-        ) : null}
+        <div className="buttons-bar">
+          {this.props.folderID !== null ? (
+            <div className="item-button" onClick={this.props.setNewBookmark}>
+              <i className="fas fa-folder-plus" />
+              <span>
+                {this.props.selectFolderCallback ? "New" : "Create new folder"}
+              </span>
+            </div>
+          ) : null}
+          {this.props.selectFolderCallback ? (
+            <div
+              className="item-button"
+              onClick={() => this.props.selectFolderCallback(null, null)}
+            >
+              <i className="fas fa-times-circle" />
+              <span>Cancel</span>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
   }

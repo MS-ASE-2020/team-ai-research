@@ -4,18 +4,29 @@
   border-bottom: 2px solid $theme-color;
 
   .AllPapers,
-  .CreateNewBookmark {
+  .item-button {
     @include clickable;
     @include clickable-proactive;
     @include item-pad;
     text-align: center;
   }
 
-  .CreateNewBookmark {
+  .buttons-bar {
     border-top: 1px solid $theme-color;
+    display: flex;
+    flex-direction: row;
 
-    > span {
-      margin-left: 0.3em;
+    .item-button {
+      width: auto;
+      flex: 1 0 auto;
+
+      > span {
+        margin-left: 0.3em;
+      }
+
+      + .item-button {
+        border-left: 1px solid $theme-color;
+      }
     }
   }
 
