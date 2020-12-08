@@ -59,7 +59,7 @@ AnnotatorSidebar.propTypes = {
   switchTranslationMode: PropTypes.func,
   searchMode: PropTypes.string,
   switchSearchMode: PropTypes.func,
-  inputRef: PropTypes.object
+  inputRef: PropTypes.func
 };
 
 export default AnnotatorSidebar;
