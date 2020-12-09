@@ -3,7 +3,8 @@
   display: flex;
 
   .left-pane {
-    width: 16em;
+    width: 50%;
+    max-width: 20em;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -38,14 +39,18 @@
       }
     }
 
+    .address-wrapper {
+      flex: 1 1 0;
+    }
+
     .btn {
       @include clickable-proactive;
     }
 
     input[type="text"] {
-      @include full-size;
+      width: 100%;
+      height: 100%;
       font-size: inherit;
-      flex: 1 0 auto;
       border: none;
       border-radius: 0;
       padding: 0 4px;

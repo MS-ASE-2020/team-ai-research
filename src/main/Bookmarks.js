@@ -129,7 +129,7 @@ export default class Bookmarks extends Component {
             >
               <i className="fas fa-arrow-alt-up" />
             </div>
-            <div>
+            <div className="address-wrapper">
               <input
                 id="filePath"
                 type="text"

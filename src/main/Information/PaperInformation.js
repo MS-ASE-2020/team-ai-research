@@ -49,7 +49,7 @@ export default class PaperInformation extends Component {
             conference: this.state.paper.conference,
             QandA: this.state.paper.QandA,
             annotations: this.state.paper.annotations,
-            content: this.state.paper.content
+            content: this.state.paper.content,
           });
           window.api.database.saveFolderOfPaper(
             window.db,
@@ -159,7 +159,7 @@ export default class PaperInformation extends Component {
   }
 
   addLibrary(id, path) {
-    if (!id || !path || this.state.libraries.find(x => x.ID === id)) {
+    if (!id || !path || this.state.libraries.find((x) => x.ID === id)) {
       this.setState({
         libraryDialog: false,
       });
@@ -179,25 +179,30 @@ export default class PaperInformation extends Component {
     );
     let keywordItem = keywordList.map((keyword, index) =>
       this.state.modify ? (
-        <span className="input-wrapper" key={index} data-index={index}>
+        <span className="tag-container" key={index} data-index={index}>
+          <span className="tag-text">{keyword ? keyword : " "}</span>
           <input
-            id="PaperKeyword"
+            id={"keyword-" + index}
+            className="tag-input"
             type="text"
             name="keyword"
             value={keyword}
             onChange={this.handleKeywordChange.bind(this)}
-            placeholder="New Keyword"
+            placeholder="..."
             required
           />
           <span
-            className="btn-remove"
+            id={"keyword-remove-" + index}
+            className="tag-remove"
             onClick={() => this.removeKeyword(index)}
           />
         </span>
       ) : (
-        <span key={index} data-index={index}>
+        <span className="tag-container fixed" key={index} data-index={index}>
+          <span className="tag-text">{keyword ? keyword : " "}</span>
           <input
-            id="PaperKeyword"
+            id={"keyword-" + index}
+            className="tag-input no-disable"
             type="text"
             name="keyword"
             value={keyword}
@@ -208,11 +213,10 @@ export default class PaperInformation extends Component {
     );
     if (this.state.modify) {
       keywordItem.push(
-        <span className="input-wrapper" key="+">
-          <input
-            id="PaperKeywordAdd"
-            type="button"
-            value="+"
+        <span className="tag-container" key="keyword-add">
+          <span
+            id="keyword-add"
+            className="tag-add"
             onClick={() => this.addKeyword()}
           />
         </span>
@@ -223,9 +227,14 @@ export default class PaperInformation extends Component {
       window.api.database.getFolderPath(window.db, x.ID)
     );
     let libraryItem = libraryList.map((library, index) => (
-      <span className="input-wrapper" key={index}>
+      <span
+        className={"tag-container" + (this.state.modify ? "" : " fixed")}
+        key={index}
+      >
+        <span className="tag-text">{library ? library : " "}</span>
         <input
-          id="PaperLibrary"
+          id={"library-" + index}
+          className="tag-input no-disable"
           type="text"
           name="library"
           value={library}
@@ -233,30 +242,33 @@ export default class PaperInformation extends Component {
         />
         {this.state.modify ? (
           <span
-            className="btn-remove"
+            id={"library-remove-" + index}
+            className="tag-remove"
             onClick={() => this.removeLibrary(index)}
           />
         ) : null}
       </span>
     ));
+    const libraryAllText = "/All papers/";
     libraryItem.unshift(
-      <span className="input-wrapper" key="/All papers/">
+      <span className="tag-container fixed" key="all-papers">
+        <span className="tag-text">{libraryAllText}</span>
         <input
-          id="PaperLibrary"
+          id="library-all"
+          className="tag-input no-disable"
           type="text"
           name="library"
-          value="/All papers/"
+          value={libraryAllText}
           disabled
         />
       </span>
     );
     if (this.state.modify) {
       libraryItem.push(
-        <span className="input-wrapper" key="+">
-          <input
-            id="PaperLibrary"
-            type="button"
-            value="+"
+        <span className="tag-container" key="library-add">
+          <span
+            id="library-add"
+            className="tag-add"
             onClick={() => this.showSelectFolderDialog()}
           />
         </span>
@@ -390,10 +402,13 @@ export default class PaperInformation extends Component {
               : " d-none"
           }
         >
-          <SelectFolderDialog
-            extraClasses={this.state.libraryDialog ? "" : " d-none"}
-            selectFolderCallback={this.addLibrary.bind(this)}
-          />
+          {this.state.libraryDialog ? (
+            <div className="save-wrapper">
+              <SelectFolderDialog
+                selectFolderCallback={this.addLibrary.bind(this)}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -404,5 +419,5 @@ PaperInformation.propTypes = {
   choosePaper: PropTypes.number.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
-  openFile: PropTypes.func.isRequired
+  openFile: PropTypes.func.isRequired,
 };

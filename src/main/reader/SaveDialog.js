@@ -131,7 +131,7 @@ export default class SaveDialog extends Component {
         <span className="tag-text">{library ? library : " "}</span>
         <input
           id={"library-" + index}
-          className="tag-input"
+          className="tag-input no-disable"
           type="text"
           name="library"
           value={library}
@@ -140,7 +140,6 @@ export default class SaveDialog extends Component {
         <span
           id={"library-remove-" + index}
           className="tag-remove"
-          type="button"
           onClick={() => this.removeLibrary(index)}
         />
       </span>
@@ -151,7 +150,7 @@ export default class SaveDialog extends Component {
         <span className="tag-text">{libraryAllText}</span>
         <input
           id="library-all"
-          className="tag-input"
+          className="tag-input no-disable"
           type="text"
           name="library"
           value={libraryAllText}
