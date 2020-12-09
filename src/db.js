@@ -5,34 +5,34 @@ const path = require('path');
 
 /**
  * 
- * @param {String} item 
+ * @param {String} str 
  * @returns {Array<String>}
  */
-function parseString(item) {
-  return JSON.parse(item);
+function parseString(str) {
+  return JSON.parse(str);
 }
 
 /**
  * 
- * @param { Array< String > } item
+ * @param { Array< String > } arr
  * @returns {String}
  */
-function stringifyArray(item) {
-  return JSON.stringify(item);
+function stringifyArray(arr) {
+  return JSON.stringify(arr);
 }
 
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
   try {
     var db = new Database(db_file, {verbose: console.log});
-    /*
-    * `paper` entity table
-    * - `ID`: using the "rowid" technic of SQlite3
-    * - `keywords`: a list of keywords seperated by some special charactor
-    * - `lastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-    * - `QandA`: Question&Answer notes of this paper
-    * - `annotations`
-    */
+    /**
+     * `paper` entity table
+     * - `ID`: using the "rowid" technic of SQlite3
+     * - `keywords`: a list of keywords seperated by some special charactor
+     * - `lastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+     * - `QandA`: Question&Answer notes of this paper
+     * - `annotations`
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS paper(
                   ID INTEGER PRIMARY KEY,
                   name TEXT UNIQUE NOT NULL,
@@ -46,11 +46,11 @@ function connectDatabase(directory = "./") {
                   content TEXT
                 );`).run();
     db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_paper_name ON paper (name);`).run();
-    /*
-    * `folder` entity table
-    * - `ID`: using the "rowid" technic of SQlite3
-    * - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-    */
+    /**
+     * `folder` entity table
+     * - `ID`: using the "rowid" technic of SQlite3
+     * - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS folder(
                   ID INTEGER PRIMARY KEY,
                   name TEXT NOT NULL,
@@ -61,9 +61,11 @@ function connectDatabase(directory = "./") {
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   UNIQUE(name, fatherID)
                 );`).run();
-    /*
-    * `paperInFolder` relation table
-    */
+    db.prepare(`CREATE INDEX IF NOT EXISTS idx_folder_fatherID ON folder (fatherID);`).run();
+    db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_folder_name_fatherID ON folder (name, fatherID);`).run();
+    /**
+     * `paperInFolder` relation table
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS paperInFolder(
                   paperID INTEGER,
                   folderID INTEGER,
@@ -101,9 +103,9 @@ function connectDatabase(directory = "./") {
                   fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED
                 );`).run();
 
-    /*
-    * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
-    */
+    /**
+     * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
+     */
     db.prepare(`INSERT OR IGNORE INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
   } catch(error) {
     console.error(error);
@@ -144,12 +146,11 @@ function savePaper(db, properties, afterwardsFunction = null) {
                               conference = @conference,
                               lastedit = datetime('now','localtime'),
                               QandA = @QandA,
-                              annotations = @annotations,
-                              content = @content
+                              annotations = @annotations
                           WHERE ID = @ID;`);
   } else {
     sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations, content)
-                      VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content);`);
+                          VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content);`);
   }
 
   db.transaction(() => {
@@ -187,8 +188,7 @@ function saveFolder(db, properties) {
   if (properties.ID) {
     sqlStmt = db.prepare(`UPDATE folder
                           SET name = @name,
-                              description = @description,
-                              fatherID = @fatherID
+                              description = @description
                           WHERE ID = @ID;`);
   } else {
     sqlStmt = db.prepare(`INSERT INTO folder (name, description, createtime, fatherID)
