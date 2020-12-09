@@ -33,7 +33,7 @@ export default class NewBookmark extends Component {
   createNewBookmark() {
     try {
       if (this.state.name === "") {
-        alert("Please input folder name!");
+        alert("Please enter folder name!");
       } else {
         window.api.database.saveFolder(window.db, {
           ID: null,
@@ -41,7 +41,7 @@ export default class NewBookmark extends Component {
           description: this.state.description,
           fatherID: this.props.folderID,
         });
-        alert("Successfully create the new bookmark!");
+        alert(`Successfully created ${this.state.name}!`);
         this.stopCreateNewBookmark();
       }
     } catch (error) {
@@ -52,29 +52,37 @@ export default class NewBookmark extends Component {
 
   render() {
     return (
-      <div className="newBookmark">
-        <h3>Create New Bookmark</h3>
-        <form>
-          <div className="newBookmarkName">
-            <label htmlFor="newBookmarkName">Name</label>
-            <input
-              id="newBookmarkName"
-              type="text"
-              value={this.state.name}
-              name="name"
-              onChange={this.handleChanges.bind(this)}
-            />
-          </div>
-          <div className="newBookmarkDescription">
-            <label htmlFor="newBookmarkDescription">Description</label>
-            <input
-              id="newBookmarkDescription"
-              type="text"
-              value={this.state.description}
-              name="description"
-              onChange={this.handleChanges.bind(this)}
-            />
-          </div>
+      <div className="InfoZone">
+        <h2>Create New Bookmark</h2>
+        <table className="InfoTable">
+          <tbody>
+            <tr>
+              <th scope="row">Name</th>
+              <td>
+                <input
+                  id="newBookmarkName"
+                  type="text"
+                  value={this.state.name}
+                  name="name"
+                  onChange={this.handleChanges.bind(this)}
+                />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Description</th>
+              <td>
+                <input
+                  id="newBookmarkDescription"
+                  type="text"
+                  value={this.state.description}
+                  name="description"
+                  onChange={this.handleChanges.bind(this)}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="Operations">
           <input
             type="button"
             value="Create"
@@ -85,7 +93,7 @@ export default class NewBookmark extends Component {
             value="Cancel"
             onClick={this.stopCreateNewBookmark.bind(this)}
           />
-        </form>
+        </div>
       </div>
     );
   }
@@ -95,4 +103,3 @@ NewBookmark.propTypes = {
   folderID: PropTypes.number.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
 };
-

@@ -87,59 +87,70 @@ export default class FolderInformation extends Component {
     return (
       <div className="InfoZone">
         <h2>Folder Information</h2>
-        <div className="FolderName">
-          <label htmlFor="FolderName">Name</label>
-          <input
-            id="FolderName"
-            type="text"
-            value={this.state.folder.name}
-            name="name"
-            onChange={this.handleChanges.bind(this)}
-            disabled={!this.state.modify}
-          />
-        </div>
-        <div className="FolderDescription">
-          <label htmlFor="FolderDescription">Description</label>
-          <input
-            id="FolderDescription"
-            type="text"
-            name="description"
-            value={this.state.folder.description}
-            onChange={this.handleChanges.bind(this)}
-            disabled={!this.state.modify}
-          />
-        </div>
-        <div className="FolderCreateTime">
-          Create time: {this.state.folder.createtime}
-        </div>
+        <table className="InfoTable">
+          <tbody>
+            <tr>
+              <th scope="row">Name</th>
+              <td>
+                {this.state.modify ? (
+                  <input
+                    type="text"
+                    value={this.state.folder.name}
+                    name="name"
+                    onChange={this.handleChanges.bind(this)}
+                  />
+                ) : (
+                  this.state.folder.name
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Description</th>
+              <td>
+                {this.state.modify ? (
+                  <input
+                    type="text"
+                    name="description"
+                    value={this.state.folder.description}
+                    onChange={this.handleChanges.bind(this)}
+                  />
+                ) : (
+                  this.state.folder.description
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Created</th>
+              <td>{this.state.folder.createtime}</td>
+            </tr>
+          </tbody>
+        </table>
         <div className="Operations">
-          {!this.state.modify ? (
-            <span className="InformationEditFalse">
-              <input
-                type="button"
-                value="Edit"
-                onClick={() => this.operation("edit")}
-              />
-              <input
-                type="button"
-                value="Delete"
-                onClick={() => this.operation("delete")}
-              />
-            </span>
-          ) : (
-            <span className="InformationEditTrue">
-              <input
-                type="button"
-                value="Save"
-                onClick={() => this.operation("save")}
-              />
-              <input
-                type="button"
-                value="Cancel"
-                onClick={() => this.operation("cancel")}
-              />
-            </span>
-          )}
+          {!this.state.modify
+            ? [
+                <input
+                  type="button"
+                  value="Edit"
+                  onClick={() => this.operation("edit")}
+                />,
+                <input
+                  type="button"
+                  value="Delete"
+                  onClick={() => this.operation("delete")}
+                />,
+              ]
+            : [
+                <input
+                  type="button"
+                  value="Save"
+                  onClick={() => this.operation("save")}
+                />,
+                <input
+                  type="button"
+                  value="Cancel"
+                  onClick={() => this.operation("cancel")}
+                />,
+              ]}
         </div>
       </div>
     );
