@@ -43,7 +43,7 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
-        {this.props.folderID === 1 ? (
+        {this.props.folderID === 1 && !this.props.selectFolderCallback ? (
           <div
             className="all-papers"
             onClick={() => this.props.forward("All papers", null)}
