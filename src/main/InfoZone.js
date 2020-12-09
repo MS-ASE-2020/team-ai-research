@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import NewBookmark from "./Information/NewBookmark";
 import FolderInformation from "./Information/FolderInformation";
 import PaperInformation from "./Information/PaperInformation";
+import Search from "./Information/Search";
 
 export default class InfoZone extends Component {
   render() {
@@ -34,7 +35,9 @@ export default class InfoZone extends Component {
         />
       );
     } else if (this.props.search === true) {
-      return <div className="Search">Placeholder for search area.</div>;
+      return (
+        <Search />
+      );
     } else {
       return null;
     }
