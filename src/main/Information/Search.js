@@ -5,8 +5,8 @@ export default class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: false,
       title: false,
-      content: false,
       keywords: false,
       year: false,
       conference: false 
@@ -23,16 +23,18 @@ export default class Search extends Component {
   render() {
     return (
       <div>
-        <input type="text" /> &nbsp;
-        Search By:
-        <input type="checkbox" name="title" onChange={this.handleChange.bind(this)}/>Name
-        <input type="checkbox" name="content" onChange={this.handleChange.bind(this)}/>Title
-        <input type="checkbox" name="keywords" onChange={this.handleChange.bind(this)}/>Keywords
-        <input type="checkbox" name="year" onChange={this.handleChange.bind(this)}/>Year
-        <input type="checkbox" name="conference" onChange={this.handleChange.bind(this)}/>Conference
-        &nbsp;
+        <input type="text" style={{width: 500}}/> &nbsp;
         <button>Order</button> &nbsp;
         <button onClick={() => alert(JSON.stringify(this.state))}>Search</button>
+        <div>
+          Search By: &nbsp;
+          <input type="checkbox" name="name" onChange={this.handleChange.bind(this)}/>Name &nbsp;
+          <input type="checkbox" name="title" onChange={this.handleChange.bind(this)}/>Title &nbsp;
+          <input type="checkbox" name="keywords" onChange={this.handleChange.bind(this)}/>Keywords &nbsp;
+          <input type="checkbox" name="year" onChange={this.handleChange.bind(this)}/>Year &nbsp;
+          <input type="checkbox" name="conference" onChange={this.handleChange.bind(this)}/>Conference &nbsp;
+        </div>
+        &nbsp; 
       </div>
     );
   }
