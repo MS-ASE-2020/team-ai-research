@@ -412,7 +412,7 @@ function listFolderOfPaper(db, paperID) {
  */
 function saveFolderOfPaper(db, paperID, folderIDs) {
   let paperProperty = getPaperProperty(db, paperID);
-  let sqlStmtInsert, fts5TableStmtInsert;
+  let sqlStmtInsert, fts5TableStmtInsert, fts5TableStmtBlankDelete;
   if (folderIDs && folderIDs.length >= 1){
     let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
     sqlStmtInsert = db.prepare(sql);
@@ -438,28 +438,32 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
       ];
     });
     let strPlaceholders = folderIDs.map(() => "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").join(',');
-    fts5TableStmtInsert = db.prepare(`
+    fts5TableStmtBlankDelete = db.prepare(`
       DELETE FROM paperAndFolderForSearch
       WHERE pID = ? AND fID IS NULL;
-
+    `).bind(paperID);
+    fts5TableStmtInsert = db.prepare(`
       INSERT INTO paperAndFolderForSearch
       VALUES ` + strPlaceholders + `;
-    `).bind(paperID, ...insertValues);
+    `).bind(...insertValues);
   }
   let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
   let fts5TableStmtDelete = db.prepare(`
     DELETE FROM paperAndFolderForSearch
     WHERE pID = ?;
-
+  `).bind(paperID);
+  let fts5TableStmtBlankInsert = db.prepare(`
     INSERT INTO paperAndFolderForSearch
     VALUES (@ID, @name, @title, @keywords, @year, @conference, @lastedit, @QandA, @annotations, @content,
             NULL, NULL, NULL, NULL, NULL);
-  `).bind(paperID, paperProperty);
+  `).bind(paperProperty);
   db.transaction(() => {
     sqlStmtDelete.run();
     fts5TableStmtDelete.run();
+    fts5TableStmtBlankInsert.run();
     if (sqlStmtInsert) {
       sqlStmtInsert.run();
+      fts5TableStmtBlankDelete.run();
       fts5TableStmtInsert.run();
     }
   })();
