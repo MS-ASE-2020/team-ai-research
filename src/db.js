@@ -60,6 +60,7 @@ function connectDatabase(directory = "./") {
                   FOREIGN KEY (fatherID) REFERENCES folder (ID)
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   UNIQUE(name, fatherID)
+                  CHECK (fatherID != 1 OR name != 'All papers')
                 );`).run();
     db.prepare(`CREATE INDEX IF NOT EXISTS idx_folder_fatherID ON folder (fatherID);`).run();
     db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_folder_name_fatherID ON folder (name, fatherID);`).run();
