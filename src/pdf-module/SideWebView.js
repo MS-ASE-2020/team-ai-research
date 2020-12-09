@@ -49,4 +49,5 @@ AnnotatorSideWebView.propTypes = {
   modeRef: PropTypes.string,
   getURL: PropTypes.func.isRequired,
   choices: PropTypes.array.isRequired,
+  className: PropTypes.string
 };

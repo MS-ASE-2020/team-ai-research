@@ -89,4 +89,5 @@ Folder.propTypes = {
   setChooseFolder: PropTypes.func.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   chooseFolder: PropTypes.number.isRequired,
+  selectFolderCallback: PropTypes.func
 };
