@@ -155,8 +155,6 @@ export default class Bookmarks extends Component {
         </div>
         <div className="right-pane">
           <InfoZone
-            folderOnly={this.props.folderOnly}
-            selectFolderCallback={this.props.selectFolderCallback}
             folderID={this.state.folderID}
             clearInfoZone={this.clearInfoZone.bind(this)}
             forward={this.forward.bind(this)}

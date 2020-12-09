@@ -57,16 +57,31 @@ export default class Folder extends Component {
         {this.props.folderOnly ? null : (
           <div className="item-list papers">{paperItem}</div>
         )}
-        <div className="buttons-bar">
-          {this.props.folderID !== null ? (
+        {this.props.folderID !== null ? (
+          <div className="buttons-bar">
             <div className="item-button" onClick={this.props.setNewBookmark}>
               <i className="fas fa-folder-plus" />
-              <span>
-                {this.props.selectFolderCallback ? "New" : "Create new folder"}
-              </span>
+              <span>Create new folder</span>
             </div>
-          ) : null}
-          {this.props.selectFolderCallback ? (
+          </div>
+        ) : null}
+        {this.props.selectFolderCallback ? (
+          <div className="buttons-bar">
+            <div
+              className="item-button"
+              onClick={() =>
+                this.props.selectFolderCallback(
+                  this.props.folderID,
+                  window.api.database.getFolderPath(
+                    window.db,
+                    this.props.folderID
+                  )
+                )
+              }
+            >
+              <i className="fas fa-folder-open" />
+              <span>Open</span>
+            </div>
             <div
               className="item-button"
               onClick={() => this.props.selectFolderCallback(null, null)}
@@ -74,8 +89,8 @@ export default class Folder extends Component {
               <i className="fas fa-times-circle" />
               <span>Cancel</span>
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -89,5 +104,5 @@ Folder.propTypes = {
   setChooseFolder: PropTypes.func.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   chooseFolder: PropTypes.number.isRequired,
-  selectFolderCallback: PropTypes.func
+  selectFolderCallback: PropTypes.func,
 };
