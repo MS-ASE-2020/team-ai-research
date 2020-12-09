@@ -148,7 +148,7 @@ export default class OpenFile extends Component {
 }
 
 OpenFileZone.propTypes = {
-  openFile: PropTypes.func.isRequired,
+  openFileCallback: PropTypes.func.isRequired
 };
 
 OpenFile.propTypes = {
