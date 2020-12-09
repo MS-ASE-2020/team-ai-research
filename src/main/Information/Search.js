@@ -24,7 +24,7 @@ export default class Search extends Component {
     return (
       <div>
         <input type="text" style={{width: 500}}/> &nbsp;
-        <button>Order</button> &nbsp;
+        <button onClick={() => alert("Placeholder!")}>Order</button> &nbsp;
         <button onClick={() => alert(JSON.stringify(this.state))}>Search</button>
         <div>
           Search By: &nbsp;
