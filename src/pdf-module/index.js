@@ -157,6 +157,7 @@ class Annotator extends React.Component {
     }
     try {
       this.rendered = false;
+      this.renderedPages = [];
       const loadingTask = pdfjsLib.getDocument({
         url: this.props.file,
         cMapUrl: 'shared/cmaps/',
