@@ -43,12 +43,12 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
-        {this.props.folderID === 1 ? (
+        {this.props.folderID === 1 && !this.props.selectFolderCallback ? (
           <div
-            className="AllPapers"
+            className="all-papers"
             onClick={() => this.props.forward("All papers", null)}
           >
-            All papers
+            <i className="fas fa-fw fa-book" /> All papers
           </div>
         ) : null}
         {this.props.folderID !== null ? (
@@ -58,12 +58,37 @@ export default class Folder extends Component {
           <div className="item-list papers">{paperItem}</div>
         )}
         {this.props.folderID !== null ? (
-          <div
-            className="CreateNewBookmark"
-            onClick={this.props.setNewBookmark}
-          >
-            <i className="fas fa-folder-plus" />
-            <span>Create new folder</span>
+          <div className="buttons-bar">
+            <div className="item-button" onClick={this.props.setNewBookmark}>
+              <i className="fas fa-folder-plus" />
+              <span>Create new folder</span>
+            </div>
+          </div>
+        ) : null}
+        {this.props.selectFolderCallback ? (
+          <div className="buttons-bar">
+            <div
+              className="item-button"
+              onClick={() =>
+                this.props.selectFolderCallback(
+                  this.props.folderID,
+                  window.api.database.getFolderPath(
+                    window.db,
+                    this.props.folderID
+                  )
+                )
+              }
+            >
+              <i className="fas fa-folder-open" />
+              <span>Open</span>
+            </div>
+            <div
+              className="item-button"
+              onClick={() => this.props.selectFolderCallback(null, null)}
+            >
+              <i className="fas fa-times-circle" />
+              <span>Cancel</span>
+            </div>
           </div>
         ) : null}
       </div>
@@ -79,4 +104,5 @@ Folder.propTypes = {
   setChooseFolder: PropTypes.func.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   chooseFolder: PropTypes.number.isRequired,
+  selectFolderCallback: PropTypes.func,
 };

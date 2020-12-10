@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import NewBookmark from "./Information/NewBookmark";
 import FolderInformation from "./Information/FolderInformation";
 import PaperInformation from "./Information/PaperInformation";
+import Search from "./Information/Search";
 
 export default class InfoZone extends Component {
   render() {
@@ -21,7 +22,6 @@ export default class InfoZone extends Component {
           forward={this.props.forward}
           setChooseFolder={this.props.setChooseFolder}
           clearInfoZone={this.props.clearInfoZone}
-          openFolderCallback={this.props.selectFolderCallback}
         />
       );
     } else if (this.props.choosePaper !== 0) {
@@ -34,7 +34,9 @@ export default class InfoZone extends Component {
         />
       );
     } else if (this.props.search === true) {
-      return <div className="Search">Placeholder for search area.</div>;
+      return (
+        <Search />
+      );
     } else {
       return null;
     }

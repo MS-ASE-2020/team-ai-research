@@ -93,6 +93,7 @@ class Annotator extends React.Component {
       translationMode: "bing",
       searchMode: "bing"
     };
+    this.content = null;
   }
 
   load(props) {
@@ -157,6 +158,7 @@ class Annotator extends React.Component {
     }
     try {
       this.rendered = false;
+      this.renderedPages = [];
       const loadingTask = pdfjsLib.getDocument({
         url: this.props.file,
         cMapUrl: 'shared/cmaps/',
@@ -183,10 +185,12 @@ class Annotator extends React.Component {
             this.setState({});
           });
 
-          this.extractor = new PDFExtractor(pdf, pdf.numPages);
-          this.extractor.extractText().then(() => {
-            console.log(this.extractor.pageContents);
-          });
+          if (this.content === null) {
+            let extractor = new PDFExtractor(pdf, pdf.numPages);
+            extractor.extractText().then(() => {
+              this.content = extractor.pageContents.join((' '));
+            });
+          }
         }
       });
     } catch {
@@ -218,6 +222,10 @@ class Annotator extends React.Component {
     // if we are going to pop a dialog, disableUI() shall be called.
     let postCloseDialog = null;
     if (newfile) {
+      if (this.content === null) {
+        alert("Indexing. Please wait for more time and then save.");
+        return;
+      }
       postCloseDialog = this.enableUI.bind(this);
       this.disableUI();
     }
@@ -228,7 +236,7 @@ class Annotator extends React.Component {
           annotations: annotations,
           ID: this.paperID,
           QandA: this.qa,
-          content: ''  // TODO
+          content: this.content  // TODO
         }, postCloseDialog, !newfile);
       });
   }

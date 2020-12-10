@@ -5,34 +5,34 @@ const path = require('path');
 
 /**
  * 
- * @param {String} item 
+ * @param {String} str 
  * @returns {Array<String>}
  */
-function parseString(item) {
-  return JSON.parse(item);
+function parseString(str) {
+  return JSON.parse(str);
 }
 
 /**
  * 
- * @param { Array< String > } item
+ * @param { Array< String > } arr
  * @returns {String}
  */
-function stringifyArray(item) {
-  return JSON.stringify(item);
+function stringifyArray(arr) {
+  return JSON.stringify(arr);
 }
 
 function connectDatabase(directory = "./") {
   const db_file = path.join(directory, DB_FILE);
   try {
     var db = new Database(db_file, {verbose: console.log});
-    /*
-    * `paper` entity table
-    * - `ID`: using the "rowid" technic of SQlite3
-    * - `keywords`: a list of keywords seperated by some special charactor
-    * - `lastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-    * - `QandA`: Question&Answer notes of this paper
-    * - `annotations`
-    */
+    /**
+     * `paper` entity table
+     * - `ID`: using the "rowid" technic of SQlite3
+     * - `keywords`: a list of keywords seperated by some special charactor
+     * - `lastedit`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+     * - `QandA`: Question&Answer notes of this paper
+     * - `annotations`
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS paper(
                   ID INTEGER PRIMARY KEY,
                   name TEXT UNIQUE NOT NULL,
@@ -46,11 +46,11 @@ function connectDatabase(directory = "./") {
                   content TEXT
                 );`).run();
     db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_paper_name ON paper (name);`).run();
-    /*
-    * `folder` entity table
-    * - `ID`: using the "rowid" technic of SQlite3
-    * - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
-    */
+    /**
+     * `folder` entity table
+     * - `ID`: using the "rowid" technic of SQlite3
+     * - `createtime`: use TEXT datatype for date-time info, see https://www.sqlitetutorial.net/sqlite-date/
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS folder(
                   ID INTEGER PRIMARY KEY,
                   name TEXT NOT NULL,
@@ -60,10 +60,13 @@ function connectDatabase(directory = "./") {
                   FOREIGN KEY (fatherID) REFERENCES folder (ID)
                     ON DELETE CASCADE ON UPDATE CASCADE,
                   UNIQUE(name, fatherID)
+                  CHECK (fatherID != 1 OR name != 'All papers')
                 );`).run();
-    /*
-    * `paperInFolder` relation table
-    */
+    db.prepare(`CREATE INDEX IF NOT EXISTS idx_folder_fatherID ON folder (fatherID);`).run();
+    db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS idx_folder_name_fatherID ON folder (name, fatherID);`).run();
+    /**
+     * `paperInFolder` relation table
+     */
     db.prepare(`CREATE TABLE IF NOT EXISTS paperInFolder(
                   paperID INTEGER,
                   folderID INTEGER,
@@ -98,12 +101,13 @@ function connectDatabase(directory = "./") {
     db.prepare(`CREATE VIRTUAL TABLE IF NOT EXISTS paperAndFolderForSearch
                 USING fts5(
                   pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations, pContent,
-                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED
+                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED,
+                  tokenize="trigram"
                 );`).run();
 
-    /*
-    * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
-    */
+    /**
+     * insert an explict root directory, so that the UNIQUE constraint in table `folder` works well for subdirectorys of '/'
+     */
     db.prepare(`INSERT OR IGNORE INTO folder VALUES (1, '', 'root', datetime('now','localtime'), null);`).run();
   } catch(error) {
     console.error(error);
@@ -135,29 +139,54 @@ function savePaper(db, properties, afterwardsFunction = null) {
     return db.prepare(`SELECT ID FROM paper WHERE name = ?;`).get(properties.name).ID;
   }
   let sqlStmt;
+  let fts5TableStmt;
   if (properties.ID) {
-    sqlStmt = db.prepare(`UPDATE paper
-                          SET name = @name,
-                              title = @title,
-                              keywords = @keywords,
-                              year = @year,
-                              conference = @conference,
-                              lastedit = datetime('now','localtime'),
-                              QandA = @QandA,
-                              annotations = @annotations,
-                              content = @content
-                          WHERE ID = @ID;`);
+    sqlStmt = db.prepare(`
+      UPDATE paper
+      SET
+        name = @name,
+        title = @title,
+        keywords = @keywords,
+        year = @year,
+        conference = @conference,
+        lastedit = datetime('now','localtime'),
+        QandA = @QandA,
+        annotations = @annotations
+      WHERE
+        ID = @ID;
+    `);
+    fts5TableStmt = db.prepare(`
+      UPDATE paperAndFolderForSearch
+      SET
+        pName = @name,
+        pTitle = @title,
+        pKeywords = @keywords,
+        pYear = @year,
+        pConference = @conference,
+        pLastedit = datetime('now','localtime'),
+        pQandA = @QandA,
+        pAnnotations = @annotations
+      WHERE
+        pID = @ID;
+    `);
   } else {
     sqlStmt = db.prepare(`INSERT INTO paper (name, title, keywords, year, conference, lastedit, QandA, annotations, content)
-                      VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content);`);
+                          VALUES (@name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content);`);
+    fts5TableStmt = db.prepare(`
+      INSERT INTO paperAndFolderForSearch
+      VALUES (@ID, @name, @title, @keywords, @year, @conference, datetime('now','localtime'), @QandA, @annotations, @content,
+              NULL, NULL, NULL, NULL, NULL);
+    `);
   }
 
   db.transaction(() => {
     sqlStmt.run(properties);
+    if (!properties.ID) {
+      properties.ID = getNewID();
+    }
+    fts5TableStmt.run(properties);
     if (afterwardsFunction) {
-      const newID = getNewID();
-      afterwardsFunction(newID);
-      properties.ID = newID;
+      afterwardsFunction(properties.ID);
     }
   })();
   if (!properties.ID && !afterwardsFunction) {
@@ -184,12 +213,20 @@ function saveFolder(db, properties) {
     return db.prepare(`SELECT ID FROM folder WHERE name = ? and fatherID = ?;`).get(properties.name, properties.fatherID).ID;
   }
   let sqlStmt;
+  let fts5TableStmt;
   if (properties.ID) {
-    sqlStmt = db.prepare(`UPDATE folder
-                          SET name = @name,
-                              description = @description,
-                              fatherID = @fatherID
-                          WHERE ID = @ID;`);
+    sqlStmt = db.prepare(`
+      UPDATE folder
+      SET name = @name,
+          description = @description
+      WHERE ID = @ID;
+    `);
+    fts5TableStmt = db.prepare(`
+      UPDATE paperAndFolderForSearch
+      SET fPath = @path,
+          fDescription = @description
+      WHERE fID = @ID;
+    `);
   } else {
     sqlStmt = db.prepare(`INSERT INTO folder (name, description, createtime, fatherID)
                           VALUES (@name, @description, datetime('now','localtime'), @fatherID);`);
@@ -197,6 +234,10 @@ function saveFolder(db, properties) {
 
   db.transaction(() => {
     sqlStmt.run(properties);
+    if (properties.ID) {
+      let path = getFolderPath(db, properties.ID);
+      fts5TableStmt.run({path: path, description: properties.description, ID: properties.ID});
+    }
   })();
   if (!properties.ID) {
     properties.ID = getNewID();
@@ -314,15 +355,39 @@ function getFolderPath(db, folderID) {
 
 function deletePaper(db, paperID) {
   let sqlStmt = db.prepare(`DELETE FROM paper WHERE ID = ?;`).bind(paperID);
+  let fts5TableStmt = db.prepare(`DELETE FROM paperAndFolderForSearch WHERE pID = ?;`).bind(paperID);
   db.transaction(() => {
     sqlStmt.run();
+    fts5TableStmt.run();
   })();
 }
 
 function deleteFolder(db, folderID) {
   let sqlStmt = db.prepare(`DELETE FROM folder WHERE ID = ?;`).bind(folderID);
+  let pIDarr = db.prepare(`
+    SELECT paperID FROM paperInFolder
+    WHERE paperID IN (
+      SELECT paperID from paperInFolder
+      WHERE folderID = ?
+    )
+    GROUP BY paperID
+    HAVING COUNT(*) = 1;
+  `).bind(folderID).all();
+  let str = '(' + pIDarr.map(x => String(x.paperID)).join(',') + ')';
+  let fts5TableStmtDelete = db.prepare(`DELETE FROM paperAndFolderForSearch WHERE fID = ? AND pID NOT IN ${str};`).bind(folderID);
+  let fts5TableStmtUpdate = db.prepare(`
+    UPDATE paperAndFolderForSearch
+    SET fID = NULL,
+        fPath = NULL,
+        fDescription = NULL,
+        fCreatetime = NULL,
+        fFatherID = NULL
+    WHERE fID = ? AND pID IN ${str};
+  `).bind(folderID);
   db.transaction(() => {
     sqlStmt.run();
+    fts5TableStmtDelete.run();
+    fts5TableStmtUpdate.run();
   })();
 }
 
@@ -348,15 +413,92 @@ function listFolderOfPaper(db, paperID) {
  * @throws error object thrown by SQlite3
  */
 function saveFolderOfPaper(db, paperID, folderIDs) {
-  if (!folderIDs || folderIDs.length < 1)
-    return;
-  let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
-  let sqlStmtInsert = db.prepare(sql);
+  let paperProperty = getPaperProperty(db, paperID);
+  let sqlStmtInsert, fts5TableStmtInsert, fts5TableStmtBlankDelete;
+  if (folderIDs && folderIDs.length >= 1){
+    let sql = `INSERT INTO paperInFolder VALUES `+ folderIDs.map(folderID => `(${paperID},${folderID})`).join(',') + ';';
+    sqlStmtInsert = db.prepare(sql);
+    let insertValues = folderIDs.map(folderID => {
+      let folderProperty = getFolderProperty(db, folderID);
+      let path = getFolderPath(db, folderID);
+      return [
+        paperProperty.ID,
+        paperProperty.name,
+        paperProperty.title,
+        paperProperty.keywords,
+        paperProperty.year,
+        paperProperty.conference,
+        paperProperty.lastedit,
+        paperProperty.QandA,
+        paperProperty.annotations,
+        paperProperty.content,
+        folderProperty.ID,
+        path,
+        folderProperty.description,
+        folderProperty.createtime,
+        folderProperty.fatherID
+      ];
+    });
+    let strPlaceholders = folderIDs.map(() => "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").join(',');
+    fts5TableStmtBlankDelete = db.prepare(`
+      DELETE FROM paperAndFolderForSearch
+      WHERE pID = ? AND fID IS NULL;
+    `).bind(paperID);
+    fts5TableStmtInsert = db.prepare(`
+      INSERT INTO paperAndFolderForSearch
+      VALUES ` + strPlaceholders + `;
+    `).bind(...insertValues);
+  }
   let sqlStmtDelete = db.prepare(`DELETE FROM paperInFolder WHERE paperID = ?;`).bind(paperID);
+  let fts5TableStmtDelete = db.prepare(`
+    DELETE FROM paperAndFolderForSearch
+    WHERE pID = ?;
+  `).bind(paperID);
+  let fts5TableStmtBlankInsert = db.prepare(`
+    INSERT INTO paperAndFolderForSearch
+    VALUES (@ID, @name, @title, @keywords, @year, @conference, @lastedit, @QandA, @annotations, @content,
+            NULL, NULL, NULL, NULL, NULL);
+  `).bind(paperProperty);
   db.transaction(() => {
     sqlStmtDelete.run();
-    sqlStmtInsert.run();
+    fts5TableStmtDelete.run();
+    fts5TableStmtBlankInsert.run();
+    if (sqlStmtInsert) {
+      sqlStmtInsert.run();
+      fts5TableStmtBlankDelete.run();
+      fts5TableStmtInsert.run();
+    }
   })();
+}
+
+/**
+ * 
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @param {{pName: Boolean, pTitle: Boolean, pKeywords: Boolean, pYear: Boolean, pConference: Boolean, pLastedit: Boolean, pQandA: Boolean, pAnnotations: Boolean, pContent: Boolean, fPath: Boolean, fDescription: Boolean, fCreatetime: Boolean}} searchBy 
+ * @param {String} queryText
+ * @param {Boolean} recursive search paper in the folder recursively or not
+ * @returns {Array<{ID: Number, name: String, matcher: String}>}
+ */
+function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
+  let paperIDs = listPaper(db, folderID, recursive);
+  let paperIDsStr = "(" + paperIDs.map(x => String(x)).join(",") + ")";
+  let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pLastedit", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription", "fCreatetime"];
+  let searchByStr = ' ';
+  for (const colName of searchByStrs) {
+    if (searchBy[colName]) {
+      searchByStr += colName + ' ';
+    }
+  }
+  let result = db.prepare(`
+    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 64) AS matcher
+    FROM paperAndFolderForSearch
+    WHERE
+      (pID IN ` + paperIDsStr + `) AND
+      (paperAndFolderForSearch MATCH '{${searchByStr}}: ${queryText}')
+    ORDER BY rank;
+  `).all();
+  return result;
 }
 
 module.exports = {
@@ -377,4 +519,5 @@ module.exports = {
   parseString: parseString,
   stringifyArray: stringifyArray,
   getFolderPath: getFolderPath,
+  searchPaperInFolder: searchPaperInFolder,
 };

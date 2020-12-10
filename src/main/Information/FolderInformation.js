@@ -87,76 +87,74 @@ export default class FolderInformation extends Component {
     return (
       <div className="InfoZone">
         <h2>Folder Information</h2>
-        <div className="FolderName">
-          <label htmlFor="FolderName">Name</label>
-          <input
-            id="FolderName"
-            type="text"
-            value={this.state.folder.name}
-            name="name"
-            onChange={this.handleChanges.bind(this)}
-            disabled={!this.state.modify}
-          />
-        </div>
-        <div className="FolderDescription">
-          <label htmlFor="FolderDescription">Description</label>
-          <input
-            id="FolderDescription"
-            type="text"
-            name="description"
-            value={this.state.folder.description}
-            onChange={this.handleChanges.bind(this)}
-            disabled={!this.state.modify}
-          />
-        </div>
-        <div className="FolderCreateTime">
-          Create time: {this.state.folder.createtime}
-        </div>
+        <table className="InfoTable">
+          <tbody>
+            <tr>
+              <th scope="row">Name</th>
+              <td>
+                {this.state.modify ? (
+                  <input
+                    type="text"
+                    value={this.state.folder.name}
+                    name="name"
+                    onChange={this.handleChanges.bind(this)}
+                  />
+                ) : (
+                  this.state.folder.name
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Description</th>
+              <td>
+                {this.state.modify ? (
+                  <input
+                    type="text"
+                    name="description"
+                    value={this.state.folder.description}
+                    onChange={this.handleChanges.bind(this)}
+                  />
+                ) : (
+                  this.state.folder.description
+                )}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Created</th>
+              <td>{this.state.folder.createtime}</td>
+            </tr>
+          </tbody>
+        </table>
         <div className="Operations">
-          {this.props.openFolderCallback ? (
-            <input
-              type="button"
-              value="Open"
-              onClick={() =>
-                this.props.openFolderCallback(
-                  this.props.chooseFolder,
-                  window.api.database.getFolderPath(
-                    window.db,
-                    this.props.chooseFolder
-                  )
-                )
-              }
-            />
-          ) : null}
-          {!this.state.modify ? (
-            <span className="InformationEditFalse">
+          {!this.state.modify
+            ? [
               <input
                 type="button"
                 value="Edit"
                 onClick={() => this.operation("edit")}
-              />
-              {this.props.openFolderCallback ? null : (
-                <input
-                  type="button"
-                  value="Delete"
-                  onClick={() => this.operation("delete")}
-                />
-              )}
-            </span>
-          ) : (
-            <span className="InformationEditTrue">
+                key={0}
+              />,
+              <input
+                type="button"
+                value="Delete"
+                onClick={() => this.operation("delete")}
+                key={1}
+              />,
+            ]
+            : [
               <input
                 type="button"
                 value="Save"
                 onClick={() => this.operation("save")}
-              />
+                key={0}
+              />,
               <input
                 type="button"
                 value="Cancel"
                 onClick={() => this.operation("cancel")}
-              />
-            </span>
-          )}
+                key={1}
+              />,
+            ]}
         </div>
       </div>
     );
@@ -167,5 +165,5 @@ FolderInformation.propTypes = {
   chooseFolder: PropTypes.number.isRequired,
   setChooseFolder: PropTypes.func.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
-  openFolderCallback: PropTypes.func
+  openFolderCallback: PropTypes.func,
 };

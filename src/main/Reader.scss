@@ -1,6 +1,5 @@
 .Reader {
   @include absolute;
-  @import "reader/SaveDialog";
 
   @at-root #pdfwrapper {
     @include absolute;

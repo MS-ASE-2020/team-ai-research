@@ -4,6 +4,10 @@
   @include absolute;
 }
 
+button {
+  outline: none;
+}
+
 .btn {
   font-family: inherit;
   font-size: 0.8em;
@@ -96,6 +100,11 @@ input {
   + input, + label {
     margin-left: 0.5em;
   }
+
+  &.no-disable {
+    background-color: white;
+    color: black;
+  }
 }
 
 .input-wrapper {
@@ -138,4 +147,106 @@ input {
 .mx-auto {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.tag-container {
+  display: inline-block;
+  position: relative;
+
+  + .tag-container {
+    margin-left: 0.3em;
+  }
+
+  .tag-text,
+  .tag-input {
+    //@include rounded;
+    font-size: 0.8em;
+    font-family: $sans-serif;
+    padding: 0.2em;
+    margin: 0;
+  }
+
+  .tag-input {
+    @include absolute;
+    width: 100%;
+  }
+
+  .tag-text {
+    padding-right: 0.8em;
+    display: inline-block;
+    visibility: hidden;
+    white-space: pre;
+  }
+
+  &:not(.fixed) .tag-text {
+    padding-right: 2em;
+  }
+
+  .tag-add,
+  .tag-remove {
+    @include rounded;
+    @include clickable;
+    display: inline-block;
+  }
+
+  .tag-add {
+    @include clickable-proactive;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    top: 0.2em;
+    border: 1px solid black;
+    z-index: 1;
+
+    &:before {
+      display: inline-block;
+      content: "+";
+      font-size: 0.6em;
+      font-weight: bold;
+      color: black;
+      line-height: 0;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .tag-remove {
+    position: absolute;
+    top: 50%;
+    right: 0.3em;
+    transform: translateY(-50%);
+    width: 0.8em;
+    height: 0.8em;
+    background-color: $theme-color;
+    visibility: hidden;
+
+    &:before {
+      display: inline-block;
+      content: "×";
+      font-size: 0.6em;
+      font-weight: bold;
+      color: white;
+      line-height: 0;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:hover {
+      background-color: $theme-color-dark;
+    }
+
+    &:active {
+      background-color: $theme-color-darker;
+    }
+  }
+
+  &:hover .tag-remove {
+    visibility: visible;
+  }
 }

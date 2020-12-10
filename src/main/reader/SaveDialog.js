@@ -93,31 +93,33 @@ export default class SaveDialog extends Component {
   }
 
   render() {
+    // (almost) CSS-only auto-width input box
+    // Source: https://stackoverflow.com/a/41389961/5958455
     let keywordItem = this.state.keywordList.map((keyword, index) => (
-      <span key={index} data-index={index}>
+      <span className="tag-container" key={index} data-index={index}>
+        <span className="tag-text">{keyword ? keyword : " "}</span>
         <input
-          id="PaperKeywords"
+          id={"keyword-" + index}
+          className="tag-input"
           type="text"
           name="keywords"
           value={keyword}
           onChange={this.handleKeywordChange.bind(this)}
-          placeholder="New Keyword"
+          placeholder="..."
           required
         />
-        <input
-          id="PaperKeywordsRemove"
-          type="button"
-          value="×"
+        <span
+          id={"keyword-remove-" + index}
+          className="tag-remove"
           onClick={() => this.removeKeyword(index)}
         />
       </span>
     ));
     keywordItem.push(
-      <span key="+">
-        <input
-          id="PaperKeywordAdd"
-          type="button"
-          value="+"
+      <span className="tag-container" key="keyword-add">
+        <span
+          id="keyword-add"
+          className="tag-add"
           onClick={() => this.addKeyword()}
         />
       </span>
@@ -125,39 +127,42 @@ export default class SaveDialog extends Component {
 
     let libraryList = this.state.libraries.map((x) => x.path);
     let libraryItem = libraryList.map((library, index) => (
-      <span key={index}>
+      <span className="tag-container" key={index}>
+        <span className="tag-text">{library ? library : " "}</span>
         <input
-          id="PaperLibrary"
+          id={"library-" + index}
+          className="tag-input no-disable"
           type="text"
           name="library"
           value={library}
           disabled
         />
-        <input
-          id="PaperLibraryRemove"
-          type="button"
-          value="×"
+        <span
+          id={"library-remove-" + index}
+          className="tag-remove"
           onClick={() => this.removeLibrary(index)}
         />
       </span>
     ));
+    const libraryAllText = "/All papers/";
     libraryItem.unshift(
-      <span key="/All papers/">
+      <span className="tag-container fixed" key="all-papers">
+        <span className="tag-text">{libraryAllText}</span>
         <input
-          id="PaperLibrary"
+          id="library-all"
+          className="tag-input no-disable"
           type="text"
           name="library"
-          value="/All papers/"
+          value={libraryAllText}
           disabled
         />
       </span>
     );
     libraryItem.push(
-      <span key="+">
-        <input
-          id="PaperLibrary"
-          type="button"
-          value="+"
+      <span className="tag-container" key="library-add">
+        <span
+          id="library-add"
+          className="tag-add"
           onClick={() => this.showAddLibraryDialog()}
         />
       </span>

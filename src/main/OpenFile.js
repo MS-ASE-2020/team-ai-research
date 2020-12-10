@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from 'prop-types';
-
+import PropTypes from "prop-types";
 
 class OpenFileZone extends Component {
   constructor(props) {
@@ -11,6 +10,19 @@ class OpenFileZone extends Component {
     };
   }
 
+  handleSelectLocal() {
+    this.setState({
+      fileSource: "local",
+    });
+    this.fileInput.click();
+  }
+
+  handleSelectUrl() {
+    this.setState({
+      fileSource: "url",
+    });
+  }
+
   handleFileSourceChange(event) {
     this.setState({
       fileSource: event.target.value,
@@ -19,9 +31,8 @@ class OpenFileZone extends Component {
 
   handleLocalPathChange(event) {
     if (event.target.files[0]) {
-      this.setState({
-        filePath: "file://" + event.target.files[0].path,
-      });
+      let filePath = "file://" + event.target.files[0].path;
+      this.props.openFileCallback(filePath);
     }
   }
 
@@ -31,51 +42,59 @@ class OpenFileZone extends Component {
     });
   }
 
+  handleOpenFile() {
+    this.props.openFileCallback(this.state.filePath);
+  }
+
   render() {
     return (
       <div className="open-new-file">
-        <h2 className="heading">Open a new file from</h2>
-        <div className="section">
-          <h3 className="section-title has-select">
-            <input
-              type="radio"
-              id="file-local"
-              value="local"
-              name="file-source"
-              onChange={this.handleFileSourceChange.bind(this)}
-            />
-            <label htmlFor="file-local">Local File</label>
-          </h3>
+        <h2 className="heading">Open a new file</h2>
+        <div className="openfile-options">
+          <div className="option" onClick={this.handleSelectLocal.bind(this)}>
+            <div className="option-icon">
+              <i className="fas fa-5x fa-file-pdf" />
+            </div>
+            <div className="option-title">Local File</div>
+          </div>
+          <div
+            className={
+              "option" + (this.state.fileSource === "url" ? " active" : "")
+            }
+            onClick={this.handleSelectUrl.bind(this)}
+          >
+            <div className="option-icon">
+              <i className="far fa-5x fa-globe" />
+            </div>
+            <div className="option-title">From URL</div>
+          </div>
+        </div>
+        <div className="section d-none">
           <div className="section-content">
             <input
               type="file"
+              ref={(self) => (this.fileInput = self)}
               onChange={(e) => this.handleLocalPathChange(e)}
-              disabled={this.state.fileSource !== "local"}
             />
           </div>
         </div>
-        <div className="section">
-          <h3 className="section-title has-select">
-            <input
-              type="radio"
-              id="file-url"
-              value="url"
-              name="file-source"
-              onChange={this.handleFileSourceChange.bind(this)}
-            />
-            <label htmlFor="file-url">From URL</label>
-          </h3>
-          <div className="section-content">
+        <div
+          className={
+            "section" + (this.state.fileSource === "url" ? "" : " d-none")
+          }
+        >
+          <div className="section-content url-bar">
             <input
               type="text"
+              ref={(self) => (this.urlInput = self)}
+              placeholder="Enter URL here"
               onChange={(e) => this.handleUrlPathChange(e)}
-              disabled={this.state.fileSource !== "url"}
             />
+            <button className="btn" onClick={this.handleOpenFile.bind(this)}>
+              Open
+            </button>
           </div>
         </div>
-        <button className="btn" onClick={() => this.props.openFile(this.state.filePath)}>
-          Open
-        </button>
       </div>
     );
   }
@@ -91,12 +110,18 @@ export default class OpenFile extends Component {
     let allPaperList = window.api.database.listPaper(window.db, null);
     console.log(allPaperList);
     for (let i = 0; i < allPaperList.length; i++) {
-      listItems.push((
-        <div className="file-item" key={"item-" + i} onClick={() => {
-          console.log(allPaperList[i].ID);
-          this.openFile("paper://" + allPaperList[i].ID);
-        }}>{allPaperList[i].name}</div>
-      ));
+      listItems.push(
+        <div
+          className="file-item"
+          key={"item-" + i}
+          onClick={() => {
+            console.log(allPaperList[i].ID);
+            this.openFile("paper://" + allPaperList[i].ID);
+          }}
+        >
+          {allPaperList[i].name}
+        </div>
+      );
     }
     return (
       <div id="OpenFile" className="OpenFile">
@@ -115,7 +140,7 @@ export default class OpenFile extends Component {
         </div>
 
         <div className="file-details">
-          <OpenFileZone openFile={this.openFile.bind(this)}/>
+          <OpenFileZone openFileCallback={this.openFile.bind(this)} />
         </div>
       </div>
     );
@@ -123,7 +148,7 @@ export default class OpenFile extends Component {
 }
 
 OpenFileZone.propTypes = {
-  openFile: PropTypes.func.isRequired,
+  openFileCallback: PropTypes.func.isRequired
 };
 
 OpenFile.propTypes = {
