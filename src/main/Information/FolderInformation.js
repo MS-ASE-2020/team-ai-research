@@ -128,29 +128,33 @@ export default class FolderInformation extends Component {
         <div className="Operations">
           {!this.state.modify
             ? [
-                <input
-                  type="button"
-                  value="Edit"
-                  onClick={() => this.operation("edit")}
-                />,
-                <input
-                  type="button"
-                  value="Delete"
-                  onClick={() => this.operation("delete")}
-                />,
-              ]
+              <input
+                type="button"
+                value="Edit"
+                onClick={() => this.operation("edit")}
+                key={0}
+              />,
+              <input
+                type="button"
+                value="Delete"
+                onClick={() => this.operation("delete")}
+                key={1}
+              />,
+            ]
             : [
-                <input
-                  type="button"
-                  value="Save"
-                  onClick={() => this.operation("save")}
-                />,
-                <input
-                  type="button"
-                  value="Cancel"
-                  onClick={() => this.operation("cancel")}
-                />,
-              ]}
+              <input
+                type="button"
+                value="Save"
+                onClick={() => this.operation("save")}
+                key={0}
+              />,
+              <input
+                type="button"
+                value="Cancel"
+                onClick={() => this.operation("cancel")}
+                key={1}
+              />,
+            ]}
         </div>
       </div>
     );
