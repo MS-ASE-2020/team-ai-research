@@ -171,7 +171,7 @@ class AnnotatorQA extends React.Component {
       };
     } else {
       newlist.splice(i, 1);
-    } 
+    }
     this.setState({
       qalist: newlist
     }, () => {
@@ -203,7 +203,6 @@ class AnnotatorQA extends React.Component {
     }
     return (
       <div id="qa-wrapper">
-        <h4>Q &amp; A</h4>
         <div className="qa-list">
           <div className="qa-list-container">
             {qaItemList.length === 0 && <div className="qa-list-item">No QAs</div>}
