@@ -35,7 +35,7 @@ class QAItem extends React.Component {
             this.props.handleRefClick(event.target.name);
           }}
           name={this.state.refs[i]}>
-          {this.state.refs[i]}
+          Ref {i + 1}
         </button>
         {this.state.editable && <button onClick={() => {
           let newRefs = this.state.refs.slice();
