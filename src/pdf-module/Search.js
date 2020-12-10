@@ -26,15 +26,15 @@ export default class AnnotatorSearch extends React.Component {
 
   render() {
     return (
-      <AnnotatorSideWebView 
+      <AnnotatorSideWebView
         switchMode={this.props.switchSearchMode}
         modeRef={this.props.searchMode}
         getURL={this.getURL.bind(this)}
         choices={[
-          {name: 'Bing Web', ref: 'bing'},
-          {name: 'Google Search', ref: 'google'},
+          {name: 'Bing', ref: 'bing'},
+          {name: 'Google', ref: 'google'},
           {name: 'Wikipedia', ref: 'wikipedia'},
-          {name: 'Google Scholar', ref: 'scholar'}
+          {name: 'Scholar', ref: 'scholar'}
         ]}></AnnotatorSideWebView>
     );
   }
