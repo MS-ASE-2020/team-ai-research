@@ -67,7 +67,7 @@ export default class Reader extends Component {
     let callback = null;
     if (!ID) {
       callback = (paperID) => {
-        window.api.filesystem.save(this.props.data.openFile, paperID);
+        window.api.filesystem.moveTmp(paperID);
         window.api.database.saveFolderOfPaper(window.db, paperID, folders);
       };
     }

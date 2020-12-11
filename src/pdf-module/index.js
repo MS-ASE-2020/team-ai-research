@@ -164,34 +164,41 @@ class Annotator extends React.Component {
         cMapUrl: 'shared/cmaps/',
         cMapPacked: true
       });
+      let promise = Promise.resolve();
+      if (!this.props.file.startsWith("paper://")) {
+        console.log("Downloading to tmp");
+        promise = promise.then(() => window.api.filesystem.save(this.props.file, "tmp"));  // TODO: Fix current model that sucks with file downloading.
+      }
 
-      loadingTask.promise.then((pdf) => {
-        this.RENDER_OPTIONS.pdfDocument = pdf;
-        let viewer = this.viewer;
-        if (viewer) {
-          viewer.innerHTML = '';
-          for (let i = 0; i < pdf.numPages; i++) {
-            let page = this.UI.createPage(i + 1);
-            viewer.appendChild(page);
-          }
+      promise.then(() => {
+        loadingTask.promise.then((pdf) => {
+          this.RENDER_OPTIONS.pdfDocument = pdf;
+          let viewer = this.viewer;
+          if (viewer) {
+            viewer.innerHTML = '';
+            for (let i = 0; i < pdf.numPages; i++) {
+              let page = this.UI.createPage(i + 1);
+              viewer.appendChild(page);
+            }
 
-          this.NUM_PAGES = pdf.numPages;
-          window.pdfjsViewer = pdfjsViewer;
-          // eslint-disable-next-line no-unused-vars
-          this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
-            let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
-            this.PAGE_HEIGHT = viewport.height;
-            this.rendered = true;
-            this.setState({});
-          });
-
-          if (this.content === null) {
-            let extractor = new PDFExtractor(pdf, pdf.numPages);
-            extractor.extractText().then(() => {
-              this.content = extractor.pageContents.join((' '));
+            this.NUM_PAGES = pdf.numPages;
+            window.pdfjsViewer = pdfjsViewer;
+            // eslint-disable-next-line no-unused-vars
+            this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
+              let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
+              this.PAGE_HEIGHT = viewport.height;
+              this.rendered = true;
+              this.setState({});
             });
+
+            if (this.content === null) {
+              let extractor = new PDFExtractor(pdf, pdf.numPages);
+              extractor.extractText().then(() => {
+                this.content = extractor.pageContents.join((' '));
+              });
+            }
           }
-        }
+        });
       });
     } catch {
       this.rendered = true;

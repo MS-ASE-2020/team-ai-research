@@ -17,23 +17,27 @@ function initFolder(userDataDir) {
 
 function savePaper(src, id) {
   console.log(src, id);
-  if (src.startsWith('file://')) {
-    src = decodeURI(src.replace('file://', ''));
-    fs.copyFileSync(src, path.join(targetFolder, id + ".pdf"));
-  } else {
-    // download from web
-    // async
-    const parsed = url.parse(src);
-    const http_lib = supportedHTTPProtocols[parsed.protocol || "http:"];
-    if (http_lib) {
-      const file = fs.createWriteStream(path.join(targetFolder, id + ".pdf"));
-      http_lib.get(src, response => {
-        response.pipe(file);
-      });
+  return new Promise((resolve, reject) => {
+    if (src.startsWith('file://')) {
+      src = decodeURI(src.replace('file://', ''));
+      fs.copyFileSync(src, path.join(targetFolder, id + ".pdf"));
+      resolve();
     } else {
-      throw "Unsupported protocol!";
+      // download from web
+      // async
+      const parsed = url.parse(src);
+      const http_lib = supportedHTTPProtocols[parsed.protocol || "http:"];
+      if (http_lib) {
+        const file = fs.createWriteStream(path.join(targetFolder, id + ".pdf"));
+        http_lib.get(src, response => {
+          response.pipe(file);
+          resolve();
+        });
+      } else {
+        reject("Unsupported protocol!");
+      }
     }
-  }
+  });
 }
 
 function getPaperPath(id) {
@@ -41,8 +45,13 @@ function getPaperPath(id) {
   return path.join(targetFolder, id + ".pdf");
 }
 
+function moveTmpToPaperID(id) {
+  fs.renameSync(path.join(targetFolder, "tmp.pdf"), path.join(targetFolder, id + ".pdf"));
+}
+
 module.exports = {
   init: initFolder,
   get: getPaperPath,
-  save: savePaper
+  save: savePaper,
+  moveTmp: moveTmpToPaperID
 };
