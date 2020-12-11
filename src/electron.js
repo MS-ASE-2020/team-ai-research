@@ -1,6 +1,5 @@
 const electron = require('electron');
 const { protocol } = require('electron');
-const { truncateSync } = require('fs');
 // const { ipcMain } = require('electron');
 
 protocol.registerSchemesAsPrivileged([
@@ -40,7 +39,6 @@ function createWindow() {
       webviewTag: true,
       nodeIntegration: true,
       enableRemoteModule: true,
-      webviewTag: true
     },
   });
   mainWindow.setMenuBarVisibility(false);

@@ -325,7 +325,7 @@ class Annotator extends React.Component {
           switchSearchMode={this.switchSearchMode.bind(this)}
           text={this.state.text}
           QA={this.qa}
-          TAB={this.state.tab}
+          tab={this.state.tab}
           text={this.state.text}
           switchTab={this.switchTab.bind(this)}
           updateQA={(qa) => {
