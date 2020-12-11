@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -85,7 +86,6 @@ class Annotator extends React.Component {
     this.renderedPages = [];
     this.file = null;
     this.paperID = null;
-
     this.qa = [];
     this.state = {
       tab: 0,
@@ -325,6 +325,9 @@ class Annotator extends React.Component {
           switchSearchMode={this.switchSearchMode.bind(this)}
           text={this.state.text}
           QA={this.qa}
+          TAB={this.state.tab}
+          text={this.state.text}
+          switchTab={this.switchTab.bind(this)}
           updateQA={(qa) => {
             this.qa = qa;
           }}

@@ -4,7 +4,6 @@ import App from './App';
 //import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
 
 // db init
-console.log("User Data Folder:", window.api.userDataDir);
 const db = window.api.database.connect(window.api.userDataDir);
 window.api.filesystem.init(window.api.userDataDir);
 window.db = db;  // let db in global for now.

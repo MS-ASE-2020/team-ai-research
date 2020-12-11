@@ -35,7 +35,10 @@ export default class InfoZone extends Component {
       );
     } else if (this.props.search === true) {
       return (
-        <Search />
+        <Search 
+          folderID={this.props.folderID}
+          clearInfoZone={this.props.clearInfoZone}
+        />
       );
     } else {
       return null;

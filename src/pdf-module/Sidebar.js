@@ -69,6 +69,9 @@ class AnnotatorSidebar extends React.Component {
             ></AnnotatorSearch>
           </div>
         </div>
+        <div style={{ display: this.props.TAB === 2 ? null : 'none' }}>
+          <AnnotatorTranslate UI={this.props.UI} text={this.props.text}/>
+        </div>
       </div>
     );
   }

@@ -48,6 +48,8 @@
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
     "better-sqlite3": "^7.1.1",
     "bootstrap": "^5.0.0-alpha2",
     "contextmenu": "^1.0.2",
