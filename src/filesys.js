@@ -1,6 +1,10 @@
 const fs = require("fs");
 const path = require("path");
-const https = require("https");
+const supportedHTTPProtocols = {
+  "http:": require('http'),
+  "https:": require('https')
+};
+const url = require("url");
 
 let targetFolder = null;
 
@@ -8,7 +12,7 @@ function initFolder(userDataDir) {
   targetFolder = path.join(userDataDir, "/papers");
   if (!fs.existsSync(targetFolder))
     fs.mkdirSync(targetFolder);
-    // not elegant but I guess now we have no race condition here...
+  // not elegant but I guess now we have no race condition here...
 }
 
 function savePaper(src, id) {
@@ -19,10 +23,16 @@ function savePaper(src, id) {
   } else {
     // download from web
     // async
-    const file = fs.createWriteStream(path.join(targetFolder, id + ".pdf"));
-    https.get(src, response => {
-      response.pipe(file);
-    });
+    const parsed = url.parse(src);
+    const http_lib = supportedHTTPProtocols[parsed.protocol || "http:"];
+    if (http_lib) {
+      const file = fs.createWriteStream(path.join(targetFolder, id + ".pdf"));
+      http_lib.get(src, response => {
+        response.pipe(file);
+      });
+    } else {
+      throw "Unsupported protocol!";
+    }
   }
 }
 
