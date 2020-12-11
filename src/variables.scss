@@ -10,6 +10,7 @@ $theme-color-active: mix($theme-color, #231e04, 70%);
 $theme-color-active-foreground: white;
 $theme-color-highlight: white;
 $theme-color-highlight-foreground: #a0711c;
+$theme-color-root-background: mix($theme-color, white, 3%);
 
 $breakpoints: (
   s: 640px,

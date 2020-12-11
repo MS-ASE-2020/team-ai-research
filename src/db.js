@@ -101,8 +101,7 @@ function connectDatabase(directory = "./") {
     db.prepare(`CREATE VIRTUAL TABLE IF NOT EXISTS paperAndFolderForSearch
                 USING fts5(
                   pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations, pContent,
-                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED,
-                  tokenize="trigram"
+                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED
                 );`).run();
 
     /**
