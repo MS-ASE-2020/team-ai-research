@@ -481,22 +481,23 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
  */
 function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
   let paperIDs = listPaper(db, folderID, recursive);
-  let paperIDsStr = "(" + paperIDs.map(x => String(x)).join(",") + ")";
+  let paperIDsStr = "(" + paperIDs.map(x => String(x.ID)).join(",") + ")";
   let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pLastedit", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription", "fCreatetime"];
   let searchByStr = ' ';
   for (const colName of searchByStrs) {
     if (searchBy[colName]) {
-      searchByStr += colName + ' ';
+      searchByStr = searchByStr + colName + ' ';
     }
   }
-  let result = db.prepare(`
+  let sql = `
     SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 64) AS matcher
     FROM paperAndFolderForSearch
     WHERE
       (pID IN ` + paperIDsStr + `) AND
-      (paperAndFolderForSearch MATCH '{${searchByStr}}: ${queryText}')
+      (paperAndFolderForSearch MATCH '{ ` + searchByStr + `}: ` + queryText + `')
     ORDER BY rank;
-  `).all();
+  `;
+  let result = db.prepare(sql).all();
   return result;
 }
 
