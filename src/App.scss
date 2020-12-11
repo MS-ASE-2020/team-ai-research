@@ -3,16 +3,11 @@
 @import "utils";
 @import "common";
 
-html {
-  font-size: 16px;
-}
-
-* {
+*, *:before, *:after{
   box-sizing: border-box;
 }
 
 body,
-#root,
 #App {
   margin: 0;
   padding: 0;
@@ -23,8 +18,9 @@ body,
   left: 0;
   right: 0;
   bottom: 0;
+  font-size: 16px;
   font-family: sans-serif;
-  background-color: mix($theme-color, white, 3%);
+  background-color: $theme-color-root-background;
 }
 
 .App {

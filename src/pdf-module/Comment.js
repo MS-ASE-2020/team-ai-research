@@ -36,7 +36,6 @@ class AnnotatorComment extends React.Component {
   render() {
     return (
       <div id="comment-wrapper">
-        <h4>Comments</h4>
         <div className="comment-list">
           <div className="comment-list-container">
             <div className="comment-list-item">No comments</div>

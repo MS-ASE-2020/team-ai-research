@@ -101,7 +101,8 @@ function connectDatabase(directory = "./") {
     db.prepare(`CREATE VIRTUAL TABLE IF NOT EXISTS paperAndFolderForSearch
                 USING fts5(
                   pID UNINDEXED, pName, pTitle, pKeywords, pYear, pConference, pLastedit, pQandA, pAnnotations, pContent,
-                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED
+                  fID UNINDEXED, fPath, fDescription, fCreatetime, fFatherID UNINDEXED,
+                  tokenize="trigram"
                 );`).run();
 
     /**
@@ -470,6 +471,36 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
   })();
 }
 
+/**
+ * 
+ * @param {BetterSqlite3.Database} db 
+ * @param {Number} folderID 
+ * @param {{pName: Boolean, pTitle: Boolean, pKeywords: Boolean, pYear: Boolean, pConference: Boolean, pLastedit: Boolean, pQandA: Boolean, pAnnotations: Boolean, pContent: Boolean, fPath: Boolean, fDescription: Boolean, fCreatetime: Boolean}} searchBy 
+ * @param {String} queryText
+ * @param {Boolean} recursive search paper in the folder recursively or not
+ * @returns {Array<{ID: Number, name: String, matcher: String}>}
+ */
+function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
+  let paperIDs = listPaper(db, folderID, recursive);
+  let paperIDsStr = "(" + paperIDs.map(x => String(x)).join(",") + ")";
+  let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pLastedit", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription", "fCreatetime"];
+  let searchByStr = ' ';
+  for (const colName of searchByStrs) {
+    if (searchBy[colName]) {
+      searchByStr += colName + ' ';
+    }
+  }
+  let result = db.prepare(`
+    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 64) AS matcher
+    FROM paperAndFolderForSearch
+    WHERE
+      (pID IN ` + paperIDsStr + `) AND
+      (paperAndFolderForSearch MATCH '{${searchByStr}}: ${queryText}')
+    ORDER BY rank;
+  `).all();
+  return result;
+}
+
 module.exports = {
   connect: connectDatabase,
   close: closeDatabase,
@@ -488,4 +519,5 @@ module.exports = {
   parseString: parseString,
   stringifyArray: stringifyArray,
   getFolderPath: getFolderPath,
+  searchPaperInFolder: searchPaperInFolder,
 };
