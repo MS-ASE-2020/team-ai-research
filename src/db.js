@@ -480,7 +480,11 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
  * @returns {Array<{ID: Number, name: String, matcher: String}>}
  */
 function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
-  let paperIDs = listPaper(db, folderID, recursive);
+  let paperIDs = listPaper(
+    db,
+    folderID === 1 ? null : folderID, // since logically and from the view of user, "All papers" is the subfolder of root.
+    recursive
+  );
   let paperIDsStr = "(" + paperIDs.map(x => String(x.ID)).join(",") + ")";
   let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pLastedit", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription", "fCreatetime"];
   let searchByStr = ' ';
@@ -490,7 +494,7 @@ function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false)
     }
   }
   let sql = `
-    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 64) AS matcher
+    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 16) AS matcher
     FROM paperAndFolderForSearch
     WHERE
       (pID IN ` + paperIDsStr + `) AND
