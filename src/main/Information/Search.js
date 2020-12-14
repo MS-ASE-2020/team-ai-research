@@ -281,9 +281,7 @@ export default class Search extends Component {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography color="textSecondary">
-              <div dangerouslySetInnerHTML={{ __html: this.state.searchItem[k].matcher }} />
-            </Typography>
+            <div dangerouslySetInnerHTML={{ __html: this.state.searchItem[k].matcher }} />
           </AccordionDetails>
         </Accordion>
       );
