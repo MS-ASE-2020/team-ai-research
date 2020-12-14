@@ -59,5 +59,6 @@ InfoZone.propTypes = {
   setChooseFolder: PropTypes.func.isRequired,
   setChoosePaper: PropTypes.func.isRequired,
   actions: PropTypes.object,
-  selectFolderCallback: PropTypes.func
+  selectFolderCallback: PropTypes.func,
+  openFolderCallback: PropTypes.func
 };

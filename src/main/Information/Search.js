@@ -19,12 +19,20 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from "@material-ui/core/colors";
+import htmlEscape from 'main/utils';
+
 
 const theme = createMuiTheme({
   palette: {
     primary: deepOrange,
   },
 });
+
+function searchResultSanitizer(str) {
+  str = htmlEscape(str);
+  str = str.replace("&lt;b&gt;", "<b>").replace("&lt;/b&gt;", "</b>");
+  return str;
+}
 
 function SearchBy(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -284,7 +292,7 @@ export default class Search extends Component {
     let searchResult = [];
     for (let k = 0; k < this.state.searchItem.length; k++) {
       searchResult.push(
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme} key={k}>
           <Accordion 
             square
             key={k}
@@ -310,7 +318,7 @@ export default class Search extends Component {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <div dangerouslySetInnerHTML={{ __html: this.state.searchItem[k].matcher }} />
+              <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(this.state.searchItem[k].matcher) }} />
             </AccordionDetails>
           </Accordion>
         </ThemeProvider>

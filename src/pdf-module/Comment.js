@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import htmlEscape from 'main/utils';
+
 
 class AnnotatorComment extends React.Component {
   constructor(props) {
@@ -53,15 +55,6 @@ AnnotatorComment.propTypes = {
   UI: PropTypes.object,
   PDFJSAnnotate: PropTypes.object
 };
-
-function htmlEscape(text) {
-  return text
-    .replace('&', '&amp;')
-    .replace('>', '&gt;')
-    .replace('<', '&lt;')
-    .replace('"', '&quot;')
-    .replace("'", '&#39;');
-}
 
 function commentInit(PDFJSAnnotate, UI, cleanup = false) {
   let commentList = document.querySelector('#comment-wrapper .comment-list-container');
