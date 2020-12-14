@@ -22,6 +22,7 @@ export default class InfoZone extends Component {
           forward={this.props.forward}
           setChooseFolder={this.props.setChooseFolder}
           clearInfoZone={this.props.clearInfoZone}
+          openFolderCallback={this.props.openFolderCallback}
         />
       );
     } else if (this.props.choosePaper !== 0) {

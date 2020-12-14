@@ -482,7 +482,7 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
 function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
   let paperIDs = listPaper(
     db,
-    folderID === 1 ? null : folderID, // since logically and from the view of user, "All papers" is the subfolder of root.
+    folderID === 1 && recursive ? null : folderID, // since logically and from the view of user, "All papers" is the subfolder of root.
     recursive
   );
   let paperIDsStr = "(" + paperIDs.map(x => String(x.ID)).join(",") + ")";
