@@ -290,7 +290,7 @@ export default class Search extends Component {
     }
     if (this.state.searchItem.length === 0) {
       searchResult.push(
-        <div>
+        <div key={-1}>
           No matched results.
         </div>
       );
