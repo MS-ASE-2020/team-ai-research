@@ -343,6 +343,11 @@ export default class Search extends Component {
               style={{
                 width: "600px"
               }}
+              onKeyDown={(event) => {
+                if (event.keyCode === 13) {
+                  this.SubmitSearch();
+                }
+              }}
               onChange={this.handleTextChange.bind(this)}
             /> &nbsp;
             <SearchBy 
