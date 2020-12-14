@@ -166,6 +166,7 @@ export default class Bookmarks extends Component {
             setChooseFolder={this.setChooseFolder.bind(this)}
             setChoosePaper={this.setChoosePaper.bind(this)}
             actions={this.props.actions}
+            openFolderCallback={this.props.selectFolderCallback}
           />
         </div>
       </div>

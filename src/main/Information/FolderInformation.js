@@ -134,7 +134,7 @@ export default class FolderInformation extends Component {
                 onClick={() => this.operation("edit")}
                 key={0}
               />,
-              <input
+              this.props.openFolderCallback ? false : <input
                 type="button"
                 value="Delete"
                 onClick={() => this.operation("delete")}

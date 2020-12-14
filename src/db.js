@@ -474,15 +474,19 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
  * 
  * @param {BetterSqlite3.Database} db 
  * @param {Number} folderID 
- * @param {{pName: Boolean, pTitle: Boolean, pKeywords: Boolean, pYear: Boolean, pConference: Boolean, pLastedit: Boolean, pQandA: Boolean, pAnnotations: Boolean, pContent: Boolean, fPath: Boolean, fDescription: Boolean, fCreatetime: Boolean}} searchBy 
+ * @param {{pName: Boolean, pTitle: Boolean, pKeywords: Boolean, pYear: Boolean, pConference: Boolean, pQandA: Boolean, pAnnotations: Boolean, pContent: Boolean, fPath: Boolean, fDescription: Boolean}} searchBy 
  * @param {String} queryText
  * @param {Boolean} recursive search paper in the folder recursively or not
  * @returns {Array<{ID: Number, name: String, matcher: String}>}
  */
 function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
-  let paperIDs = listPaper(db, folderID, recursive);
+  let paperIDs = listPaper(
+    db,
+    folderID === 1 && recursive ? null : folderID, // since logically and from the view of user, "All papers" is the subfolder of root.
+    recursive
+  );
   let paperIDsStr = "(" + paperIDs.map(x => String(x.ID)).join(",") + ")";
-  let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pLastedit", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription", "fCreatetime"];
+  let searchByStrs = ["pName", "pTitle", "pKeywords", "pYear", "pConference", "pQandA", "pAnnotations", "pContent", "fPath", "fDescription"];
   let searchByStr = ' ';
   for (const colName of searchByStrs) {
     if (searchBy[colName]) {
@@ -490,7 +494,7 @@ function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false)
     }
   }
   let sql = `
-    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 64) AS matcher
+    SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 16) AS matcher
     FROM paperAndFolderForSearch
     WHERE
       (pID IN ` + paperIDsStr + `) AND
