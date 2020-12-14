@@ -231,7 +231,7 @@ function SearchBy(props) {
 } 
 
 SearchBy.propTypes = {
-  searchBy: PropTypes.func.isRequired,
+  searchBy: PropTypes.object.isRequired,
   handleSearchBy: PropTypes.func.isRequired,
 };
 
