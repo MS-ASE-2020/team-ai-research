@@ -498,7 +498,7 @@ function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false)
     FROM paperAndFolderForSearch
     WHERE
       (pID IN ` + paperIDsStr + `) AND
-      (paperAndFolderForSearch MATCH '{ ` + searchByStr + `}: ` + queryText + `')
+      (paperAndFolderForSearch MATCH '{ ` + searchByStr + `}: "` + queryText + `"')
     ORDER BY rank;
   `;
   let result = db.prepare(sql).all();
