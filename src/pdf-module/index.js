@@ -250,7 +250,7 @@ class Annotator extends React.Component {
           annotations: annotations,
           ID: this.paperID,
           QandA: this.qa,
-          content: this.content  // TODO
+          content: this.content
         }, postCloseDialog, !newfile);
       });
   }
