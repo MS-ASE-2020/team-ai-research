@@ -63,7 +63,7 @@ export default class PDFExtractor {
               }
   
               // Store the normalized page content (text items) as one string.
-              this.pageContents[i] = normalize(strBuf.join(""));
+              this.pageContents[i] = normalize(strBuf.join(" "));
               extractTextCapability.resolve(i);
             },
             reason => {
