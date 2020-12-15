@@ -28,26 +28,27 @@ class QAItem extends React.Component {
   render() {
     let refs = [];
     for (let i = 0; i < this.state.refs.length; i++) {
+      let refText = "Ref " + (i + 1);
       refs.push(
-        <div key={i}>
-          <button
+        <div className="tag-container" key={i}>
+          <span className="tag-text">{refText}</span>
+          <input
+            type="button"
+            className="tag-input"
             onClick={(event) => {
               this.props.handleRefClick(event.target.name);
             }}
             name={this.state.refs[i]}
-          >
-            Ref {i + 1}
-          </button>
+            value={refText}
+          />
           {this.state.editable && (
-            <button
+            <span className="tag-remove"
               onClick={() => {
                 let newRefs = this.state.refs.slice();
                 newRefs.splice(i, 1);
                 this.setState({ refs: newRefs });
               }}
-            >
-              Remove this
-            </button>
+            />
           )}
         </div>
       );
