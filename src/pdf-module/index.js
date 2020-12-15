@@ -16,6 +16,8 @@ import workerURL from "../pdf.worker.min.data";
 import useContextMenu from 'contextmenu';
 import 'contextmenu/ContextMenu.css';
 
+import { pdfTextAdjust } from "../main/utils";
+
 function getSelection() {
   /*
   let text = "";
@@ -25,16 +27,8 @@ function getSelection() {
   return text;
   */
   let selectList = window.getSelection().getRangeAt(0).cloneContents().childNodes;
-  let text = "";
-  for (let i = 0; i < selectList.length; i++) {
-    let str = selectList[i].textContent;
-    if (str[str.length - 1] === "-") {
-      text = text + str.slice(0, str.length - 1);
-    } else {
-      text = text + str + " "; 
-    }   
-  }
-  return text;
+  selectList = selectList.map(x => x.textContent);
+  return pdfTextAdjust(selectList);
 }
 
 function PaperZone(props) {

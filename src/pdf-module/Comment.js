@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import htmlEscape from 'main/utils';
+import { htmlEscape } from 'main/utils';
 
 
 class AnnotatorComment extends React.Component {

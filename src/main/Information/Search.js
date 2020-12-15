@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from "@material-ui/core/colors";
 import Box from '@material-ui/core/Box';
-import htmlEscape from 'main/utils';
+import {htmlEscape} from 'main/utils';
 
 
 const theme = createMuiTheme({

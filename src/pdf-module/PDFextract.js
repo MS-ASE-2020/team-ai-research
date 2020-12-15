@@ -1,4 +1,6 @@
 import { createPromiseCapability } from "pdfjs-dist";
+import { pdfTextAdjust } from "../main/utils";
+
 
 const CHARACTERS_TO_NORMALIZE = {
   "\u2018": "'", // Left single quotation mark
@@ -56,14 +58,13 @@ export default class PDFExtractor {
           .then(
             textContent => {
               const textItems = textContent.items;
-              const strBuf = [];
   
-              for (let j = 0, jj = textItems.length; j < jj; j++) {
-                strBuf.push(textItems[j].str);
-              }
+              const textStrArray = textItems.map(x => x.str);
+
+              const text = pdfTextAdjust(textStrArray);
   
               // Store the normalized page content (text items) as one string.
-              this.pageContents[i] = normalize(strBuf.join(" "));
+              this.pageContents[i] = normalize(text);
               extractTextCapability.resolve(i);
             },
             reason => {
