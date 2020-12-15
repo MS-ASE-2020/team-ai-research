@@ -96,6 +96,8 @@ class QAItem extends React.Component {
                   if (!newRefs.includes(this.props.currentAnnotation)) {
                     newRefs.push(this.props.currentAnnotation);
                     this.setState({ refs: newRefs });
+                  } else {
+                    alert("This ref has been added in this question.");
                   }
                 }
               }}
