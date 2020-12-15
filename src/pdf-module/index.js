@@ -27,7 +27,12 @@ function getSelection() {
   let selectList = window.getSelection().getRangeAt(0).cloneContents().childNodes;
   let text = "";
   for (let i = 0; i < selectList.length; i++) {
-    text = text + selectList[i].textContent + " ";
+    let str = selectList[i].textContent;
+    if (str[str.length - 1] === "-") {
+      text = text + str.slice(0, str.length - 1);
+    } else {
+      text = text + str + " "; 
+    }   
   }
   return text;
 }
