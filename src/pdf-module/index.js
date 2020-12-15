@@ -27,7 +27,7 @@ function getSelection() {
   return text;
   */
   let selectList = window.getSelection().getRangeAt(0).cloneContents().childNodes;
-  selectList = selectList.map(x => x.textContent);
+  selectList = Array.from(selectList).map(x => x.textContent);
   return pdfTextAdjust(selectList);
 }
 
