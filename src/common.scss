@@ -170,6 +170,8 @@ input {
   .tag-input {
     @include absolute;
     width: 100%;
+    padding-left: 0.3em;
+    text-align: left;
   }
 
   .tag-text {

@@ -52,7 +52,8 @@
 
 .select-folder-wrapper {
   position: relative;
-  width: 36em;
+  width: 83.333333%;
+  min-width: 36em;
   min-height: 24em;
   padding: 0.5em;
 
@@ -61,5 +62,6 @@
     width: 100%;
     height: 100%;
     border-left: 2px solid $theme-color;
+    overflow-x: auto;
   }
 }

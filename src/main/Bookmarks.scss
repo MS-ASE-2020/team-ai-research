@@ -3,6 +3,7 @@
   display: flex;
 
   .left-pane {
+    flex: 1 0 auto;
     width: 50%;
     max-width: 20em;
     display: flex;
@@ -14,7 +15,7 @@
   }
 
   .right-pane {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     border: 2px solid $theme-color;
     position: relative;
     padding: 2em;
