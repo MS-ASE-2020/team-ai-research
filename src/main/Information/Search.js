@@ -69,6 +69,7 @@ function SearchBy(props) {
             vertical: 'top',
             horizontal: 'center',
           }}
+          
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}
@@ -89,6 +90,7 @@ function SearchBy(props) {
               label="Name"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -104,6 +106,7 @@ function SearchBy(props) {
               label="Title"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -119,6 +122,7 @@ function SearchBy(props) {
               label="Keywords"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -134,6 +138,7 @@ function SearchBy(props) {
               label="Year"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -149,6 +154,7 @@ function SearchBy(props) {
               label="Conference"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -164,6 +170,7 @@ function SearchBy(props) {
               label="Q and A"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -179,6 +186,7 @@ function SearchBy(props) {
               label="Annotations"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -194,6 +202,7 @@ function SearchBy(props) {
               label="Content"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -209,6 +218,7 @@ function SearchBy(props) {
               label="Folder Path"
             />
           </MenuItem>
+          <Divider />
           <MenuItem>
             <FormControlLabel
               control={
@@ -317,6 +327,7 @@ export default class Search extends Component {
                 {this.state.searchItem[k].name}
               </Typography>
             </AccordionSummary>
+            <Divider />
             <AccordionDetails>
               <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(this.state.searchItem[k].matcher) }} />
             </AccordionDetails>

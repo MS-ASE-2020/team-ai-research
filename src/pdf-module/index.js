@@ -17,9 +17,17 @@ import useContextMenu from 'contextmenu';
 import 'contextmenu/ContextMenu.css';
 
 function getSelection() {
+  /*
   let text = "";
   if (window.getSelection) {
     text = window.getSelection().toString();
+  }
+  return text;
+  */
+  let selectList = window.getSelection().getRangeAt(0).cloneContents().childNodes;
+  let text = "";
+  for (let i = 0; i < selectList.length; i++) {
+    text = text + selectList[i].textContent + " ";
   }
   return text;
 }
@@ -27,8 +35,8 @@ function getSelection() {
 function PaperZone(props) {
   const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
   const menuConfig = {
-    'Alert Selected Text': () => alert(getSelection()),
-    'Copy': () => document.execCommand("copy"),
+    //'Alert Selected Text': () => alert(getSelection()),
+    'Copy': () => navigator.clipboard.writeText(getSelection()),
     'Translate': {
       'Microsoft Bing': () => {
         props.switchTab(2);
