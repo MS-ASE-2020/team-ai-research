@@ -19,6 +19,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from "@material-ui/core/colors";
+import Box from '@material-ui/core/Box';
 import htmlEscape from 'main/utils';
 
 
@@ -46,10 +47,10 @@ function SearchBy(props) {
   };
 
   return (
-    <span>
-      <Button 
-        aria-controls="simple-menu" 
-        aria-haspopup="true" 
+    <span style={{ margin: "10px" }}>
+      <Button
+        aria-controls="simple-menu"
+        aria-haspopup="true"
         onClick={handleClick}
         endIcon={<ArrowDropDownIcon />}
         variant="outlined"
@@ -78,8 +79,8 @@ function SearchBy(props) {
             <FormControlLabel
               control={
                 <Checkbox
-                  name="pName" 
-                  onChange={props.handleSearchBy} 
+                  name="pName"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pName}
@@ -92,9 +93,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pTitle" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pTitle"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pTitle}
@@ -107,9 +108,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pKeywords" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pKeywords"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pKeywords}
@@ -122,9 +123,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pYear" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pYear"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pYear}
@@ -137,9 +138,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pConference" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pConference"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pConference}
@@ -152,9 +153,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pQandA" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pQandA"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pQandA}
@@ -167,9 +168,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pAnnotations" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pAnnotations"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pAnnotations}
@@ -182,9 +183,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="pContent" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="pContent"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.pContent}
@@ -197,9 +198,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="fPath" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="fPath"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.fPath}
@@ -212,9 +213,9 @@ function SearchBy(props) {
           <MenuItem>
             <FormControlLabel
               control={
-                <Checkbox 
-                  name="fDescription" 
-                  onChange={props.handleSearchBy} 
+                <Checkbox
+                  name="fDescription"
+                  onChange={props.handleSearchBy}
                   color="primary"
                   size="small"
                   defaultChecked={props.searchBy.fDescription}
@@ -228,7 +229,7 @@ function SearchBy(props) {
       </ThemeProvider>
     </span>
   );
-} 
+}
 
 SearchBy.propTypes = {
   searchBy: PropTypes.object.isRequired,
@@ -293,27 +294,22 @@ export default class Search extends Component {
     for (let k = 0; k < this.state.searchItem.length; k++) {
       searchResult.push(
         <ThemeProvider theme={theme} key={k}>
-          <Accordion 
-            square
-            key={k}
-            style={{
-              width: "880px",
-            }}>
-            <AccordionSummary 
-              aria-controls="panel1d-content" 
+          <Accordion square>
+            <AccordionSummary
+              aria-controls="panel1d-content"
               expandIcon={<ExpandMoreIcon />}
             >
               <Typography>
-                <IconButton 
+                <IconButton
                   size="small"
                   onClick={(event) => {
                     event.stopPropagation();
                     alert(JSON.stringify(this.state.searchItem[k].ID));
                   }}>
-                  <SendIcon 
+                  <SendIcon
                     fontSize="inherit"
-                    color="primary"/>
-                </IconButton> &nbsp;
+                    color="primary" />
+                </IconButton>
                 {this.state.searchItem[k].name}
               </Typography>
             </AccordionSummary>
@@ -333,26 +329,28 @@ export default class Search extends Component {
     }
     return (
       <div>
-        <div>
+        <form style={{
+          display: "flex",
+          alignItems: "center"
+        }}>
           <ThemeProvider theme={theme}>
-            <TextField 
-              label="Search" 
+            <TextField
+              label="Search"
               variant="outlined"
               size="small"
               color="primary"
-              style={{
-                width: "600px"
-              }}
               onKeyDown={(event) => {
                 if (event.keyCode === 13) {
                   this.SubmitSearch();
                 }
               }}
               onChange={this.handleTextChange.bind(this)}
-            /> &nbsp;
-            <SearchBy 
+              style={{ verticalAlign: "center" }}
+              fullWidth={true}
+            />
+            <SearchBy
               searchBy={this.state.searchBy}
-              handleSearchBy={this.handleSearchBy.bind(this)}/>
+              handleSearchBy={this.handleSearchBy.bind(this)} />
             <FormControlLabel
               control={
                 <Checkbox
@@ -366,22 +364,24 @@ export default class Search extends Component {
               }
               label="Recursive:"
               labelPlacement="start"
-            /> &nbsp; &nbsp;
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              startIcon={<SearchIcon />}
-              onClick={() => this.SubmitSearch()}
-            >Search</Button>
+            />
+            <Box pl="1rem" pr="1rem">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<SearchIcon />}
+                onClick={() => this.SubmitSearch()}
+              >Search</Button>
+            </Box>
           </ThemeProvider>
-        </div>
-        <br/>
-        <Divider />
-        <br/>
+        </form>
+        <Box pt="1rem" pb="1rem">
+          <Divider />
+        </Box>
         <div>
           {searchResult}
-        </div> 
+        </div>
       </div>
     );
   }
