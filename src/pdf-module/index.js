@@ -33,7 +33,7 @@ function getSelection() {
 function PaperZone(props) {
   const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
   const menuConfig = {
-    'Alert Selected Text': () => alert(getSelection()),
+    // 'Alert Selected Text': () => alert(getSelection()),
     'Copy': () => navigator.clipboard.writeText(getSelection()),
     'Translate': {
       'Microsoft Bing': () => {
