@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from "@material-ui/core/colors";
 import Box from '@material-ui/core/Box';
-import {htmlEscape} from 'main/utils';
+import { htmlEscape } from 'main/utils';
 
 
 const theme = createMuiTheme({
@@ -314,7 +314,7 @@ export default class Search extends Component {
                   size="small"
                   onClick={(event) => {
                     event.stopPropagation();
-                    alert(JSON.stringify(this.state.searchItem[k].ID));
+                    this.props.openFile("paper://" + this.state.searchItem[k].ID);
                   }}>
                   <SendIcon
                     fontSize="inherit"
@@ -401,4 +401,5 @@ export default class Search extends Component {
 Search.propTypes = {
   folderID: PropTypes.number.isRequired,
   clearInfoZone: PropTypes.func.isRequired,
+  openFile: PropTypes.func.isRequired
 };
