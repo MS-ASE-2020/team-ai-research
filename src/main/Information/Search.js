@@ -333,7 +333,7 @@ export default class Search extends Component {
             </Accordion>
           </ThemeProvider>
         );
-      }
+      } 
       if (searchItem.length === 0) {
         searchResult.push(
           <div key={-1}>
