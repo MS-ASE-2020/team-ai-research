@@ -2,11 +2,18 @@
   display: flex;
   flex-direction: column;
 
+  .heading {
+    @include item-pad;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: $theme-color;
+  }
+
   .all-papers,
   .item-button {
     @include clickable;
     @include item-pad;
-    text-align: center;
   }
 
   .all-papers {
@@ -23,6 +30,7 @@
       @include clickable-proactive;
       width: auto;
       flex: 1 0 auto;
+      text-align: center;
       border-bottom: none;
 
       > span {

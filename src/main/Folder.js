@@ -43,6 +43,9 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
+        <div className="heading">
+          <i className="fas fa-fw fa-folder-open" /> Folders
+        </div>
         {this.props.folderID === 1 && !this.props.selectFolderCallback ? (
           <div
             className="all-papers"
@@ -54,9 +57,14 @@ export default class Folder extends Component {
         {this.props.folderID !== null ? (
           <div className="item-list subfolders">{folderItem}</div>
         ) : null}
-        {this.props.folderOnly ? null : (
-          <div className="item-list papers">{paperItem}</div>
-        )}
+        {this.props.folderOnly
+          ? null
+          : [
+              <div className="heading">
+                <i className="fas fa-fw fa-file" /> Papers
+              </div>,
+              <div className="item-list papers">{paperItem}</div>,
+            ]}
         {this.props.folderID !== null ? (
           <div className="buttons-bar">
             <div className="item-button" onClick={this.props.setNewBookmark}>
