@@ -289,58 +289,65 @@ export default class Search extends Component {
   }
 
   SubmitSearch() {
-    let searchItem = window.api.database.searchPaperInFolder(
-      window.db,
-      this.props.folderID,
-      this.state.searchBy,
-      this.state.text,
-      this.state.recursive
-    );
     this.setState({
       onSearching: true
     });
-    let searchResult = [];
-    for (let k = 0; k < searchItem.length; k++) {
-      searchResult.push(
-        <ThemeProvider theme={theme} key={k}>
-          <Accordion square>
-            <AccordionSummary
-              aria-controls="panel1d-content"
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography>
-                <IconButton
-                  size="small"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    this.props.openFile("paper://" + searchItem[k].ID);
-                  }}>
-                  <SendIcon
-                    fontSize="inherit"
-                    color="primary" />
-                </IconButton> <span>&nbsp;</span>
-                {searchItem[k].name}
-              </Typography>
-            </AccordionSummary>
-            <Divider />
-            <AccordionDetails>
-              <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(searchItem[k].matcher) }} />
-            </AccordionDetails>
-          </Accordion>
-        </ThemeProvider>
+  }
+
+  componentDidUpdate() {
+    if (this.state.onSearching) {
+      let searchItem = window.api.database.searchPaperInFolder(
+        window.db,
+        this.props.folderID,
+        this.state.searchBy,
+        this.state.text,
+        this.state.recursive
       );
-    }
-    if (searchItem.length === 0) {
-      searchResult.push(
-        <div key={-1}>
-          No matched results.
-        </div>
-      );
-    }
-    this.setState({
-      searchResult: searchResult,
-      onSearching: false
-    });
+      let searchResult = [];
+      for (let k = 0; k < searchItem.length; k++) {
+        searchResult.push(
+          <ThemeProvider theme={theme} key={k}>
+            <Accordion square>
+              <AccordionSummary
+                aria-controls="panel1d-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <Typography>
+                  <IconButton
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      this.props.openFile("paper://" + searchItem[k].ID);
+                    }}>
+                    <SendIcon
+                      fontSize="inherit"
+                      color="primary" />
+                  </IconButton> <span>&nbsp;</span>
+                  {searchItem[k].name}
+                </Typography>
+              </AccordionSummary>
+              <Divider />
+              <AccordionDetails>
+                <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(searchItem[k].matcher) }} />
+              </AccordionDetails>
+            </Accordion>
+          </ThemeProvider>
+        );
+      }
+      if (searchItem.length === 0) {
+        searchResult.push(
+          <div key={-1}>
+            No matched results.
+          </div>
+        );
+      }
+      setTimeout(() => {
+        this.setState({
+          searchResult: searchResult,
+          onSearching: false
+        });
+      }, 1000);
+    } 
   }
 
   render() {
