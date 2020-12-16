@@ -5,7 +5,6 @@
 }
 
 button,
-input[type="button"],
 .btn {
   font-family: inherit;
   font-size: 0.8em;
@@ -141,8 +140,7 @@ textarea {
   overflow: hidden;
 
   input,
-  .input,
-  [contentEditable] {
+  .input {
     display: inline-block;
     width: 100%;
     font-size: 0.833333em;
@@ -288,4 +286,8 @@ textarea {
     opacity: 1;
     visibility: visible;
   }
+}
+
+.textarea {
+  white-space: pre-wrap;
 }

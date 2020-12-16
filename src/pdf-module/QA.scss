@@ -14,11 +14,14 @@
       background-color: $theme-color-lighter;
     }
 
-    > div:not(:first-child) {
+    .qa-answer,
+    .qa-refs {
       margin-top: 0.5em;
     }
 
-    .qa-question, .qa-answer, .qa-refs {
+    .qa-question,
+    .qa-answer,
+    .qa-refs {
       display: flex;
 
       .noselect {
@@ -47,7 +50,11 @@
 
     .qa-actions {
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
+      margin: {
+        top: 0.8em;
+        bottom: 0.5em;
+      }
 
       button {
         font-size: 0.9em;
@@ -79,7 +86,15 @@
     }
 
     input[type="button"] {
-      margin-left: 0;
+      padding: {
+        top: 0.2em;
+        bottom: 0.2em;
+      }
+      margin: {
+        top: 0;
+        left: 0;
+        bottom: 0;
+      }
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
     }

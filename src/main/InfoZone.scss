@@ -8,11 +8,12 @@
   .InfoTable {
     width: 100%;
 
-    th, td {
+    th,
+    td {
       padding: 0.2em;
     }
 
-    th[scope=row] {
+    th[scope="row"] {
       text-align: right;
 
       + td {
@@ -20,22 +21,30 @@
       }
     }
 
-    input[type=text], textarea {
+    input[type="text"],
+    textarea {
       font-size: inherit;
       width: 100%;
     }
 
     td textarea {
-      font-size: 0.833333em;
+      font: {
+        family: $sans-serif;
+        size: 0.9em;
+      }
       resize: vertical;
       min-height: 3em;
     }
   }
 
   .Operations {
-    margin-top: 1em;
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.25em;
+    margin-top: 1.5em;
 
-    input[type=button], button {
+    input[type="button"],
+    button {
       font-size: 0.9em;
     }
   }

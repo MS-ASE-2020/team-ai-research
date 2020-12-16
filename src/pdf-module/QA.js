@@ -63,7 +63,7 @@ class QAItem extends React.Component {
               <span className="noselect">Q:</span>
               {this.state.question}
             </div>
-            <div className="qa-answer">
+            <div className="qa-answer textarea">
               <span className="noselect">A:</span>
               {this.state.answer}
             </div>

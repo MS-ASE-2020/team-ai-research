@@ -115,7 +115,9 @@ export default class FolderInformation extends Component {
                     onChange={this.handleChanges.bind(this)}
                   />
                 ) : (
-                  this.state.folder.description
+                  <span className="textarea">
+                    {this.state.folder.description}
+                  </span>
                 )}
               </td>
             </tr>
@@ -128,33 +130,41 @@ export default class FolderInformation extends Component {
         <div className="Operations">
           {!this.state.modify
             ? [
-              <input
-                type="button"
-                value="Edit"
-                onClick={() => this.operation("edit")}
-                key={0}
-              />,
-              this.props.openFolderCallback ? false : <input
-                type="button"
-                value="Delete"
-                onClick={() => this.operation("delete")}
-                key={1}
-              />,
-            ]
+                <input
+                  className="btn btn-edit"
+                  type="button"
+                  value="Edit"
+                  onClick={() => this.operation("edit")}
+                  key={0}
+                />,
+                this.props.openFolderCallback ? (
+                  false
+                ) : (
+                  <input
+                    className="btn btn-danger"
+                    type="button"
+                    value="Delete"
+                    onClick={() => this.operation("delete")}
+                    key={1}
+                  />
+                ),
+              ]
             : [
-              <input
-                type="button"
-                value="Save"
-                onClick={() => this.operation("save")}
-                key={0}
-              />,
-              <input
-                type="button"
-                value="Cancel"
-                onClick={() => this.operation("cancel")}
-                key={1}
-              />,
-            ]}
+                <input
+                  className="btn btn-success"
+                  type="button"
+                  value="Save"
+                  onClick={() => this.operation("save")}
+                  key={0}
+                />,
+                <input
+                  className="btn btn-edit"
+                  type="button"
+                  value="Cancel"
+                  onClick={() => this.operation("cancel")}
+                  key={1}
+                />,
+              ]}
         </div>
       </div>
     );

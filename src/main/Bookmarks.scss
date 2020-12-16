@@ -19,6 +19,10 @@
     border: 2px solid $theme-color;
     position: relative;
     padding: 2em;
+    overflow: {
+      x: hidden;
+      y: auto;
+    }
   }
 
   .address-bar {
