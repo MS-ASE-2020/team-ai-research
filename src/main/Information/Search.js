@@ -289,9 +289,13 @@ export default class Search extends Component {
   }
 
   SubmitSearch() {
-    this.setState({
-      onSearching: true
-    });
+    if (this.state.text === "") {
+      alert("Please input the text!");
+    } else {
+      this.setState({
+        onSearching: true
+      });
+    }
   }
 
   componentDidUpdate() {
