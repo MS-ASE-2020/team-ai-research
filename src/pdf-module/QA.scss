@@ -48,6 +48,15 @@
       }
     }
 
+    .qa-refs {
+      .tag-container {
+        margin: {
+          top: -0.2em;
+          bottom: -0.2em;
+        }
+      }
+    }
+
     .qa-actions {
       display: flex;
       justify-content: space-evenly;
