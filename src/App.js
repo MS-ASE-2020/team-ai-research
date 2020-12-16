@@ -5,7 +5,7 @@ import NavBar from "./main/NavBar";
 import FileManager from "./main/File";
 import Reader from "./main/Reader";
 import Bookmarks from "./main/Bookmarks";
-import Sharing from "./main/Sharing";
+// import Sharing from "./main/Sharing";
 
 const CONTENT_TABS = [
   {
@@ -25,18 +25,6 @@ const CONTENT_TABS = [
     title: "Library",
     icon: "briefcase",
     component: Bookmarks,
-  },
-  {
-    id: "sharing",
-    title: "Share",
-    icon: "chart-network",
-    component: Sharing,
-  },
-  {
-    id: "debug",
-    title: "Debug",
-    icon: "bug",
-    component: Sharing,
   },
 ];
 
