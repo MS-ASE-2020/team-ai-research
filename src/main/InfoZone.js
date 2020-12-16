@@ -34,9 +34,9 @@ export default class InfoZone extends Component {
           clearInfoZone={this.props.clearInfoZone}
         />
       );
-    } else if (this.props.search === true) {
+    } else if (this.props.search === true && this.props.actions) {
       return (
-        <Search 
+        <Search
           folderID={this.props.folderID}
           clearInfoZone={this.props.clearInfoZone}
           openFile={this.props.actions.openFile}

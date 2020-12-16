@@ -75,6 +75,10 @@
   padding: 0.5em;
 }
 
+@mixin noselect {
+  user-select: none;
+}
+
 @mixin rounded {
   border-radius: 999999px;
 }

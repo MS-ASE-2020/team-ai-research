@@ -14,6 +14,18 @@
       background-color: $theme-color-lighter;
     }
 
+    > div:not(:first-child) {
+      margin-top: 0.5em;
+    }
+
+    .qa-question, .qa-answer, .qa-refs {
+      display: flex;
+
+      .noselect {
+        margin-right: 0.4em;
+      }
+    }
+
     .qa-question {
       margin: 0;
       font-size: inherit;
@@ -25,8 +37,6 @@
     }
 
     .qa-answer {
-      margin: 0.5em 0;
-
       textarea {
         font-family: $sans-serif;
         resize: vertical;
@@ -37,9 +47,12 @@
 
     .qa-actions {
       display: flex;
+      justify-content: center;
 
-      input, button {
-        + input, + button {
+      button {
+        font-size: 0.9em;
+
+        + button {
           margin-left: 0.5em;
         }
       }

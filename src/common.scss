@@ -12,22 +12,46 @@ button {
   font-family: inherit;
   font-size: 0.8em;
   background-color: $theme-color-lighter;
-  border: 1px solid $theme-color-dark;
-  border-radius: 4px;
-  cursor: pointer;
-
   padding: 0.25em 0.4em;
   margin: -0.25em 0;
-  border: 1px solid;
+  border: 1px solid $theme-color-darker;
   border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+
 
   &:active {
     background-color: $theme-color-light;
-    border: 2px solid $theme-color-active;
+    border: 1px solid $theme-color-active;
   }
 
   + .btn {
     margin-left: 0.5em;
+  }
+}
+
+.btn-danger {
+  background-color: mix($theme-color-lighter, red, 80%);
+
+  &:hover {
+    background-color: mix($theme-color-lighter, red, 60%);
+  }
+
+  &:active {
+    color: white;
+    background-color: mix($theme-color-lighter, red, 40%);
+  }
+}
+
+.btn-success {
+  background-color: mix($theme-color-lighter, lime, 80%);
+
+  &:hover {
+    background-color: mix($theme-color-lighter, lime, 60%);
+  }
+
+  &:active {
+    background-color: mix($theme-color-lighter, lime, 40%);
   }
 }
 
@@ -98,7 +122,8 @@ input {
   font-size: 0.833333em;
   outline: none;
 
-  + input, + label {
+  + input,
+  + label {
     margin-left: 0.5em;
   }
 
@@ -148,6 +173,10 @@ input {
 .mx-auto {
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.noselect {
+  user-select: none !important;
 }
 
 .tag-container {
