@@ -4,10 +4,8 @@
   @include absolute;
 }
 
-button {
-  outline: none;
-}
-
+button,
+input[type=button],
 .btn {
   font-family: inherit;
   font-size: 0.8em;
@@ -19,13 +17,12 @@ button {
   outline: none;
   cursor: pointer;
 
-
   &:active {
     background-color: $theme-color-light;
     border: 1px solid $theme-color-active;
   }
 
-  + .btn {
+  & + & {
     margin-left: 0.5em;
   }
 }
