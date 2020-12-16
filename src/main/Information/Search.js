@@ -19,6 +19,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { deepOrange } from "@material-ui/core/colors";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Box from '@material-ui/core/Box';
 import { htmlEscape } from 'main/utils';
 
@@ -266,7 +267,8 @@ export default class Search extends Component {
         fCreatetime: true,
       },
       recursive: false,
-      searchItem: []
+      searchResult: [],
+      onSearching: false
     };
   }
 
@@ -295,13 +297,10 @@ export default class Search extends Component {
       this.state.recursive
     );
     this.setState({
-      searchItem: searchItem
+      onSearching: true
     });
-  }
-
-  render() {
     let searchResult = [];
-    for (let k = 0; k < this.state.searchItem.length; k++) {
+    for (let k = 0; k < searchItem.length; k++) {
       searchResult.push(
         <ThemeProvider theme={theme} key={k}>
           <Accordion square>
@@ -314,30 +313,37 @@ export default class Search extends Component {
                   size="small"
                   onClick={(event) => {
                     event.stopPropagation();
-                    this.props.openFile("paper://" + this.state.searchItem[k].ID);
+                    this.props.openFile("paper://" + searchItem[k].ID);
                   }}>
                   <SendIcon
                     fontSize="inherit"
                     color="primary" />
-                </IconButton>
-                {this.state.searchItem[k].name}
+                </IconButton> <span>&nbsp;</span>
+                {searchItem[k].name}
               </Typography>
             </AccordionSummary>
             <Divider />
             <AccordionDetails>
-              <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(this.state.searchItem[k].matcher) }} />
+              <div dangerouslySetInnerHTML={{ __html: searchResultSanitizer(searchItem[k].matcher) }} />
             </AccordionDetails>
           </Accordion>
         </ThemeProvider>
       );
     }
-    if (this.state.searchItem.length === 0) {
+    if (searchItem.length === 0) {
       searchResult.push(
         <div key={-1}>
           No matched results.
         </div>
       );
     }
+    this.setState({
+      searchResult: searchResult,
+      onSearching: false
+    });
+  }
+
+  render() {
     return (
       <div>
         <form style={{
@@ -391,7 +397,10 @@ export default class Search extends Component {
           <Divider />
         </Box>
         <div>
-          {searchResult}
+          {this.state.onSearching ? 
+            <ThemeProvider theme={theme}>
+              <CircularProgress />
+            </ThemeProvider> : this.state.searchResult}
         </div>
       </div>
     );
