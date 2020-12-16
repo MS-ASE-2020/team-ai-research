@@ -127,15 +127,12 @@ export default class OpenFile extends Component {
       <div id="OpenFile" className="OpenFile">
         <div className="file-menu">
           <div className="menu-item menu-title clickable">
-            <h2>Open File</h2>
+            <h2>Saved Paper</h2>
           </div>
           <div className="menu-item file-list__wrap">
             <div className="file-list__inner-wrap">
               <div className="file-list">{listItems}</div>
             </div>
-          </div>
-          <div className="menu-item menu-title clickable">
-            <h2>Settings</h2>
           </div>
         </div>
 
