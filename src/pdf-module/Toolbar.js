@@ -78,7 +78,7 @@ class AnnotatorToolBar extends React.Component {
         {/* <a className="rotate-ccw" title="Rotate Counter Clockwise">⟲</a>
                 <a className="rotate-cw" title="Rotate Clockwise">⟳</a> */}
 
-        <button className="undo" title="Undo annotations" data-tooltype="undo" onClick={() => {
+        <button className="undo" title="Undo annotations" onClick={() => {
           this.props.PDFJSAnnotate.getStoreAdapter().undo(this.props.RENDER_OPTIONS.documentId).then(() => {
             for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
               this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
@@ -86,7 +86,7 @@ class AnnotatorToolBar extends React.Component {
           });
                     
         }}>⟲</button>
-        <button className="redo" title="Redo annotations" data-tooltype="redo" onClick={() => {
+        <button className="redo" title="Redo annotations" onClick={() => {
           this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId).then(() => {
             for (let i = 1; i <= this.props.NUM_PAGES; i += 1) {
               this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
@@ -97,7 +97,7 @@ class AnnotatorToolBar extends React.Component {
 
         <div className="spacer"></div>
 
-        <button className="clear" title="Clear" data-tooltype="clear" onClick={() => {
+        <button className="clear" title="Clear" onClick={() => {
           if (window.confirm('Are you sure you want to clear annotations? This operation cannot be undone.')) {
             for (let i = 0; i < this.props.NUM_PAGES; i++) {
               document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
@@ -108,13 +108,13 @@ class AnnotatorToolBar extends React.Component {
         }}>×</button>
 
         <div className="spacer"></div>
-        <button className="search" title="Search" data-tooltype="Search" onClick={() => {
+        <button className="search" title="Search" onClick={() => {
           let findInPage = window.api.getFindInPage(document.querySelector("#content-wrapper"));
           findInPage.openFindWindow();
         }}><span role="img" aria-label="search">🔍</span></button>
         <div className="spacer"></div>
 
-        <button className="save" title="Save" data-tooltype="save" onClick={() => this.props.saveFunc()}>
+        <button className="save" title="Save" onClick={() => this.props.saveFunc()}>
           <span role="img" aria-label="save">💾</span>
         </button>
 
@@ -270,6 +270,9 @@ function buttonsAnnotationInit(UI, RENDER_OPTIONS) {
 
   function setActiveToolbarItem(type, button) {
     if (type === 'clear' || type === 'undo' || type === 'redo') {
+      return;
+    }
+    if (!type) {
       return;
     }
     let active = document.querySelector('.toolbar button.active');
