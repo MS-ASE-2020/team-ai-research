@@ -131,6 +131,18 @@ textarea {
   }
 }
 
+input[type="button"] {
+  @include clickable;
+
+  &:hover {
+    background-color: #dddddd;
+  }
+
+  &:active {
+    background-color: #d3d3d3;
+  }
+}
+
 .input-wrapper {
   display: inline-block;
   min-width: 2em;
