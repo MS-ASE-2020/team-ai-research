@@ -6,6 +6,8 @@
   }
 
   .InfoTable {
+    width: 100%;
+
     th, td {
       padding: 0.2em;
     }
@@ -17,9 +19,24 @@
         margin-left: 0.5em;
       }
     }
+
+    input[type=text], textarea {
+      font-size: inherit;
+      width: 100%;
+    }
+
+    td textarea {
+      font-size: 0.833333em;
+      resize: vertical;
+      min-height: 3em;
+    }
   }
 
   .Operations {
     margin-top: 1em;
+
+    input[type=button], button {
+      font-size: 0.9em;
+    }
   }
 }

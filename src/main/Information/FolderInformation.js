@@ -108,7 +108,7 @@ export default class FolderInformation extends Component {
               <th scope="row">Description</th>
               <td>
                 {this.state.modify ? (
-                  <input
+                  <textarea
                     type="text"
                     name="description"
                     value={this.state.folder.description}

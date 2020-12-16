@@ -5,7 +5,7 @@
 }
 
 button,
-input[type=button],
+input[type="button"],
 .btn {
   font-family: inherit;
   font-size: 0.8em;
@@ -113,13 +113,15 @@ input[type=button],
   }
 }
 
-input {
+input,
+textarea {
   border: 1px solid black;
   border-radius: 4px;
-  font-size: 0.833333em;
+  font-size: 0.9em;
   outline: none;
 
   + input,
+  + textarea,
   + label {
     margin-left: 0.5em;
   }
@@ -187,7 +189,6 @@ input {
   .tag-text,
   .tag-input {
     //@include rounded;
-    font-size: 0.8em;
     font-family: $sans-serif;
     padding: 0.2em;
     margin: 0;
@@ -196,19 +197,25 @@ input {
   .tag-input {
     @include absolute;
     width: 100%;
-    padding-left: 0.3em;
+    font-size: 0.9em;
+    padding: {
+      left: 0.3em;
+      right: 0.3em;
+    }
     text-align: left;
   }
 
   .tag-text {
-    padding-right: 0.8em;
     display: inline-block;
+    min-width: 2em;
+    padding-right: 0.6em;
     visibility: hidden;
     white-space: pre;
+    transition: all 0.2s ease-in-out;
   }
 
-  &:not(.fixed) .tag-text {
-    padding-right: 2em;
+  &:not(.fixed):hover .tag-text {
+    padding-right: 1.6em;
   }
 
   .tag-add,
@@ -251,6 +258,8 @@ input {
     height: 0.8em;
     background-color: $theme-color;
     visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
 
     &:before {
       display: inline-block;
@@ -276,6 +285,7 @@ input {
   }
 
   &:hover .tag-remove {
+    opacity: 1;
     visibility: visible;
   }
 }

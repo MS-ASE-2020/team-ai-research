@@ -43,9 +43,12 @@ export default class Folder extends Component {
     }
     return (
       <div className="Folder">
-        <div className="heading">
-          <i className="fas fa-fw fa-folder-open" /> Folders
-        </div>
+        {this.props.folderID ? (
+          <div className="heading">
+            <i className="fas fa-fw fa-folder-open" /> Folders
+          </div>
+        ) : null}
+
         {this.props.folderID === 1 && !this.props.selectFolderCallback ? (
           <div
             className="all-papers"

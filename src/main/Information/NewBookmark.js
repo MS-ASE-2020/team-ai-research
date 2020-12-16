@@ -53,7 +53,7 @@ export default class NewBookmark extends Component {
   render() {
     return (
       <div className="InfoZone">
-        <h2>Create New Bookmark</h2>
+        <h2>Create New Folder</h2>
         <table className="InfoTable">
           <tbody>
             <tr>
@@ -71,7 +71,7 @@ export default class NewBookmark extends Component {
             <tr>
               <th scope="row">Description</th>
               <td>
-                <input
+                <textarea
                   id="newBookmarkDescription"
                   type="text"
                   value={this.state.description}
