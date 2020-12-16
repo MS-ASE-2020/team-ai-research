@@ -471,13 +471,16 @@ function saveFolderOfPaper(db, paperID, folderIDs) {
 }
 
 /**
- * 
+ * Search paper with search-by options and query text.
+ * The query text, currently, gives user permission to use everything provided by SQlite3 FTS5,
+ * but REQUIRES USER TO GIVE VALID TEXT STRING.
  * @param {BetterSqlite3.Database} db 
  * @param {Number} folderID 
  * @param {{pName: Boolean, pTitle: Boolean, pKeywords: Boolean, pYear: Boolean, pConference: Boolean, pQandA: Boolean, pAnnotations: Boolean, pContent: Boolean, fPath: Boolean, fDescription: Boolean}} searchBy 
  * @param {String} queryText
  * @param {Boolean} recursive search paper in the folder recursively or not
  * @returns {Array<{ID: Number, name: String, matcher: String}>}
+ * @throws error object thrown by SQlite3
  */
 function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false) {
   let paperIDs = listPaper(
@@ -493,6 +496,8 @@ function searchPaperInFolder(db, folderID, searchBy, queryText, recursive=false)
       searchByStr = searchByStr + colName + ' ';
     }
   }
+  if (searchByStr === ' ')
+    return [];
   let sql = `
     SELECT pID AS ID, pName AS name, snippet(paperAndFolderForSearch, -1, '<b>', '</b>', '......', 16) AS matcher
     FROM paperAndFolderForSearch
