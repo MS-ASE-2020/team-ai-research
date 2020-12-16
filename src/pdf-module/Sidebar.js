@@ -24,7 +24,7 @@ class AnnotatorSidebar extends React.Component {
     return (
       <div
         id="sidebar-wrapper"
-        className={"no-annotation" + (displaySidebar ? null : " d-none")}
+        className={"no-annotation" + (displaySidebar ? "" : " d-none")}
         ref={this.props.inputRef}
       >
         {/* Class "no-annotation" is a special class in modified pdf-annotate.js.
