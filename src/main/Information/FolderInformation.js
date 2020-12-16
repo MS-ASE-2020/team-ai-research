@@ -128,6 +128,7 @@ export default class FolderInformation extends Component {
           </tbody>
         </table>
         <div className="Operations">
+          {/* eslint-disable indent */}
           {!this.state.modify
             ? [
                 <input
@@ -137,9 +138,7 @@ export default class FolderInformation extends Component {
                   onClick={() => this.operation("edit")}
                   key={0}
                 />,
-                this.props.openFolderCallback ? (
-                  false
-                ) : (
+                this.props.openFolderCallback ? null : (
                   <input
                     className="btn btn-danger"
                     type="button"
@@ -165,6 +164,7 @@ export default class FolderInformation extends Component {
                   key={1}
                 />,
               ]}
+          {/* eslint-enable indent */}
         </div>
       </div>
     );

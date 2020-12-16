@@ -60,6 +60,7 @@ export default class Folder extends Component {
         {this.props.folderID !== null ? (
           <div className="item-list subfolders">{folderItem}</div>
         ) : null}
+        {/* eslint-disable indent, react/jsx-key */}
         {this.props.folderOnly
           ? null
           : [
@@ -68,6 +69,7 @@ export default class Folder extends Component {
               </div>,
               <div className="item-list papers">{paperItem}</div>,
             ]}
+        {/* eslint-enable indent, react/jsx-key */}
         {this.props.folderID !== null ? (
           <div className="buttons-bar">
             <div className="item-button" onClick={this.props.setNewBookmark}>
