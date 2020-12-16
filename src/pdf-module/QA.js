@@ -26,11 +26,12 @@ class QAItem extends React.Component {
   }
 
   render() {
+    const editable = this.state.editable;
     let refs = [];
     for (let i = 0; i < this.state.refs.length; i++) {
       let refText = "Ref " + (i + 1);
       refs.push(
-        <div className="tag-container" key={i}>
+        <div className={"tag-container" + (editable ? "" : " fixed")} key={i}>
           <span className="tag-text">{refText}</span>
           <input
             type="button"
@@ -41,8 +42,9 @@ class QAItem extends React.Component {
             name={this.state.refs[i]}
             value={refText}
           />
-          {this.state.editable && (
-            <span className="tag-remove"
+          {editable && (
+            <span
+              className="tag-remove"
               onClick={() => {
                 let newRefs = this.state.refs.slice();
                 newRefs.splice(i, 1);
@@ -56,94 +58,94 @@ class QAItem extends React.Component {
     if (this.state.refs.length === 0) {
       refs = "No references";
     }
-      if (!this.state.editable) {
-        return (
-          <div className="qa-item">
-            <div className="qa-question">
-              <span className="noselect">Q:</span>
-              {this.state.question}
-            </div>
-            <div className="qa-answer textarea">
-              <span className="noselect">A:</span>
-              {this.state.answer}
-            </div>
-            <div className="qa-refs">
-              <span className="noselect">Refs:</span>
-              {refs}
-            </div>
-            <div className="qa-actions">
-              <button
-                className="btn btn-edit"
-                onClick={() => this.setState({ editable: true })}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => this.props.updateProps(null, null, null, true)}
-              >
-                Delete
-              </button>
-            </div>
+    if (!editable) {
+      return (
+        <div className="qa-item">
+          <div className="qa-question">
+            <span className="noselect">Q:</span>
+            {this.state.question}
           </div>
-        );
-      } else {
-        return (
-          <div className="qa-item">
-            <div className="qa-question">
-              <span className="noselect">Q:</span>
-              <input
-                value={this.state.question}
-                name="question"
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="qa-answer">
-              <span className="noselect">A:</span>
-              <textarea
-                value={this.state.answer}
-                name="answer"
-                onChange={this.handleInputChange}
-              />
-            </div>
-            <div className="qa-refs">
-              <span className="noselect">Refs:</span>
-              {refs}
-            </div>
-            <div className="qa-actions">
-              <button
-                className="btn btn-edit"
-                onClick={() => {
-                  if (this.props.currentAnnotation != null) {
-                    let newRefs = this.state.refs.slice();
-                    if (!newRefs.includes(this.props.currentAnnotation)) {
-                      newRefs.push(this.props.currentAnnotation);
-                      this.setState({ refs: newRefs });
-                    } else {
-                      alert("This ref has been added in this question.");
-                    }
+          <div className="qa-answer textarea">
+            <span className="noselect">A:</span>
+            {this.state.answer}
+          </div>
+          <div className="qa-refs">
+            <span className="noselect">Refs:</span>
+            {refs}
+          </div>
+          <div className="qa-actions">
+            <button
+              className="btn btn-edit"
+              onClick={() => this.setState({ editable: true })}
+            >
+              Edit
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => this.props.updateProps(null, null, null, true)}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="qa-item">
+          <div className="qa-question">
+            <span className="noselect">Q:</span>
+            <input
+              value={this.state.question}
+              name="question"
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="qa-answer">
+            <span className="noselect">A:</span>
+            <textarea
+              value={this.state.answer}
+              name="answer"
+              onChange={this.handleInputChange}
+            />
+          </div>
+          <div className="qa-refs">
+            <span className="noselect">Refs:</span>
+            {refs}
+          </div>
+          <div className="qa-actions">
+            <button
+              className="btn btn-edit"
+              onClick={() => {
+                if (this.props.currentAnnotation != null) {
+                  let newRefs = this.state.refs.slice();
+                  if (!newRefs.includes(this.props.currentAnnotation)) {
+                    newRefs.push(this.props.currentAnnotation);
+                    this.setState({ refs: newRefs });
+                  } else {
+                    alert("This ref has been added in this question.");
                   }
-                }}
-              >
-                Add ref
-              </button>
-              <button
-                className="btn btn-success"
-                onClick={() => {
-                  this.props.updateProps(
-                    this.state.question,
-                    this.state.answer,
-                    this.state.refs
-                  );
-                  this.setState({ editable: false });
-                }}
-              >
-                Done
-              </button>
-            </div>
+                }
+              }}
+            >
+              Add ref
+            </button>
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                this.props.updateProps(
+                  this.state.question,
+                  this.state.answer,
+                  this.state.refs
+                );
+                this.setState({ editable: false });
+              }}
+            >
+              Done
+            </button>
           </div>
-        );
-      }
+        </div>
+      );
+    }
   }
 }
 
