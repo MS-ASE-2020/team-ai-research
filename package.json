@@ -29,7 +29,8 @@
     "postinstall": "install-app-deps",
     "update-pdf-annotate.js": "node utils/update-pdf-annotate.js",
     "lint": "eslint .",
-    "pdf": "node utils/cp.js node_modules/pdfjs-dist/build/pdf.worker.min.js src/pdf.worker.min.data"
+    "pdf": "node utils/cp.js node_modules/pdfjs-dist/build/pdf.worker.min.js src/pdf.worker.min.data",
+    "prune": "node utils/prune.js"
   },
   "author": "",
   "license": "MIT",
