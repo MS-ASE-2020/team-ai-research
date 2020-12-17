@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import initColorPicker from './initColorPicker';
-import './toolbar.css';
+import './Toolbar.scss';
 
 class AnnotatorToolBar extends React.Component {
   constructor(props) {
@@ -84,7 +84,7 @@ class AnnotatorToolBar extends React.Component {
               this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
             }
           });
-                    
+
         }}>⟲</button>
         <button className="redo" title="Redo annotations" onClick={() => {
           this.props.PDFJSAnnotate.getStoreAdapter().redo(this.props.RENDER_OPTIONS.documentId).then(() => {
@@ -92,7 +92,7 @@ class AnnotatorToolBar extends React.Component {
               this.props.UI.rerenderAnnotations(i, this.props.RENDER_OPTIONS);
             }
           });
-                    
+
         }}>⟳</button>
 
         <div className="spacer"></div>
@@ -102,7 +102,7 @@ class AnnotatorToolBar extends React.Component {
             for (let i = 0; i < this.props.NUM_PAGES; i++) {
               document.querySelector(`div#pageContainer${i + 1} svg.annotationLayer`).innerHTML = '';
             }
-            
+
             localStorage.removeItem(`${this.props.RENDER_OPTIONS.documentId}/annotations`);
             this.props.PDFJSAnnotate.getStoreAdapter().clearHistory(this.props.RENDER_OPTIONS.documentId);
           }
