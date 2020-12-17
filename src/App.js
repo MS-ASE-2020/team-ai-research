@@ -59,6 +59,8 @@ export default class App extends Component {
     const actions = {
       openFile: this.handleOpenFile.bind(this),
     };
+
+    window.api.openFile = this.handleOpenFile.bind(this);
     let components = [];
     for (let i = 0; i < CONTENT_TABS.length; i++) {
       const TheComponent = CONTENT_TABS[i].component;

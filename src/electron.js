@@ -122,5 +122,21 @@ app.on("web-contents-created", (e, contents) => {
   contextMenu({
     window: contents,
     showSearchWithGoogle: false,
+    prepend: (defaultActions, params, browserWindow) => [
+      {
+        label: "Open this link with Papera",
+        visible: params.linkURL.toLowerCase().endsWith(".pdf"),
+        click: () => {
+          console.log(params.linkURL);
+          mainWindow.webContents.send("openFile", params.linkURL);
+        }
+      },
+      {
+        label: "Reload",
+        click: () => {
+          browserWindow.reload();
+        }
+      }
+    ]
   });
 });

@@ -222,6 +222,8 @@ class Annotator extends React.Component {
               });
             }
           }
+        }).catch(() => {
+          alert("Papera cannot open this PDF file.");
         });
       });
     } catch {

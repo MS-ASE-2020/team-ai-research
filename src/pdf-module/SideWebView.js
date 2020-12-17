@@ -38,7 +38,16 @@ export default class AnnotatorSideWebView extends React.Component {
           style={{ display: "inline-flex", width: "100%", height: "575px" }}
           src={this.props.getURL()}
           useragent="Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1"
+          ref={el => this.webview = el}
         ></webview>
+        <div className="webview-control">
+          <button onClick={() => this.webview.goBack()}>Back</button>
+          <button onClick={() => this.webview.goForward()}>Forward</button>
+          <button onClick={() => this.webview.reload()}>Reload</button>
+          <button onClick={() => {
+            window.api.openFile(this.webview.getURL());
+          }}>Try opening current PDF</button>
+        </div>
       </div>
     );
   }

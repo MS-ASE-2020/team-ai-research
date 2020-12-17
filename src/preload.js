@@ -20,7 +20,8 @@ window.api = {
   userDataDir: app.getPath('userData'),
   getFindInPage: (element) => new FindInPage(getCurrentWebContents(), {
     parentElement: element
-  })
+  }),
+  openFile: null  // filled in App.js
 };
 
 // overwrite alert and confirm, as they stuck in electron
@@ -48,3 +49,9 @@ window.confirm = (detail) => {
   const buttonIdx = dialog.showMessageBoxSync(null, options);
   return buttonIdx === 0;
 };
+
+// openFile IPC
+window.ipcRenderer.on("openFile", (event, message) => {
+  console.log(message);
+  window.api.openFile(message);
+});
