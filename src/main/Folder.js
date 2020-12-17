@@ -3,12 +3,19 @@ import PropTypes from "prop-types";
 
 export default class Folder extends Component {
   render() {
+    // Sorting helper
+    const collator = new Intl.Collator(undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
+
     let folderItem = [];
     if (this.props.folderID !== null) {
       const folderList = window.api.database.listFolder(
         window.db,
         this.props.folderID
       );
+      folderList.sort((a, b) => collator.compare(a.name, b.name));
       for (let k = 0; k < folderList.length; k++) {
         folderItem.push(
           <div
@@ -30,6 +37,7 @@ export default class Folder extends Component {
       window.db,
       this.props.folderID
     );
+    paperList.sort((a, b) => collator.compare(a.name, b.name));
     for (let k = 0; k < paperList.length; k++) {
       paperItem.push(
         <div
@@ -67,7 +75,9 @@ export default class Folder extends Component {
               <div key="papers-heading" className="heading">
                 <i className="fas fa-fw fa-file" /> Papers
               </div>,
-              <div key="papers-item" className="item-list papers">{paperItem}</div>,
+              <div key="papers-item" className="item-list papers">
+                {paperItem}
+              </div>,
             ]}
         {/* eslint-enable indent */}
         {this.props.folderID !== null ? (
