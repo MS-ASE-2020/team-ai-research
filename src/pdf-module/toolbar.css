@@ -19,6 +19,7 @@
   border-left: 1px solid #c1c1c1;
   height: 34px;
   margin: 0 5px -11px;
+  align-self: baseline;
 }
 
 .toolbar a {
