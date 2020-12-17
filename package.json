@@ -6,7 +6,9 @@
   "build": {
     "appId": "com.msase.ai.research",
     "asar": true,
-    "win": {},
+    "win": {
+      "target": "zip"
+    },
     "directories": {
       "buildResources": "public"
     },

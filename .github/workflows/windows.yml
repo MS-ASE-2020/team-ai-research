@@ -2,12 +2,13 @@ name: Papera Windows Build
 
 on:
   push:
+    branches:
+      - pack-win
     tags:
       - v*
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
@@ -21,3 +22,4 @@ jobs:
     - run: npm run dist
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: dir dist
