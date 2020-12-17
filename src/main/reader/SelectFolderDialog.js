@@ -13,6 +13,7 @@ export default class SelectFolderDialog extends Component {
       >
         <div className="select-folder-dialog">
           <Bookmarks
+            id="select-folder"
             folderOnly={true}
             selectFolderCallback={this.props.selectFolderCallback}
           />
