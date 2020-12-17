@@ -14,6 +14,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
+const contextMenu = require('electron-context-menu');
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -114,4 +116,11 @@ app.whenReady().then(() => {
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err));
   }
+});
+
+app.on("web-contents-created", (e, contents) => {
+  contextMenu({
+    window: contents,
+    showSearchWithGoogle: false,
+  });
 });

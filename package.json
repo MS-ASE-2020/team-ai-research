@@ -58,8 +58,9 @@
     "tsutils": "^3.17.1"
   },
   "dependencies": {
-    "electron-find": "^1.0.6",
-    "better-sqlite3": "^7.1.1"
+    "better-sqlite3": "^7.1.1",
+    "electron-context-menu": "^2.3.0",
+    "electron-find": "^1.0.6"
   },
   "browserslist": {
     "production": [
