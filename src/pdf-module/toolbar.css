@@ -118,4 +118,5 @@
 
 .text-color, .pen-color {
   display: inline-block;
+  margin: 0 6px;
 }

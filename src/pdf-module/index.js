@@ -1,19 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import PDFJSAnnotate from 'pdf-annotate.js';
+import PDFJSAnnotate from "pdf-annotate.js";
 import "./wrapper.css";
-import AnnotatorToolBar from './Toolbar';
-import AnnotatorSidebar from './Sidebar';
-import PDFExtractor from './PDFextract';
+import AnnotatorToolBar from "./Toolbar";
+import AnnotatorSidebar from "./Sidebar";
+import PDFExtractor from "./PDFextract";
 
-import * as pdfjsLib from 'pdfjs-dist';
-import * as pdfjsViewer from 'pdfjs-dist/web/pdf_viewer';
-import 'pdfjs-dist/web/pdf_viewer.css';
+import * as pdfjsLib from "pdfjs-dist";
+import * as pdfjsViewer from "pdfjs-dist/web/pdf_viewer";
+import "pdfjs-dist/web/pdf_viewer.css";
 import workerURL from "../pdf.worker.min.data";
 
-import useContextMenu from 'contextmenu';
-import 'contextmenu/ContextMenu.css';
+import useContextMenu from "contextmenu";
+import "contextmenu/ContextMenu.css";
 
 import { pdfTextAdjust } from "../main/utils";
 
@@ -25,52 +25,58 @@ function getSelection() {
   }
   return text;
   */
-  let selectList = window.getSelection().getRangeAt(0).cloneContents().childNodes;
-  selectList = Array.from(selectList).map(x => x.textContent);
+  let selectList = window.getSelection().getRangeAt(0).cloneContents()
+    .childNodes;
+  selectList = Array.from(selectList).map((x) => x.textContent);
   return pdfTextAdjust(selectList);
 }
 
 function PaperZone(props) {
-  const [contextMenu, useCM] = useContextMenu({ submenuSymbol: 'O' });
+  const [contextMenu, useCM] = useContextMenu({ submenuSymbol: "O" });
   const menuConfig = {
     // 'Alert Selected Text': () => alert(getSelection()),
-    'Copy': () => navigator.clipboard.writeText(getSelection()),
-    'Translate': {
-      'Microsoft Bing': () => {
+    Copy: () => navigator.clipboard.writeText(getSelection()),
+    Translate: {
+      "Microsoft Bing": () => {
         props.switchTab(2);
         props.switchTranslationMode("bing");
         props.switchText(getSelection());
       },
-      'Google': () => {
+      Google: () => {
         props.switchTab(2);
         props.switchTranslationMode("google");
         props.switchText(getSelection());
-      }
+      },
     },
-    'Search': {
-      'Bing Web': () => {
+    Search: {
+      "Bing Web": () => {
         props.switchTab(3);
         props.switchSearchMode("bing");
         props.switchText(getSelection());
       },
-      'Google Web': () => {
+      "Google Web": () => {
         props.switchTab(3);
         props.switchSearchMode("google");
         props.switchText(getSelection());
       },
-      'Google Scholar': () => {
+      "Google Scholar": () => {
         props.switchTab(3);
         props.switchSearchMode("scholar");
         props.switchText(getSelection());
       },
-      'Wikipedia': () => {
+      Wikipedia: () => {
         props.switchTab(3);
         props.switchSearchMode("wikipedia");
         props.switchText(getSelection());
       },
     },
   };
-  return (<div onContextMenu={useCM(menuConfig)}>{props.Zone}{props.fileNull ? null : contextMenu}</div>);
+  return (
+    <div id="paper-zone" onContextMenu={useCM(menuConfig)}>
+      {props.Zone}
+      {props.fileNull ? null : contextMenu}
+    </div>
+  );
 }
 
 PaperZone.propTypes = {
@@ -97,7 +103,7 @@ class Annotator extends React.Component {
       tab: 0,
       text: "",
       translationMode: "bing",
-      searchMode: "bing"
+      searchMode: "bing",
     };
     this.content = null;
   }
@@ -107,16 +113,21 @@ class Annotator extends React.Component {
     const documentId = props.docid;
     this.paperID = this.props.paperID;
     if (this.paperID) {
-      let annotation = window.api.database.getAnnotation(window.db, this.paperID);
-      this.qa = JSON.parse(window.api.database.getQandA(window.db, this.paperID)) || [];
+      let annotation = window.api.database.getAnnotation(
+        window.db,
+        this.paperID
+      );
+      this.qa =
+        JSON.parse(window.api.database.getQandA(window.db, this.paperID)) || [];
       localStorage.setItem(`${documentId}/annotations`, annotation);
     }
     PDFJSAnnotate.setStoreAdapter(new PDFJSAnnotate.LocalStoreAdapter());
     let RENDER_OPTIONS = {
       documentId,
       pdfDocument: null,
-      scale: parseFloat(localStorage.getItem(`${documentId}/scale`), 10) || 1.33,
-      rotate: parseInt(localStorage.getItem(`${documentId}/rotate`), 10) || 0
+      scale:
+        parseFloat(localStorage.getItem(`${documentId}/scale`), 10) || 1.33,
+      rotate: parseInt(localStorage.getItem(`${documentId}/rotate`), 10) || 0,
     };
     this.UI = UI;
     this.RENDER_OPTIONS = RENDER_OPTIONS;
@@ -133,23 +144,23 @@ class Annotator extends React.Component {
 
   componentWillUnmount() {
     // for (let i = 0; i < this.renderedPages.length; i++) {
-
     // }
   }
 
   visiblePageNum = () => {
     return Math.round(this.wrapper.scrollTop / this.PAGE_HEIGHT) + 1;
-  }
+  };
 
   contentWrapperScroll(e) {
     let visiblePageNum = Math.round(e.target.scrollTop / this.PAGE_HEIGHT) + 1;
-    let visiblePage = document.querySelector(`.page[data-page-number="${visiblePageNum}"][data-loaded="false"]`);
+    let visiblePage = document.querySelector(
+      `.page[data-page-number="${visiblePageNum}"][data-loaded="false"]`
+    );
     let okToRender;
     if (this.renderedPages.indexOf(visiblePageNum) === -1) {
       okToRender = true;
       this.renderedPages.push(visiblePageNum);
-    }
-    else {
+    } else {
       okToRender = false;
     }
 
@@ -167,13 +178,15 @@ class Annotator extends React.Component {
       this.renderedPages = [];
       const loadingTask = pdfjsLib.getDocument({
         url: this.props.file,
-        cMapUrl: 'shared/cmaps/',
-        cMapPacked: true
+        cMapUrl: "shared/cmaps/",
+        cMapPacked: true,
       });
       let promise = Promise.resolve();
       if (!this.props.file.startsWith("paper://")) {
         console.log("Downloading to tmp");
-        promise = promise.then(() => window.api.filesystem.save(this.props.file, "tmp"));  // TODO: Fix current model that sucks with file downloading.
+        promise = promise.then(() =>
+          window.api.filesystem.save(this.props.file, "tmp")
+        ); // TODO: Fix current model that sucks with file downloading.
       }
 
       promise.then(() => {
@@ -181,7 +194,7 @@ class Annotator extends React.Component {
           this.RENDER_OPTIONS.pdfDocument = pdf;
           let viewer = this.viewer;
           if (viewer) {
-            viewer.innerHTML = '';
+            viewer.innerHTML = "";
             for (let i = 0; i < pdf.numPages; i++) {
               let page = this.UI.createPage(i + 1);
               viewer.appendChild(page);
@@ -190,17 +203,22 @@ class Annotator extends React.Component {
             this.NUM_PAGES = pdf.numPages;
             window.pdfjsViewer = pdfjsViewer;
             // eslint-disable-next-line no-unused-vars
-            this.UI.renderPage(1, this.RENDER_OPTIONS).then(([pdfPage, annotations]) => {
-              let viewport = pdfPage.getViewport({ scale: this.RENDER_OPTIONS.scale, rotation: this.RENDER_OPTIONS.rotate });
-              this.PAGE_HEIGHT = viewport.height;
-              this.rendered = true;
-              this.setState({});
-            });
+            this.UI.renderPage(1, this.RENDER_OPTIONS).then(
+              ([pdfPage, annotations]) => {
+                let viewport = pdfPage.getViewport({
+                  scale: this.RENDER_OPTIONS.scale,
+                  rotation: this.RENDER_OPTIONS.rotate,
+                });
+                this.PAGE_HEIGHT = viewport.height;
+                this.rendered = true;
+                this.setState({});
+              }
+            );
 
             if (this.content === null) {
               let extractor = new PDFExtractor(pdf, pdf.numPages);
               extractor.extractText().then(() => {
-                this.content = extractor.pageContents.join((' '));
+                this.content = extractor.pageContents.join(" ");
               });
             }
           }
@@ -209,7 +227,7 @@ class Annotator extends React.Component {
     } catch {
       this.rendered = true;
     }
-  }
+  };
 
   disableUI() {
     this.UI.disableUI();
@@ -243,14 +261,19 @@ class Annotator extends React.Component {
       this.disableUI();
     }
 
-    PDFJSAnnotate.getStoreAdapter().getAllAnnotations(this.RENDER_OPTIONS.documentId)
-      .then(annotations => {
-        this.props.openSaveDialog({
-          annotations: annotations,
-          ID: this.paperID,
-          QandA: this.qa,
-          content: this.content
-        }, postCloseDialog, !newfile);
+    PDFJSAnnotate.getStoreAdapter()
+      .getAllAnnotations(this.RENDER_OPTIONS.documentId)
+      .then((annotations) => {
+        this.props.openSaveDialog(
+          {
+            annotations: annotations,
+            ID: this.paperID,
+            QandA: this.qa,
+            content: this.content,
+          },
+          postCloseDialog,
+          !newfile
+        );
       });
   }
 
@@ -260,10 +283,10 @@ class Annotator extends React.Component {
   }
 
   switchSidebar() {
-    if (this.sidebar.style.display === 'none') {
+    if (this.sidebar.style.display === "none") {
       this.enableSidebar();
     } else {
-      this.sidebar.style.display = 'none';
+      this.sidebar.style.display = "none";
       this.wrapper.classList.add("fullwidth");
     }
   }
@@ -272,42 +295,48 @@ class Annotator extends React.Component {
     this.enableSidebar();
     if (newTab !== this.state.tab) {
       this.setState({
-        text: ""
+        text: "",
       });
     }
     this.setState({
-      tab: newTab
+      tab: newTab,
     });
   }
 
   switchTranslationMode(mode) {
     this.setState({
-      translationMode: mode
+      translationMode: mode,
     });
   }
 
   switchText(newText) {
     this.setState({
-      text: newText
+      text: newText,
     });
   }
 
   switchSearchMode(mode) {
     this.setState({
-      searchMode: mode
+      searchMode: mode,
     });
   }
 
   render() {
     let Zone = (
-      <div id="content-wrapper"
+      <div
+        id="content-wrapper"
         onScroll={this.contentWrapperScroll.bind(this)}
-        ref={el => this.wrapper = el}>
-        <div id="viewer" className="pdfViewer" ref={el => this.viewer = el}></div>
+        ref={(el) => (this.wrapper = el)}
+      >
+        <div
+          id="viewer"
+          className="pdfViewer"
+          ref={(el) => (this.viewer = el)}
+        ></div>
       </div>
     );
     return (
-      <div id="pdfwrapper" ref={el => this.el = el}>
+      <div id="pdfwrapper" ref={(el) => (this.el = el)}>
         <AnnotatorToolBar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
@@ -317,7 +346,8 @@ class Annotator extends React.Component {
           render={this.PDFRender}
           filename={this.file}
           saveFunc={this.save.bind(this)}
-          switchSidebar={this.switchSidebar.bind(this)}></AnnotatorToolBar>
+          switchSidebar={this.switchSidebar.bind(this)}
+        ></AnnotatorToolBar>
         <PaperZone
           Zone={Zone}
           fileNull={this.file === null}
@@ -341,7 +371,8 @@ class Annotator extends React.Component {
           updateQA={(qa) => {
             this.qa = qa;
           }}
-          inputRef={el => this.sidebar = el}></AnnotatorSidebar>
+          inputRef={(el) => (this.sidebar = el)}
+        ></AnnotatorSidebar>
       </div>
     );
   }
@@ -350,7 +381,7 @@ class Annotator extends React.Component {
 Annotator.propTypes = {
   paperID: PropTypes.number,
   file: PropTypes.string,
-  openSaveDialog: PropTypes.func.isRequired
+  openSaveDialog: PropTypes.func.isRequired,
 };
 
 export default Annotator;
