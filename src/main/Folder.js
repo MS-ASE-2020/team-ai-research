@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 export default class Folder extends Component {
   render() {
-    // Sorting helper
+    // Sorting helper, ref: https://stackoverflow.com/a/38641281/5958455
     const collator = new Intl.Collator(undefined, {
       numeric: true,
       sensitivity: "base",

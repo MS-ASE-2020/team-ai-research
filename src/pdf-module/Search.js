@@ -16,7 +16,7 @@ export default class AnnotatorSearch extends React.Component {
         url = "https://en.wikipedia.org/wiki/" + this.props.text;
         break;
       case "scholar":
-        url = "https://scholar.google.com/scholar?hl=zh-CN&as_sdt=0%2C5&q=" + this.props.text;
+        url = "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=" + this.props.text;
         break;
       default:
         break;
