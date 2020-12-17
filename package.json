@@ -1,6 +1,6 @@
 {
   "name": "msase-ai-research",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Papera: A paper-reading assistant",
   "repository": "https://github.com/MS-ASE-2020/team-ai-research",
   "build": {
