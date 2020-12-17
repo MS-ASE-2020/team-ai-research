@@ -104,7 +104,7 @@ class Annotator extends React.Component {
       text: "",
       translationMode: "bing",
       searchMode: "bing",
-      showLoading: true
+      showLoading: true,
     };
     this.content = null;
     this.rendered = true;
@@ -177,7 +177,7 @@ class Annotator extends React.Component {
     }
     try {
       this.setState({
-        showLoading: true
+        showLoading: true,
       });
       this.rendered = false;
       this.renderedPages = [];
@@ -195,45 +195,48 @@ class Annotator extends React.Component {
       }
 
       promise.then(() => {
-        loadingTask.promise.then((pdf) => {
-          this.RENDER_OPTIONS.pdfDocument = pdf;
-          let viewer = this.viewer;
-          if (viewer) {
-            viewer.innerHTML = "";
-            for (let i = 0; i < pdf.numPages; i++) {
-              let page = this.UI.createPage(i + 1);
-              viewer.appendChild(page);
-            }
-
-            this.NUM_PAGES = pdf.numPages;
-            window.pdfjsViewer = pdfjsViewer;
-            this.UI.renderPage(1, this.RENDER_OPTIONS).then(
-              // eslint-disable-next-line no-unused-vars
-              ([pdfPage, annotations]) => {
-                let viewport = pdfPage.getViewport({
-                  scale: this.RENDER_OPTIONS.scale,
-                  rotation: this.RENDER_OPTIONS.rotate,
-                });
-                this.PAGE_HEIGHT = viewport.height;
-                this.rendered = true;
-                this.setState({});
+        loadingTask.promise
+          .then((pdf) => {
+            this.RENDER_OPTIONS.pdfDocument = pdf;
+            let viewer = this.viewer;
+            if (viewer) {
+              viewer.innerHTML = "";
+              for (let i = 0; i < pdf.numPages; i++) {
+                let page = this.UI.createPage(i + 1);
+                viewer.appendChild(page);
               }
-            );
 
-            if (this.content === null) {
-              let extractor = new PDFExtractor(pdf, pdf.numPages);
-              extractor.extractText().then(() => {
-                this.content = extractor.pageContents.join(" ");
-              });
+              this.NUM_PAGES = pdf.numPages;
+              window.pdfjsViewer = pdfjsViewer;
+              this.UI.renderPage(1, this.RENDER_OPTIONS).then(
+                // eslint-disable-next-line no-unused-vars
+                ([pdfPage, annotations]) => {
+                  let viewport = pdfPage.getViewport({
+                    scale: this.RENDER_OPTIONS.scale,
+                    rotation: this.RENDER_OPTIONS.rotate,
+                  });
+                  this.PAGE_HEIGHT = viewport.height;
+                  this.rendered = true;
+                  this.setState({});
+                }
+              );
+
+              if (this.content === null) {
+                let extractor = new PDFExtractor(pdf, pdf.numPages);
+                extractor.extractText().then(() => {
+                  this.content = extractor.pageContents.join(" ");
+                });
+              }
             }
-          }
-        }).catch(() => {
-          alert("Papera cannot open this PDF file.");
-        }).finally(() => {
-          this.setState({
-            showLoading: false
+          })
+          .catch(() => {
+            alert("Papera cannot open this PDF file.");
+          })
+          .finally(() => {
+            this.setState({
+              showLoading: false,
+            });
           });
-        });
       });
     } catch {
       this.rendered = true;
@@ -348,14 +351,25 @@ class Annotator extends React.Component {
     );
     return (
       <div id="pdfwrapper" ref={(el) => (this.el = el)}>
-        <h2 style={{
-          margin: "10px",
-          display: this.props.file !== null ? "none" : null
-        }}>You can use &quot;File&quot; or &quot;Library&quot; in the left menu to open papers.</h2>
-        <h2 style={{
-          margin: "10px",
-          display: (this.props.file !== null && this.state.showLoading === true) ? null : "none"
-        }}>Loading...</h2>
+        <h2
+          style={{
+            margin: "10px",
+            display: this.props.file !== null ? "none" : null,
+          }}
+        >
+          {'You can open a paper from "File" or "Library" on the left menu.'}
+        </h2>
+        <h2
+          style={{
+            margin: "10px",
+            display:
+              this.props.file !== null && this.state.showLoading === true
+                ? null
+                : "none",
+          }}
+        >
+          Loading...
+        </h2>
         <AnnotatorToolBar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
