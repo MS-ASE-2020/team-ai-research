@@ -7,7 +7,8 @@
     text-align: center;
     font-weight: bold;
     color: white;
-    background-color: $theme-color;
+    background-color: $theme-color-muted;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5);
   }
 
   .all-papers,
