@@ -45,7 +45,8 @@
   }
 
   .item-list {
-    flex: 1 0 auto;
+    flex: 1 0 0;
+    overflow-y: auto;
 
     .item {
       @include clickable;
