@@ -38,21 +38,31 @@ export default class AnnotatorSideWebView extends React.Component {
       >
         <div className="function-tabs">{choices}</div>
         <div className="webview-control">
-          <span className="control-item" onClick={() => this.webview.goBack()}>
-            <i className="fas fa-fw fa-arrow-left" />
+          <span
+            className="control-item"
+            title="Back"
+            onClick={() => this.webview.goBack()}
+          >
+            <i className="far fa-fw fa-arrow-left" />
           </span>
           <span
             className="control-item"
+            title="Forward"
             onClick={() => this.webview.goForward()}
           >
-            <i className="fas fa-fw fa-arrow-right" />
+            <i className="far fa-fw fa-arrow-right" />
           </span>
-          <span className="control-item" onClick={() => this.webview.reload()}>
-            <i className="fas fa-fw fa-sync-alt" />
+          <span
+            className="control-item"
+            title="Refresh"
+            onClick={() => this.webview.reload()}
+          >
+            <i className="far fa-fw fa-sync-alt" />
           </span>
           <span className="separator" />
           <span
             className="control-item"
+            title="Open as PDF"
             onClick={() => {
               const url = this.webview.getURL();
               if (
@@ -65,17 +75,18 @@ export default class AnnotatorSideWebView extends React.Component {
               }
             }}
           >
-            <i className="fas fa-fw fa-external-link-alt" />
+            <i className="far fa-fw fa-external-link-alt" />
           </span>
           <span
             className="control-item"
+            title="Copy current URL"
             onClick={() => {
               const url = this.webview.getURL();
               navigator.clipboard.writeText(url);
-              alert(`${url} copied.`);
+              alert("Copied URL to clipboard.\n" + url);
             }}
           >
-            <i className="fas fa-fw fa-copy" />
+            <i className="far fa-fw fa-copy" />
           </span>
         </div>
         <webview

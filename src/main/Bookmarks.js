@@ -119,7 +119,7 @@ export default class Bookmarks extends Component {
 
   render() {
     return (
-      <div id="Bookmarks" className="Bookmarks">
+      <div id={this.props.id || "Bookmarks"} className="Bookmarks">
         <div className="left-pane">
           <div className="address-bar">
             <div

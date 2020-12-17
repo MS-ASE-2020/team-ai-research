@@ -53,7 +53,7 @@ export default class NewBookmark extends Component {
   render() {
     return (
       <div className="InfoZone">
-        <h2>Create New Folder</h2>
+        <h2>New Folder</h2>
         <table className="InfoTable">
           <tbody>
             <tr>

@@ -63,5 +63,23 @@
     height: 100%;
     border-left: 2px solid $theme-color;
     overflow-x: auto;
+
+    .Bookmarks {
+      .left-pane {
+        max-width: 12em;
+      }
+
+      .right-pane {
+        table tbody tr td {
+          input {
+            width: auto;
+          }
+
+          textarea {
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }
