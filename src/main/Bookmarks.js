@@ -179,5 +179,4 @@ Bookmarks.propTypes = {
   actions: PropTypes.object,
   selectFolderCallback: PropTypes.func,
   folderOnly: PropTypes.bool,
-  id: PropTypes.string
 };
