@@ -17,9 +17,30 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-    - run: npm ci
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: npm
+      with:
+        path: |
+          ~/.npm
+          node_modules
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install NPM
+      run: |
+        npm install --also=dev
+        npm prune
     - run: npm run lint
     - run: npm run dist
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: dir dist
+    - uses: actions/upload-artifact@v2
+      with:
+        name: package
+        path: dist/*-win.zip
+        retention-days: 1
