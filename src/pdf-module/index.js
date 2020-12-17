@@ -202,8 +202,8 @@ class Annotator extends React.Component {
 
             this.NUM_PAGES = pdf.numPages;
             window.pdfjsViewer = pdfjsViewer;
-            // eslint-disable-next-line no-unused-vars
             this.UI.renderPage(1, this.RENDER_OPTIONS).then(
+              // eslint-disable-next-line no-unused-vars
               ([pdfPage, annotations]) => {
                 let viewport = pdfPage.getViewport({
                   scale: this.RENDER_OPTIONS.scale,

@@ -104,6 +104,7 @@ class AnnotatorToolBar extends React.Component {
             }
             
             localStorage.removeItem(`${this.props.RENDER_OPTIONS.documentId}/annotations`);
+            this.props.PDFJSAnnotate.getStoreAdapter().clearHistory(this.props.RENDER_OPTIONS.documentId);
           }
         }}>×</button>
 
