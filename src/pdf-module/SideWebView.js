@@ -67,6 +67,16 @@ export default class AnnotatorSideWebView extends React.Component {
           >
             <i className="fas fa-fw fa-external-link-alt" />
           </span>
+          <span
+            className="control-item"
+            onClick={() => {
+              const url = this.webview.getURL();
+              navigator.clipboard.writeText(url);
+              alert(`${url} copied.`);
+            }}
+          >
+            <i className="fas fa-fw fa-copy" />
+          </span>
         </div>
         <webview
           style={{ display: "inline-flex", width: "100%" }}
