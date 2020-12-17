@@ -107,6 +107,10 @@
           border-color: $theme-color;
           background-color: $theme-color;
           color: white;
+
+          .option-icon {
+            color: inherit;
+          }
         }
 
         &:first-child {

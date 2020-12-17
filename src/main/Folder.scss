@@ -8,7 +8,15 @@
     font-weight: bold;
     color: white;
     background-color: $theme-color-muted;
-    text-shadow: 0 0 4px rgba(0,0,0,0.5);
+    animation: text-shadow-colorful 3s infinite linear;
+
+    @keyframes text-shadow-colorful {
+      @for $i from 0 through 6 {
+        #{$i / 6 * 100}% {
+          text-shadow: 0 0 4px #{"hsla(#{$i * 60}deg, 100%, 30%, 0.7)"};
+        }
+      }
+    }
   }
 
   .all-papers,

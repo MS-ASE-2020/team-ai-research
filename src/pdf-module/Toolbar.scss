@@ -117,6 +117,9 @@
   .text-color,
   .pen-color {
     display: inline-block;
-    margin: 0 6px;
+  }
+
+  select {
+    margin: auto 6px;
   }
 }
