@@ -41,7 +41,7 @@ export default class NewBookmark extends Component {
           description: this.state.description,
           fatherID: this.props.folderID,
         });
-        alert(`Successfully created ${this.state.name}!`);
+        // alert(`Successfully created ${this.state.name}!`);
         this.stopCreateNewBookmark();
       }
     } catch (error) {

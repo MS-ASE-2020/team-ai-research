@@ -56,7 +56,7 @@ export default class PaperInformation extends Component {
             this.props.choosePaper,
             this.state.libraries.map((x) => x.ID)
           );
-          alert("Successfully edit the information of paper!");
+          // alert("Successfully edit the information of paper!");
           this.props.setChoosePaper(this.props.choosePaper);
           this.setState({
             modify: false,
@@ -70,7 +70,7 @@ export default class PaperInformation extends Component {
       case "delete":
         if (window.confirm("Are you sure you want to delete this paper?")) {
           window.api.database.deletePaper(window.db, this.props.choosePaper);
-          alert("Successfully deleted the paper!");
+          // alert("Successfully deleted the paper!");
           this.props.clearInfoZone();
         }
         break;

@@ -38,7 +38,7 @@ export default class FolderInformation extends Component {
               description: this.state.folder.description,
               fatherID: this.state.folder.fatherID,
             });
-            alert("Successfully edit the information of bookmark!");
+            // alert("Successfully edit the information of bookmark!");
             this.props.setChooseFolder(this.props.chooseFolder);
             this.setState({
               modify: !this.state.modify,
@@ -52,7 +52,7 @@ export default class FolderInformation extends Component {
       case "delete":
         if (window.confirm("Are you surely want to delete this bookmark?")) {
           window.api.database.deleteFolder(window.db, this.props.chooseFolder);
-          alert("Successfully delete the bookmark!");
+          // alert("Successfully delete the bookmark!");
           this.props.clearInfoZone();
         }
         break;

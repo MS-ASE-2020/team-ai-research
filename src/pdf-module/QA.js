@@ -122,7 +122,7 @@ class QAItem extends React.Component {
                     newRefs.push(this.props.currentAnnotation);
                     this.setState({ refs: newRefs });
                   } else {
-                    alert("This ref has been added in this question.");
+                    alert("This ref has been added in this question before.");
                   }
                 }
               }}
