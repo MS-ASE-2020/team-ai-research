@@ -28,13 +28,18 @@
       width: 100%;
     }
 
-    td textarea {
-      font: {
-        family: $sans-serif;
-        size: 0.9em;
+    td {
+      .tag-container {
+        margin-top: -0.2em;
+        margin-bottom: -0.2em;
       }
-      resize: vertical;
-      min-height: 3em;
+
+      textarea {
+        font-family: $sans-serif;
+        font-size: 0.9em;
+        resize: vertical;
+        min-height: 3em;
+      }
     }
   }
 
