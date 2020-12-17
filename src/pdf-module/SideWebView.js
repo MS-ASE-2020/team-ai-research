@@ -45,7 +45,10 @@ export default class AnnotatorSideWebView extends React.Component {
           <button onClick={() => this.webview.goForward()}>Forward</button>
           <button onClick={() => this.webview.reload()}>Reload</button>
           <button onClick={() => {
-            window.api.openFile(this.webview.getURL());
+            const url = this.webview.getURL();
+            if (url.toLowerCase().endsWith(".pdf") || window.confirm("Current page does not look like a PDF page. Still open?")) {
+              window.api.openFile(url);
+            }
           }}>Try opening current PDF</button>
         </div>
       </div>
