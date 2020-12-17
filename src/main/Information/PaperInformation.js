@@ -361,38 +361,43 @@ export default class PaperInformation extends Component {
           </tbody>
         </table>
         <div className="Operations">
-          {!this.state.modify ? (
-            <div className="InformationEditFalse">
-              <input
-                type="button"
-                value="Open"
-                onClick={() => this.operation("open")}
-              />
-              <input
-                type="button"
-                value="Edit"
-                onClick={() => this.operation("edit")}
-              />
-              <input
-                type="button"
-                value="Delete"
-                onClick={() => this.operation("delete")}
-              />
-            </div>
-          ) : (
-            <div className="InformationEditTrue">
-              <input
-                type="button"
-                value="Save"
-                onClick={() => this.operation("save")}
-              />
-              <input
-                type="button"
-                value="Cancel"
-                onClick={() => this.operation("cancel")}
-              />
-            </div>
-          )}
+          {/* eslint-disable indent, react/jsx-key */}
+          {!this.state.modify
+            ? [
+                <input
+                  className="btn btn-success"
+                  type="button"
+                  value="Open"
+                  onClick={() => this.operation("open")}
+                />,
+                <input
+                  className="btn btn-edit"
+                  type="button"
+                  value="Edit"
+                  onClick={() => this.operation("edit")}
+                />,
+                <input
+                  className="btn btn-danger"
+                  type="button"
+                  value="Delete"
+                  onClick={() => this.operation("delete")}
+                />,
+              ]
+            : [
+                <input
+                  className="btn btn-success"
+                  type="button"
+                  value="Save"
+                  onClick={() => this.operation("save")}
+                />,
+                <input
+                  className="btn btn-danger"
+                  type="button"
+                  value="Cancel"
+                  onClick={() => this.operation("cancel")}
+                />,
+              ]}
+          {/* eslint-enable indent, react/jsx-key */}
         </div>
 
         <div
