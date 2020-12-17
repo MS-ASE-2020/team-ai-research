@@ -32,6 +32,19 @@ export default class Folder extends Component {
         );
       }
     }
+
+    // "All papers" special entry
+    if (this.props.folderID === 1 && !this.props.selectFolderCallback) {
+      folderItem.unshift(
+        <div
+          className="all-papers"
+          onClick={() => this.props.forward("All papers", null)}
+        >
+          <i className="fas fa-fw fa-book" /> All papers
+        </div>
+      );
+    }
+
     let paperItem = [];
     const paperList = window.api.database.listPaper(
       window.db,
@@ -49,6 +62,7 @@ export default class Folder extends Component {
         </div>
       );
     }
+
     return (
       <div className="Folder">
         {this.props.folderID ? (
@@ -57,17 +71,10 @@ export default class Folder extends Component {
           </div>
         ) : null}
 
-        {this.props.folderID === 1 && !this.props.selectFolderCallback ? (
-          <div
-            className="all-papers"
-            onClick={() => this.props.forward("All papers", null)}
-          >
-            <i className="fas fa-fw fa-book" /> All papers
-          </div>
-        ) : null}
         {this.props.folderID !== null ? (
           <div className="item-list subfolders">{folderItem}</div>
         ) : null}
+
         {/* eslint-disable indent */}
         {this.props.folderOnly
           ? null
