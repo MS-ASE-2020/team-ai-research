@@ -28,8 +28,13 @@
     flex: 1 0 auto;
   }
 
-  .webview-control button {
-    margin-top: 0;
-    margin-bottom: 0;
+  .webview-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
   }
 }
