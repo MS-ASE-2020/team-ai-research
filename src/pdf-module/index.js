@@ -104,8 +104,10 @@ class Annotator extends React.Component {
       text: "",
       translationMode: "bing",
       searchMode: "bing",
+      showLoading: true
     };
     this.content = null;
+    this.rendered = true;
   }
 
   load(props) {
@@ -174,6 +176,9 @@ class Annotator extends React.Component {
       return;
     }
     try {
+      this.setState({
+        showLoading: true
+      });
       this.rendered = false;
       this.renderedPages = [];
       const loadingTask = pdfjsLib.getDocument({
@@ -224,6 +229,10 @@ class Annotator extends React.Component {
           }
         }).catch(() => {
           alert("Papera cannot open this PDF file.");
+        }).finally(() => {
+          this.setState({
+            showLoading: false
+          });
         });
       });
     } catch {
@@ -339,6 +348,14 @@ class Annotator extends React.Component {
     );
     return (
       <div id="pdfwrapper" ref={(el) => (this.el = el)}>
+        <h2 style={{
+          margin: "10px",
+          display: this.props.file !== null ? "none" : null
+        }}>You can use &quot;File&quot; or &quot;Library&quot; in the left menu to open papers.</h2>
+        <h2 style={{
+          margin: "10px",
+          display: (this.props.file !== null && this.state.showLoading === true) ? null : "none"
+        }}>Loading...</h2>
         <AnnotatorToolBar
           UI={this.UI}
           RENDER_OPTIONS={this.RENDER_OPTIONS}
