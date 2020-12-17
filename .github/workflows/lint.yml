@@ -3,10 +3,10 @@ name: Node.js Build & Lint CI
 on:
   push:
     branches:
-      - "react"
+      - "main"
   pull_request:
     branches:
-      - "react"
+      - "main"
 
 jobs:
   build:
